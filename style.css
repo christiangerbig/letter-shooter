@@ -1,3 +1,7 @@
-* {
+.cursorOff {
   cursor: none;
+}
+
+.cursorOn {
+  cursor: auto;
 }
