@@ -68,7 +68,7 @@ function displayMainScreen() {
   let ctx = canvas.getContext("2d");
 
   let bgImage = document.createElement("img");
-  bgImage.src = "../images/letters-picture_1280x712.jpg";
+  bgImage.src = '../images/letters-picture_1280x712.jpg';
   bgImage.addEventListener(
     "load",
     function() {
@@ -76,7 +76,7 @@ function displayMainScreen() {
   );
 
   let penImage = document.createElement("img");
-  penImage.src = "../images/pen_163x16.jpg";
+  penImage.src = '../images/pen_163x16.jpg';
   penImage.addEventListener(
     "load",
     function() {
@@ -84,7 +84,7 @@ function displayMainScreen() {
   );
 
   let dropImage = document.createElement("img");
-  dropImage.src = "../images/drop_23x16.jpg";
+  dropImage.src = '../images/drop_23x16.jpg';
   dropImage.addEventListener(
     "load",
     function() {
@@ -92,7 +92,7 @@ function displayMainScreen() {
   );
 
   let inkpotImage = document.createElement("img");
-  inkpotImage.src = "../images/inkpot_30x30.png";
+  inkpotImage.src = '..//images/inkpot_30x30.png';
   inkpotImage.addEventListener(
     "load",
     function() {
