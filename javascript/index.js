@@ -1,6 +1,6 @@
 function displayMainScreen() {
 
-  // Init objects
+  // Init classes
   class PenObject {
     constructor(x,y,w,h,im) {
       this.xPos = x;
@@ -32,6 +32,7 @@ function displayMainScreen() {
     }
   }
 
+  // Init arrays
   const flyingLetters = [
     "HFEODUSRELAKM",
     "DTGCSEAFTGJBQ",
@@ -44,26 +45,30 @@ function displayMainScreen() {
     "MOUSE"
   ];
 
-  let energy = 90;
-
-  let score = 0;
-
-  let lives = 3;
-  
   let letters = [];
 
+  // Init variables
+  let energy = 90;
+  let score = 0;
+  let lives = 3;
+
   let assembledWord = "      ";
-
   let startIndex = Math.floor(Math.random()*templateWords.length);
-
   let currentTemplateWord = templateWords[startIndex];
 
-   // Init Canvas stuff
+  let letterXSize = 39;
+  let letterYSize = 57;
+
+  let dropEnabled = false;
+  let intervalId = 0;
+
+  
+  // Init Canvas
   let canvas = document.querySelector("canvas");
   let ctx = canvas.getContext("2d");
 
   let bgImage = document.createElement("img");
-  bgImage.src = "/images/letters-picture_1280x712.jpg";
+  bgImage.src = "../images/letters-picture_1280x712.jpg";
   bgImage.addEventListener(
     "load",
     function() {
@@ -71,7 +76,7 @@ function displayMainScreen() {
   );
 
   let penImage = document.createElement("img");
-  penImage.src = "/images/pen_163x16.jpg";
+  penImage.src = "../images/pen_163x16.jpg";
   penImage.addEventListener(
     "load",
     function() {
@@ -79,7 +84,7 @@ function displayMainScreen() {
   );
 
   let dropImage = document.createElement("img");
-  dropImage.src = "/images/drop_23x16.jpg";
+  dropImage.src = "../images/drop_23x16.jpg";
   dropImage.addEventListener(
     "load",
     function() {
@@ -87,20 +92,17 @@ function displayMainScreen() {
   );
 
   let inkpotImage = document.createElement("img");
-  inkpotImage.src = "/images/inkpot_30x30.png";
+  inkpotImage.src = "../images/inkpot_30x30.png";
   inkpotImage.addEventListener(
     "load",
     function() {
     }
   );
 
-  // Init objects and arrays
+
+  // Init objects
   let pen = new PenObject(10,canvas.height/2,163,16,penImage);
   let drop = new DropObject(10+pen.width,canvas.height/2,23,16,dropImage);
-
-  let letterXSize = 39;
-  let letterYSize = 57;
-
   for (let i = 0; i < flyingLetters[startIndex].length; i++) {
     let x = canvas.width - (Math.floor(Math.random()*500)) - (2*letterXSize);
     let y = letterYSize + (Math.floor(Math.random()*500));
@@ -112,12 +114,7 @@ function displayMainScreen() {
   }
 
 
-  let dropEnabled = false;
-  let intervalId = 0;
-
-
-  
-  // Add event listener for mouse movement and mouse button
+ // Add event listeners
  document.addEventListener(
     "mousemove",
     function(e) {
@@ -135,7 +132,6 @@ function displayMainScreen() {
     }
   );
 
-  // Add event listener for Escape key
   document.addEventListener(
     "keydown",
     function(event) {
@@ -148,7 +144,7 @@ function displayMainScreen() {
   );
 
 
-
+  // Functions
   function displayBgPicture() {
     ctx.drawImage(bgImage, 0, 0);
   }
@@ -167,7 +163,6 @@ function displayMainScreen() {
       }
     }
   }
-
 
   function checkMissingLetter(i) {
     let buffer = "";
@@ -211,7 +206,6 @@ function displayMainScreen() {
     }
   }
 
-
   function checkLetterHit(i) {
     const xCollisionCheck1 = ((drop.xPos + drop.width) >= letters[i].xPos);
     const yCollisionCheck1 = (drop.yPos >= letters[i].yPos) && (drop.yPos <= (letters[i].yPos + letters[i].height));
@@ -225,7 +219,6 @@ function displayMainScreen() {
     }
     return false;
   }
-
 
   function moveLetters() {
     ctx.font = "50px Verdana";
@@ -244,16 +237,13 @@ function displayMainScreen() {
     }
   }
 
-
   function displayEnergy() {
     ctx.font = "25px Verdana";
     ctx.fillStyle = "orange";
     ctx.fillText("Energy",10,30);
     ctx.fillStyle = "steelblue";
     ctx.fillRect(110,10,energy,20);
-
   }
-
 
   function displayScore() {
     let scoreStr = score.toString();
@@ -262,7 +252,6 @@ function displayMainScreen() {
     ctx.fillStyle = "orange";
     ctx.fillText(scoreStr,350,30);
   }
-
 
   function displayLives() {
     let x = 675;
@@ -273,7 +262,6 @@ function displayMainScreen() {
       }
     }
    }
-
 
   function displayTemplateWord() {
     ctx.font = "40px Verdana";
@@ -287,7 +275,7 @@ function displayMainScreen() {
     ctx.fillText(assembledWord,600,canvas.height-15);
   }
 
-
+  // Game loop
   function animateAll() {
     displayBgPicture();
     if (lives !== 0) {
@@ -307,8 +295,7 @@ function displayMainScreen() {
     }
   }
 
-
-  // Start interval
+  // Start game
   intervalId = setInterval(
     function() {
       requestAnimationFrame(animateAll);
@@ -319,40 +306,3 @@ function displayMainScreen() {
 }
 
 displayMainScreen();
-
-
-
-
-
-
-
- /*
- 
- const lastPoint = {
-    //x: null,
-    y: canvas.height/2
-  };
-
- if (e.clientX > lastPoint.x) {
-        console.log('right');
-      }
-      else if (e.clientX < lastPoint.x) {
-        console.log("left");
-      }
-      else {
-        console.log('none');
-      }*/
-      /*if (e.clientY > lastPoint.y) {
-        if (pen.yPos < 512) {
-          pen.yPos += 2;
-        }
-      }
-      else if (e.clientY < lastPoint.y) {
-        if (pen.yPos > 0) {
-          pen.yPos -= 2;
-        }
-
-      lastPoint.x = e.clientX;
-      lastPoint.y = e.clientY;
-      }*/
-      
