@@ -33,9 +33,9 @@ function displayMainScreen() {
   }
 
   const flyingLetters = [
-    "HFEODUSRE",
-    "DTGCSEAFT",
-    "MZOIDUEMS"
+    "HFEODUSRELAKM",
+    "DTGCSEAFTGJBQ",
+    "MZOIDUEMSRXPQ"
   ];
 
   const templateWords = [
@@ -44,6 +44,12 @@ function displayMainScreen() {
     "MOUSE"
   ];
 
+  let energy = 90;
+
+  let score = 0;
+
+  let lives = 3;
+  
   let letters = [];
 
   let assembledWord = "      ";
@@ -80,6 +86,14 @@ function displayMainScreen() {
     }
   );
 
+  let inkpotImage = document.createElement("img");
+  inkpotImage.src = "/images/inkpot_30x30.png";
+  inkpotImage.addEventListener(
+    "load",
+    function() {
+    }
+  );
+
   // Init objects and arrays
   let pen = new PenObject(10,canvas.height/2,163,16,penImage);
   let drop = new DropObject(10+pen.width,canvas.height/2,23,16,dropImage);
@@ -107,7 +121,7 @@ function displayMainScreen() {
  document.addEventListener(
     "mousemove",
     function(e) {
-      if (e.clientY > (4*pen.height) && e.clientY < canvas.height-(5*pen.height)) {
+      if ((e.clientY > (4*pen.height)) && (e.clientY < canvas.height-(5*pen.height))) {
         pen.yPos = e.clientY;
       }
     }
@@ -157,8 +171,11 @@ function displayMainScreen() {
 
   function checkMissingLetter(i) {
     let buffer = "";
+    let isLetter = false;
     for (let j = 0; j < currentTemplateWord.length; j++) {
       if (letters[i].char == currentTemplateWord[j]) {
+        score += 100;
+        isLetter = true;
         for (let k = 0; k < assembledWord.length; k++) {
           let char = assembledWord[k];
           if (j !== k) {
@@ -169,6 +186,27 @@ function displayMainScreen() {
           }
         }
         assembledWord = buffer;
+        buffer = "";
+        for (let k = 0; k < currentTemplateWord.length; k++) {
+          let char = currentTemplateWord[k];
+          if (j !== k) {
+            buffer += char;
+          }
+          else {
+            buffer += " ";
+          }
+        }
+        currentTemplateWord = buffer;
+      }
+    }
+    if (!(isLetter)) {
+      if (energy > 30) {
+        energy -= 30;
+        console.log(energy);
+      }
+      else {
+        energy = 90;
+        lives -= 1;
       }
     }
   }
@@ -207,6 +245,36 @@ function displayMainScreen() {
   }
 
 
+  function displayEnergy() {
+    ctx.font = "25px Verdana";
+    ctx.fillStyle = "orange";
+    ctx.fillText("Energy",10,30);
+    ctx.fillStyle = "steelblue";
+    ctx.fillRect(110,10,energy,20);
+
+  }
+
+
+  function displayScore() {
+    let scoreStr = score.toString();
+    scoreStr = scoreStr.padStart(6,0,0);
+    ctx.font = "25px Verdana";
+    ctx.fillStyle = "orange";
+    ctx.fillText(scoreStr,350,30);
+  }
+
+
+  function displayLives() {
+    let x = 675;
+    if (lives !== 0) {
+      for (let i = 0; i < lives; i++) {
+        ctx.drawImage(inkpotImage,x,5);
+        x += 40;
+      }
+    }
+   }
+
+
   function displayTemplateWord() {
     ctx.font = "40px Verdana";
     ctx.fillStyle = "red";
@@ -222,11 +290,21 @@ function displayMainScreen() {
 
   function animateAll() {
     displayBgPicture();
-    displayPen();   
-    shootInk();
-    moveLetters();
-    displayTemplateWord();
-    displayAssembledWord();
+    if (lives !== 0) {
+      displayPen();   
+      shootInk();
+      moveLetters();
+      displayEnergy();
+      displayScore();
+      displayLives();
+      displayTemplateWord();
+      displayAssembledWord();
+    }
+    else {
+      clearInterval(intervalId);
+      canvas.classList.remove("cursorOff");
+      canvas.classList.add("cursorOn");
+    }
   }
 
 
