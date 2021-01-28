@@ -375,7 +375,7 @@ function displayMainScreen() {
       displayTemplateWord();
       displayAssembledWord();
     }
-    else {
+    else if (lives <= 0) {
       clearInterval(intervalId);
       gameOver = true
     }
