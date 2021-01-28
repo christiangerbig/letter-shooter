@@ -1,17 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <!--<link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Seymour+One&display=swap" rel="stylesheet">-->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Seymour+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coda+Caption:wght@800&display=swap" rel="stylesheet">
     <title>Letter Shooter</title>
-</head>
-<body>
-    <canvas class="cursorOff" width="800" height="580"></canvas>
+  </head>
 
+  <body>
+    <!-- Intro screen -->
+    <div id="introContainer" class="fixedContainerHeight">
+      <div class="flexContainer">
+        <div id="titleContainer">
+          <div>
+            <h3>WELCOME</h3>
+            <h3>TO</h3>
+            <h1>LETTER SHOOTER</h1>
+          </div>
+          <div>
+            <h3 class="subtitle">Shoot the right letters to assemble the missing word!</h3>
+            <p>Use your mouse to move the pen.</p>
+            <p>Click the left mouse button to shoot with ink at the letters.</p>
+            <p>Press Esc to quit the game.</p>
+            <p>Have fun with it...</p>
+          </div>
+          <div>
+            <button type="button" id="startButton">Start game</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Game screen -->
+    <div id="gameContainer" class="displayOff">
+      <div class="flexContainer">
+        <canvas class="cursorOff" width="800" height="580"></canvas>
+      </div>
+    </div>
+    <!-- End screen -->
+    <div id="endContainer" class="displayOff fixedContainerHeight">
+      <div class="flexContainer fixedContainerHeight">
+        <div id="highscoreContainer" class="flexboxContainer2">
+          <div>
+            <h1>Highscore</h1>
+            <ul id="scoreList">
+            </ul>
+          </div>
+          <div>
+            <button type="button" id="restartButton">Restart game</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script type="text/javascript" src="./javascript/index.js"></script>
-</body>
+  </body>
 </html>

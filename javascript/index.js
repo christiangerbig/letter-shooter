@@ -1,5 +1,84 @@
-function displayMainScreen() {
+// Init arrays
+let scoresTable = [
+  12000,
+  11100,
+  10100,
+  9000,
+  50,
+  10
+];
 
+let gameOver = false;
+
+
+ // add event listener
+ let startButtonElem = document.getElementById("startButton");
+ startButtonElem.addEventListener(
+   "click",
+   function() {
+     let introContainerElem = document.getElementById("introContainer");
+     introContainerElem.classList.add("displayOff");
+     let gameContainerElem = document.getElementById("gameContainer"); 
+     gameContainerElem.classList.remove("displayOff");
+     displayMainScreen();
+   }
+ );
+
+
+// add event listener
+let restartButtonElem = document.getElementById("restartButton");
+restartButtonElem.addEventListener(
+  "click",
+  function() {
+    gameOver = false;
+    let ulElem = document.getElementById("scoreList");
+    ulElem.innerHTML = "";
+    console.log("Inside restart button");
+    let endContainerElem = document.getElementById("endContainer");
+    endContainerElem.classList.add("displayOff");
+    let introContainerElem = document.getElementById("introContainer"); 
+    introContainerElem.classList.remove("displayOff");
+  }
+);
+
+
+function displayEndScreen(score) {
+  let gameContainerElem = document.getElementById("gameContainer");
+  gameContainerElem.classList.add("displayOff");
+  let endContainerElem = document.getElementById("endContainer"); 
+  endContainerElem.classList.remove("displayOff");
+
+  
+
+  if (scoresTable.length < 10) {
+    scoresTable.push(score);
+    scoresTable.sort((a,b) => b-a);
+
+
+    /*for (let i = 0; i < scoresTable.length; i++) {
+      if (score > scoresTable[i]) {
+        scoresTable.splice(i,0,score);
+        break;
+      }
+    }*/
+  }
+
+  let ulElem = document.getElementById("scoreList");
+  ulElem.innerHTML = "" // clear the list
+  console.log('ScORES', scoresTable.length)
+  for (let i = 0; i < scoresTable.length; i++) {
+    let scoreStr = scoresTable[i].toString();
+    scoreStr = scoreStr.padStart(6,0,0);
+    let liElem = document.createElement("li");
+    liElem.innerText = scoreStr;
+    ulElem.appendChild(liElem);
+  }
+ 
+}
+
+
+function displayMainScreen() {
+   console.log('Main screen called')
   // Init classes
   class PenObject {
     constructor(x,y,w,h,im) {
@@ -50,7 +129,7 @@ function displayMainScreen() {
   // Init variables
   let energy = 90;
   let score = 0;
-  let lives = 3;
+  let lives = 1;
 
   let assembledWord = "      ";
   let startIndex = Math.floor(Math.random()*templateWords.length);
@@ -64,8 +143,8 @@ function displayMainScreen() {
 
   
   // Init Canvas
-  let canvas = document.querySelector("canvas");
-  let ctx = canvas.getContext("2d");
+  let canvasElem = document.querySelector("canvas");
+  let ctx = canvasElem.getContext("2d");
 
   let bgImage = document.createElement("img");
   bgImage.src = './images/letters-picture_1280x712.jpg';
@@ -101,10 +180,10 @@ function displayMainScreen() {
 
 
   // Init objects
-  let pen = new PenObject(10,canvas.height/2,163,16,penImage);
-  let drop = new DropObject(10+pen.width,canvas.height/2,23,16,dropImage);
+  let pen = new PenObject(10,canvasElem.height/2,163,16,penImage);
+  let drop = new DropObject(10+pen.width,canvasElem.height/2,23,16,dropImage);
   for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-    let x = canvas.width - (Math.floor(Math.random()*500)) - (2*letterXSize);
+    let x = canvasElem.width - (Math.floor(Math.random()*500)) - (2*letterXSize);
     let y = letterYSize + (Math.floor(Math.random()*500));
     let width = letterXSize;
     let height = letterYSize;
@@ -118,7 +197,7 @@ function displayMainScreen() {
  document.addEventListener(
     "mousemove",
     function(e) {
-      if ((e.clientY > (4*pen.height)) && (e.clientY < canvas.height-(5*pen.height))) {
+      if ((e.clientY > (4*pen.height)) && (e.clientY < canvasElem.height-(5*pen.height))) {
         pen.yPos = e.clientY;
       }
     }
@@ -137,8 +216,8 @@ function displayMainScreen() {
     function(event) {
      if ((event.keyCode == 27 || event.key == "Escape")) {
         clearInterval(intervalId);
-        canvas.classList.remove("cursorOff");
-        canvas.classList.add("cursorOn");
+        canvasElem.classList.remove("cursorOff");
+        canvasElem.classList.add("cursorOn");
       }
     }
   );
@@ -156,8 +235,8 @@ function displayMainScreen() {
   function shootInk() {
     if (dropEnabled) {
       ctx.drawImage(drop.imageUrl,drop.xPos,drop.yPos);
-      drop.xPos +=3;
-      if (drop.xPos > canvas.width) {
+      drop.xPos +=6;
+      if (drop.xPos > canvasElem.width) {
         dropEnabled = false;
         drop.xPos = 10+pen.width;
       }
@@ -197,7 +276,6 @@ function displayMainScreen() {
     if (!(isLetter)) {
       if (energy > 30) {
         energy -= 30;
-        console.log(energy);
       }
       else {
         energy = 90;
@@ -207,9 +285,9 @@ function displayMainScreen() {
   }
 
   function checkLetterHit(i) {
-    const xCollisionCheck1 = ((drop.xPos + drop.width) >= letters[i].xPos);
-    const yCollisionCheck1 = (drop.yPos >= letters[i].yPos) && (drop.yPos <= (letters[i].yPos + letters[i].height));
-    const yCollisionCheck2 = ((drop.yPos + drop.height) <= (letters[i].ypos + letters[i].height)) && ((drop.yPos + drop.height) >= letters[i].yPos);    
+    const xCollisionCheck1 = ((drop.xPos + drop.width) >= letters[i].xPos) && (drop.xPos <= (letters[i].xPos + letters[i].width));
+    const yCollisionCheck1 = (drop.yPos >= (letters[i].yPos - letters[i].height)) && (drop.yPos <= letters[i].yPos);
+    const yCollisionCheck2 = ((drop.yPos + drop.height) <= letters[i].ypos) && ((drop.yPos + drop.height) >= (letters[i].yPos - letters[i].height));    
     if (xCollisionCheck1 && (yCollisionCheck1 || yCollisionCheck2)) {
       checkMissingLetter(i);
       letters.splice(i,1);
@@ -250,10 +328,13 @@ function displayMainScreen() {
     scoreStr = scoreStr.padStart(6,0,0);
     ctx.font = "25px Verdana";
     ctx.fillStyle = "orange";
-    ctx.fillText(scoreStr,350,30);
+    ctx.fillText(`Score ${scoreStr}`,300,30);
   }
 
   function displayLives() {
+    ctx.font = "25px Verdana";
+    ctx.fillStyle = "orange";
+    ctx.fillText("Lives",600,30);
     let x = 675;
     if (lives !== 0) {
       for (let i = 0; i < lives; i++) {
@@ -266,19 +347,25 @@ function displayMainScreen() {
   function displayTemplateWord() {
     ctx.font = "40px Verdana";
     ctx.fillStyle = "red";
-    ctx.fillText(templateWords[startIndex],10,canvas.height-15);
+    ctx.fillText(templateWords[startIndex],10,canvasElem.height-15);
   }
 
   function displayAssembledWord() {
     ctx.font = "40px Verdana";
     ctx.fillStyle = "blue";
-    ctx.fillText(assembledWord,600,canvas.height-15);
+    ctx.fillText(assembledWord,600,canvasElem.height-15);
+  }
+
+  function displayGameOver() {
+    ctx.font = "80px Verdana";
+    ctx.fillStyle = "red";
+    ctx.fillText("GAME OVER",170,300);
   }
 
   // Game loop
   function animateAll() {
     displayBgPicture();
-    if (lives !== 0) {
+    if (lives > 0) {
       displayPen();   
       shootInk();
       moveLetters();
@@ -290,10 +377,25 @@ function displayMainScreen() {
     }
     else {
       clearInterval(intervalId);
-      canvas.classList.remove("cursorOff");
-      canvas.classList.add("cursorOn");
+      gameOver = true
+    }
+
+    if (gameOver) {
+      gameOver = false;
+      displayGameOver();
+      canvasElem.classList.remove("cursorOff");
+      canvasElem.classList.add("cursorOn");
+      console.log('animate getting called')
+      setTimeout(
+        function() {
+          displayEndScreen(score);
+        },
+        3000
+      );
     }
   }
+
+
 
   // Start game
   intervalId = setInterval(
@@ -302,7 +404,5 @@ function displayMainScreen() {
     }, 
     10
   );  
-
 }
 
-displayMainScreen();
