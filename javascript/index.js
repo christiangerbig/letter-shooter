@@ -1,7 +1,5 @@
 // Global
 let scoresTable = [
-  12000,
-  11100,
   10100,
   9000,
   1000
@@ -63,7 +61,7 @@ function displayMainScreen() {
   // Init variables
   let energy = 90;
   let score = 0;
-  let lives = 1;
+  let lives = 3;
   let nextLevel = false;
   let gameOver = false;
 
@@ -123,7 +121,7 @@ function displayMainScreen() {
     let y = letterYSize + (Math.floor(Math.random()*500));
     let width = letterXSize;
     let height = letterYSize;
-    let yDirection = 1 + (Math.floor(Math.random()*2));
+    let yDirection = 1 + (Math.floor(Math.random()*4));
     let letterObject = new LetterObject(x,y,width,height,yDirection,flyingLetters[startIndex][i]);
     letters.push(letterObject);
   }
@@ -160,7 +158,7 @@ function displayMainScreen() {
   function shootInk() {
     if (dropEnabled) {
       ctx.drawImage(drop.imageUrl,drop.xPos,drop.yPos);
-      drop.xPos +=9;
+      drop.xPos +=12;
       // Check right border
       if (drop.xPos > canvasElem.width) {
         dropEnabled = false;
@@ -201,7 +199,7 @@ function displayMainScreen() {
         currentTemplateWord = buffer;
       }
     }
-    // reduce energy if wrong letter was hit
+    // Reduce energy if wrong letter was hit
     if (!(isLetter)) {
       if (energy > 30) {
         energy -= 30;
@@ -317,7 +315,7 @@ function displayMainScreen() {
         let y = letterYSize + (Math.floor(Math.random()*500));
         let width = letterXSize;
         let height = letterYSize;
-        let yDirection = 1 + (Math.floor(Math.random()*2));
+        let yDirection = 1 + (Math.floor(Math.random()*4));
         let letterObject = new LetterObject(x,y,width,height,yDirection,flyingLetters[startIndex][i]);
         letters.push(letterObject);
       }
@@ -415,12 +413,13 @@ function displayEndScreen(score) {
     ulElem.innerHTML = "";
     let endContainerElem = document.getElementById("endContainer");
     endContainerElem.classList.add("displayOff");
-    let introContainerElem = document.getElementById("introContainer"); 
-    introContainerElem.classList.remove("displayOff");
+    let gameContainerElem = document.getElementById("gameContainer"); 
+    gameContainerElem.classList.remove("displayOff");
     // Remove handler for click on restart button
     let restartButtonElem = document.getElementById("restartButton");
     restartButtonElem.removeEventListener("click",handleRestartButton);
-    displayIntroScreen();
+    // Start main screen
+    displayMainScreen();
   }
   // Add handler for click on restart button
   let restartButtonElem = document.getElementById("restartButton");
