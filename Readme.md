@@ -1,81 +1,113 @@
 Letter Shooter
 
 Description
-Letter Shooter is a game where the player moves vertically on the screen and can shoot ink at flying letters. The player gets a template word and has to shoot the characters of this word out of a formation of letters. If the player hits the wrong letter out of this formation, he looses energy. If the energy is zero, he looses one of his three lives. The game ends when he has lost all his three lives. After that the highscore table with the position of the player is displayed.
+Letter Shooter is a game where the player moves a spaceship vertically on the screen and can shoot with bullets at flying letters. The player gets a template word and has to shoot the characters of this given word out of a formation of letters. If the player hits the right letter his score is increased by 100. If the player hits the wrong letter out of this formation, he looses energy. If the energy is zero, he looses one of his three lives. The game ends if he has lost all his three lives. After that the highscore table with the position of the player is displayed.
 
 MVP (DOM - CANVAS)
 -intro part with start button
 -main part with:
-*move the pen with the mouse
-*shoot with ink at the letters
-*the letters flying arount
+*game music is played in the background and is looped if end of song is reached
+*move the spaceship with the mouse
+*shoot with bullets at the letters
+*the letters are bouncing up and down
 *random fetch of a word template out of an array
-*the letters matching the letters of the word template disappear out of the letter formation
-*the matching letters are displayed at the bottom of the screen
-*energery is decreased if the wrong letter was hit
-*live gets lost, if energy has reached zero
-*energy and lives displayed
+*if the right letter was hit a positive sound is displayed
+*if the wrong letter was hit a negative sound is displayed
+*the letters matching the letters of the word template disappear out of the flying letters formation
+*the letters of the template word are displayed at the left bottom of the screen
+*the matching letters are displayed at the right bottom of the screen
+*energy is displayed as a bar on the top left of the screen and is decreased if the wrong letter was hit
+*current player score is displayed at the top centre of the screen
+*lifes left are displayed at the right top of the screen
+*a life gets lost, if energy has reached zero
 *game over after all lives are lost
 end part with:
+*a game over sound is played
 *display high score table after game over
 *restart game supported
-
-Backlog
--add music or sounds
--change graphics
 
 Data structure
 intro.js
 -displayIntroScreen() {}
--startGame() {}
 
 game.js
 -displayMainScreen() {}
 -displayBGPicture() {}
--movePen() {}
--shootInk() {}
+-moveSpaceship() {}
+-shootBullet() {}
 -moveLetters() {}
--letterHit() {}
+-checkLetterHit() {}
 -displayTemplateWord() {}
 -displayAssembledWord() {}
--setMissingLetter() {}
 -displayEnergy() {}
 -displayLives() {}
 -displayScore() {}
 
 end.js
 -displayEndScreen() {}
--displayHighScore() {}
--restartGame() {}
 
 Classes
--Letters
+
+-Letter
 X-Position
 Y-Position
 Width
 Height
-URL-image
-„A“
+Y-Direction
+char
 
--Pen
+-LetterObjectInfo
+x-Offset
+y-Offset
+char
+
+-Spaceship
 X-Position
 Y-Posiztion
 Width
 Height
 URL-image
 
--Ink
+-Shot
 X-Position
 Y-Position
 Width
 Height
 URL-image
 
-Array
+Arrays
+
 -templateWords
-„TOWER“
-„CAT“
-„TABLE“ 
+"HOUSE",
+"CAT",
+"CIRCLE",
+"MOUSE",
+"CAR",
+"TABLE",
+"BUTTER",
+"KNIFE",
+"ROSE",
+"BOOKS"
+
+-flyingLetters
+"HFEODUSRELA",
+"DTGCSEAFTBQ",
+"ELRTCUNILCF",
+"MZODUEMRXPS",
+"FHCWRFQAJKI",
+"THUALWBTLSE",
+"BUSTATMELNR",
+"GKSEMFPENSI",
+"SLXEJROWDAU",
+"BQWGOZKSYOF"
+
+-alphabetChars
+"A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+"K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+"U", "V", "W", "X", "Y", "Z"
+
+-letterObjects
+-letters
 
 States y States Transitions
 Definition of the different states and their transition (transition functions)
@@ -91,24 +123,26 @@ game - start-loop
 game - build canvas
 game - update canvas
 game - draw canvass
-game - move pen
+game - move spaceship
 game - shot handler
-game - check collision
+game - check collisions
 game - move letters
 game - show words
 game - display energy
 game - display lives
 game - display score
+game - play music
+game - play positive/negative samples for letters hit
 
+end - play game over sound
 end - display high score
 end - build DOM
 end - addEventListener
 
 Links
-Trello
 
 Git
 https://christiangerbig.github.io/letter-shooter/
 
 Slides
-https://docs.google.com/presentation/d/e/2PACX-1vSlsfckWmcssGIl8FGOARO5BiIyPk2Q_qI9VV0Zp4ELx8Gy79NHXccQljmXJB2h8kMgOK3TD9nKH3cO/pub?start=true&loop=false&delayms=3000
+https://docs.google.com/presentation/d/19SUX9neMiqWqEPA53OpoDVEWDInEuT_owJnXoIe3P_Q/edit?usp=sharing

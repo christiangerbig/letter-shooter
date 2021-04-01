@@ -49,6 +49,19 @@ function displayMainScreen() {
 
 
   // Init arrays
+    const templateWords = [
+    "HOUSE",
+    "CAT",
+    "CIRCLE",
+    "MOUSE",
+    "CAR",
+    "TABLE",
+    "BUTTER",
+    "KNIFE",
+    "ROSE",
+    "BOOKS"
+  ];
+
   const flyingLetters = [
     "HFEODUSRELA",
     "DTGCSEAFTBQ",
@@ -60,19 +73,6 @@ function displayMainScreen() {
     "GKSEMFPENSI",
     "SLXEJROWDAU",
     "BQWGOZKSYOF"
-  ];
-
-  const templateWords = [
-    "HOUSE",
-    "CAT",
-    "CIRCLE",
-    "MOUSE",
-    "CAR",
-    "TABLE",
-    "BUTTER",
-    "KNIFE",
-    "ROSE",
-    "BOOKS"
   ];
 
   const alphabetChars = [
@@ -115,7 +115,7 @@ function displayMainScreen() {
 
   // Load picture files
   const bgImage = document.createElement("img");
-  bgImage.src = './images/Andromeda.png';
+  bgImage.src = "./images/Andromeda.png";
   bgImage.addEventListener(
     "load",
     () => {
@@ -123,7 +123,7 @@ function displayMainScreen() {
   );
 
   const spaceshipImage = document.createElement("img");
-  spaceshipImage.src = './images/Ships-4.png';
+  spaceshipImage.src = "./images/Ships-4.png";
   spaceshipImage.addEventListener(
     "load",
     () => {
@@ -131,7 +131,7 @@ function displayMainScreen() {
   );
 
   const shotImage = document.createElement("img");
-  shotImage.src = './images/Shot-2.png';
+  shotImage.src = "./images/Shot-2.png";
   shotImage.addEventListener(
     "load",
     () => {
@@ -139,7 +139,7 @@ function displayMainScreen() {
   );
 
   const lifeImage = document.createElement("img");
-  lifeImage.src = './images/Ship-sm.png';
+  lifeImage.src = "./images/Ship-sm.png";
   lifeImage.addEventListener(
     "load",
     () => {
@@ -147,7 +147,7 @@ function displayMainScreen() {
   );
 
   const lettersImage = document.createElement("img");
-  lettersImage.src = './images/Charset_Alchemy-5.png';
+  lettersImage.src = "./images/Charset_Alchemy-5.png";
   lettersImage.addEventListener(
     "load",
     () => {
@@ -156,28 +156,28 @@ function displayMainScreen() {
 
 
   // Load sound files
-  const posHitSound = new Audio('./samples/PosHit.mp3');
+  const posHitSound = new Audio("./samples/PosHit.mp3");
   posHitSound.addEventListener(
     "load",
     () => {
     }
   );
   
-  const negHitSound = new Audio('./samples/NegHit.mp3');
+  const negHitSound = new Audio("./samples/NegHit.mp3");
   negHitSound.addEventListener(
     "load",
     () => {
     }
   );
 
-  const gameOverSound = new Audio('./samples/GameOver.mp3');
+  const gameOverSound = new Audio("./samples/GameOver.mp3");
   gameOverSound.addEventListener(
     "load",
     () => {
     }
   );
 
-  const gameMusic = new Audio('./samples/RetroRulez.mp3');
+  const gameMusic = new Audio("./samples/RetroRulez.mp3");
   gameMusic.addEventListener(
     "load",
     () => {
@@ -243,7 +243,7 @@ function displayMainScreen() {
 
   // Handler for mouse move up or down
   const handleMouseUpDown = (e) => {
-    if ((e.clientY > (4 * spaceship.height)) && (e.clientY < canvasElem.height - (7 * spaceship.height))) {
+    if ((e.clientY > (4 * spaceship.height)) && (e.clientY < canvasElem.height - (8 * spaceship.height))) {
       spaceship.yPos = e.clientY;
     }
   }
@@ -389,7 +389,7 @@ function displayMainScreen() {
         continue;
       }
       // Top / bottom border check
-      if ((letters[i].yPos < 0) || (letters[i].yPos > (500 + letterHeight))) {
+      if ((letters[i].yPos < 0) || (letters[i].yPos > (600 - letterHeight))) {
         letters[i].yDirection *= - 1;
       }
       letters[i].yPos += letters[i].yDirection;
