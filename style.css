@@ -1,10 +1,14 @@
-#introContainer {
-  text-shadow: 0px 0px 1px black;
-  background-color: #5b82cc;
-  color: white;
-  background-image: linear-gradient(#5b82cc, rgb(0, 0, 0));
-  width: 100%;
+body {
   font-family: "Coda Caption";
+  background-color:rgb(0, 0, 0);
+}
+
+#introContainer {
+  width: 100%;
+  background-color: #5b82cc;
+  background-image: linear-gradient(#5b82cc, rgb(0, 0, 0));
+  color: white;
+  text-shadow: 0px 0px 1px black;
 }
 
 #titleContainer {
@@ -12,35 +16,39 @@
 }
 
 #titleContainer h1 {
-  padding: 0 0.4em 0.4em 0.4em;
-  font-weight: bold;
+  font-size: 2.7rem;
+  padding: 0 0.4rem 0.4rem 0.4rem;
 }
 
 .subtitle {
-  margin-bottom: 2em;
+  margin-bottom: 2rem;
 }
 
 #startButton {
-  font-size: 0.9em;
   font-family: "Coda Caption";
-  margin-top: 2em;
+  font-size: 0.9rem;
+  margin-top: 2rem;
 }
 
 
 #endContainer {
-  text-shadow: 0px 0px 1px black;
-  background-color: #5b82cc;
-  color: white;
-  background-image: linear-gradient(#5b82cc, rgb(0, 0, 0));
   width: 100%;
-  font-family: "Coda Caption";
+  background-color: #5b82cc;
+  background-image: linear-gradient(#5b82cc, rgb(0, 0, 0));
+  color: white;
+  text-shadow: 0px 0px 1px black;
+}
+
+#endContainer h1 {
+  font-size: 2.7rem;
+  padding: 0 0.4rem 0.4rem 0.4rem;
 }
 
 #highscoreContainer ul {
-  list-style-type: none;
-  padding-left: 0;
   font-family: monospace;
-  font-size: 2em;
+  font-size: 2rem;
+  padding-left: 0;
+  list-style-type: none;
 }
 
 #highscoreContainer h1 {
@@ -48,8 +56,8 @@
 }
 
 #restartButton {
-  font-size: 0.9em;
   font-family: "Coda Caption";
+  font-size: 0.9rem;
 }
 
 

@@ -12,48 +12,54 @@
   </head>
   <body>
     <!-- Intro screen -->
-    <div id="introContainer" class="fixedContainerHeight">
-      <div class="flexContainer">
-        <div id="titleContainer">
-          <div>
-            <h3> WELCOME </h3>
-            <h3> TO </h3>
-            <h1> LETTER SHOOTER </h1>
-          </div>
-          <div>
-            <h3 class="subtitle"> Shoot the right letters to assemble the missing word! </h3>
-            <p> Use your mouse to move the pen. </p>
-            <p> Click the left mouse button to shoot with ink at the letters. </p>
-            <p> Have fun with it... </p>
-          </div>
-          <div>
-            <button type="button" id="startButton">Start game</button>
+    <section>
+      <div id="introContainer" class="fixedContainerHeight">
+        <div class="flexContainer">
+          <div id="titleContainer">
+            <div>
+              <h2> WELCOME </h2>
+              <h2> TO </h2>
+              <h1> LETTER SHOOTER </h1>
+            </div>
+            <div>
+              <h3 class="subtitle"> Shoot the right letters to assemble the missing word! </h3>
+              <p> Use your mouse to move the spaceship. </p>
+              <p> Click the left mouse button to shoot and hit the letters. </p>
+              <p> Have fun with it... </p>
+            </div>
+            <div>
+              <button type="button" id="startButton"> Start game </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
     <!-- Game screen -->
-    <div id="gameContainer" class="displayOff">
-      <div class="flexContainer">
-        <canvas class="cursorOff" width="800" height="580"></canvas>
+    <section>
+      <div id="gameContainer" class="displayOff cursorOff">
+        <div class="flexContainer">
+          <canvas width="800" height="580"></canvas>
+        </div>
       </div>
-    </div>
+    </section>
     <!-- End screen -->
-    <div id="endContainer" class="displayOff fixedContainerHeight">
-      <div class="flexContainer fixedContainerHeight">
-        <div id="highscoreContainer" class="flexboxContainer2">
-          <div>
-            <h1> GAME OVER </h1>
-            <h2> Highscore </h2>
-            <ul id="scoreList">
-            </ul>
-          </div>
-          <div>
-            <button type="button" id="restartButton">Restart game</button>
+    <section>
+      <div id="endContainer" class="displayOff fixedContainerHeight">
+        <div class="flexContainer fixedContainerHeight">
+          <div id="highscoreContainer" class="flexboxContainer2">
+            <div>
+              <h1> GAME OVER </h1>
+              <h2> Highscore </h2>
+              <ul id="scoreList">
+              </ul>
+            </div>
+            <div>
+              <button type="button" id="restartButton">Restart game</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
     <script type="text/javascript" src="./javascript/index.js"></script>
   </body>
 </html>
