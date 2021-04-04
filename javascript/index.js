@@ -99,6 +99,7 @@ function displayMainScreen() {
 
   let assembledWord = "      ";
   let startIndex = Math.floor(Math.random() * templateWords.length);
+  let oldStartIndex = startIndex;
   let currentTemplateWord = templateWords[startIndex];
 
   let letterWidth = 50;
@@ -224,7 +225,7 @@ function displayMainScreen() {
   );
 
   for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-    let x = canvasElem.width - (Math.floor(Math.random() * 500)) - (1*letterWidth);
+    let x = canvasElem.width - (Math.floor(Math.random() * 500)) - letterWidth;
     let y = letterHeight + (Math.floor(Math.random() * 500));
     let yDirection = 1 + (Math.floor(Math.random() * 3));
     let letterObject = new LetterObject(
@@ -313,9 +314,7 @@ function displayMainScreen() {
         isLetter = true;
         for (let k = 0; k < assembledWord.length; k++) {
           let char = assembledWord[k];
-          (j !== k) 
-            ? buffer += char 
-            : buffer += letters[i].char;
+          (j !== k) ? buffer += char : buffer += letters[i].char;
         }
         assembledWord = buffer;
         // Clear hit letter in current template word
@@ -332,9 +331,7 @@ function displayMainScreen() {
       }
       else {
         lives -= 1;
-        (lives === 0) 
-          ? gameOver = true 
-          : energy = 90;        
+        (lives === 0) ? gameOver = true : energy = 90;        
       }
     }
     // Check if all missed letters are hit
@@ -472,31 +469,61 @@ function displayMainScreen() {
     );
   }
 
+  // Get next random template word if all missing letters were hit
+  const checkTemplateWord = () => {
+    assembledWord = "      ";
+    while (startIndex === oldStartIndex) {
+      startIndex = Math.floor(Math.random() * templateWords.length);
+    }
+    oldStartIndex = startIndex;      
+    currentTemplateWord = templateWords[startIndex];
+    letters = [];
+    for (let i = 0; i < flyingLetters[startIndex].length; i++) {
+      let x = canvasElem.width - (Math.floor(Math.random() * 500)) - (2 * letterWidth);
+      let y = letterHeight + (Math.floor(Math.random() * 500));
+      let yDirection = 1 + (Math.floor(Math.random() * 4));
+      let letterObject = new LetterObject(
+        x, 
+        y, 
+        letterWidth, 
+        letterHeight, 
+        yDirection, 
+        flyingLetters[startIndex][i]
+      );
+      letters.push(letterObject);
+    }
+    nextLevel = false;
+  }
+
+  // Stop game if no lives left
+  const stopGame = () => {
+    gameOver = false;
+    // DOM-Manipulation
+    const gameContainerElem = document.getElementById("gameContainer");
+    gameContainerElem.classList.remove("cursorOff");
+    gameContainerElem.classList.add("cursorOn");
+    // Stop interval
+    clearInterval(intervalId);
+    // Remove event listeners
+    document.removeEventListener("mousemove", handleMouseUpDown);
+    document.removeEventListener("mousedown", handleLeftMouseButton);
+    // Stop game music and play game over sound
+    gameMusic.currentTime = 0; 
+    gameMusic.pause(); 
+    gameMusic.currentTime = 0;
+    gameOverSound.play();
+    // Start end screen
+    displayEndScreen(score);
+  }
+  
+
   // Game loop
   const animateAll = () => {
     // Always display background picture
     displayBgPicture();
-    // Next template word if all letters were hit
+    // Check template word if level is finished
     if (nextLevel) {
-      assembledWord = "      ";
-      startIndex = Math.floor(Math.random() * templateWords.length);
-      currentTemplateWord = templateWords[startIndex];
-      letters = [];
-      for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-        let x = canvasElem.width - (Math.floor(Math.random() * 500)) - (2 * letterWidth);
-        let y = letterHeight + (Math.floor(Math.random() * 500));
-        let yDirection = 1 + (Math.floor(Math.random() * 4));
-        let letterObject = new LetterObject(
-          x, 
-          y, 
-          letterWidth, 
-          letterHeight, 
-          yDirection, 
-          flyingLetters[startIndex][i]
-        );
-        letters.push(letterObject);
-      }
-      nextLevel = false;
+      checkTemplateWord();
     }
     // Graphic elements only displayed if game not over
     if (!gameOver) {
@@ -511,23 +538,7 @@ function displayMainScreen() {
     }
     // Prepare game over
     else {
-      gameOver = false;
-      // DOM-Manipulation
-      const gameContainerElem = document.getElementById("gameContainer");
-      gameContainerElem.classList.remove("cursorOff");
-      gameContainerElem.classList.add("cursorOn");
-      // Stop interval
-      clearInterval(intervalId);
-      // Remove event listeners
-      document.removeEventListener("mousemove", handleMouseUpDown);
-      document.removeEventListener("mousedown", handleLeftMouseButton);
-      // Stop game music and play game over sound
-      gameMusic.currentTime = 0; 
-      gameMusic.pause(); 
-      gameMusic.currentTime = 0;
-      gameOverSound.play();
-      // Start end screen
-      displayEndScreen(score);
+      stopGame();
     }
   }
 
