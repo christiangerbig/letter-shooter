@@ -6,7 +6,7 @@ let scoresTable = [
 ];
 
 // ---------- Main screen ----------
-function displayMainScreen() {
+const displayMainScreen = () => {
   // Init classes
   class SpaceshipObject {
     constructor(x, y, w, h, im) {
@@ -85,11 +85,15 @@ function displayMainScreen() {
   let letters = [];
 
   // Init constants
+  const letterWidth = 50;
+  const letterHeight = 40;
   const letterHorizGap = 17;
   const letterVertGap = 7;
+
   const shotHorizSpeed = 15;
   const alphabetCharactersNum = 26;
-  
+
+
   // Init variables
   let energy = 90;
   let score = 0;
@@ -101,9 +105,6 @@ function displayMainScreen() {
   let startIndex = Math.floor(Math.random() * templateWords.length);
   let oldStartIndex = startIndex;
   let currentTemplateWord = templateWords[startIndex];
-
-  let letterWidth = 50;
-  let letterHeight = 40;
 
   let shotEnabled = false;
   let intervalId = null;
@@ -195,7 +196,7 @@ function displayMainScreen() {
   let xOff = 5;
   let yOff = 8;
   for (let i = 0; i < alphabetCharactersNum; i++) {
-    letterObjectInfo = new LetterObjectInfo(
+    let letterObjectInfo = new LetterObjectInfo(
       xOff, 
       yOff, 
       alphabetChars[i]
@@ -342,6 +343,7 @@ function displayMainScreen() {
     }
     nextLevel = true;
   }
+
   // Check collision shot vs. letter(s)
   const checkLetterHit = (i) => {
     // ( shot.xr >= letter.xl ) && ( shot.xl <= letter.xr )
@@ -543,9 +545,7 @@ function displayMainScreen() {
   }
 
   // Handler for interval timer
-  const handleIntervalTimer = () => {
-    requestAnimationFrame(animateAll);
-  }
+  const handleIntervalTimer = () => requestAnimationFrame(animateAll);
   // Start game by interval
   intervalId = setInterval(
     handleIntervalTimer, 
@@ -589,8 +589,8 @@ const displayEndScreen = (score) => {
     scoresTable.push(score);
     scoresTable.sort(
       (a, b) => {
-        return b - a;
-      }
+        b - a;
+    }
     );
   }
   // Display highscore table
