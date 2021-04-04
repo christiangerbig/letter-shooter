@@ -589,8 +589,8 @@ const displayEndScreen = (score) => {
     scoresTable.push(score);
     scoresTable.sort(
       (a, b) => {
-        b - a;
-    }
+        return b - a;
+      }
     );
   }
   // Display highscore table
