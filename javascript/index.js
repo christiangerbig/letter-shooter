@@ -587,11 +587,7 @@ const displayEndScreen = (score) => {
   // Insert score in highscore table and sort entries
   if ((scoresTable.length < 10) && (score !== 0)) {
     scoresTable.push(score);
-    scoresTable.sort(
-      (a, b) => {
-        return b - a;
-      }
-    );
+    scoresTable.sort((a, b) => b - a);
   }
   // Display highscore table
   const ulElem = document.getElementById("scoreList");
