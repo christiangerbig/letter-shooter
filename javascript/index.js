@@ -1,5 +1,5 @@
 // ---------- Global ----------
-let scoresTable = [
+const scoresTable = [
   10100,
   9000,
   1000
@@ -81,8 +81,8 @@ const displayMainScreen = () => {
     "U", "V", "W", "X", "Y", "Z"
   ];
 
-  let letterObjects = [];
-  let letters = [];
+  const letterObjects = [];
+  const letters = [];
 
   // Init constants
   const letterWidth = 50;
@@ -229,7 +229,7 @@ const displayMainScreen = () => {
     let x = canvasElem.width - (Math.floor(Math.random() * 500)) - letterWidth;
     let y = letterHeight + (Math.floor(Math.random() * 500));
     let yDirection = 1 + (Math.floor(Math.random() * 3));
-    let letterObject = new LetterObject(
+    const letterObject = new LetterObject(
       x, 
       y, 
       letterWidth, 
@@ -479,12 +479,12 @@ const displayMainScreen = () => {
     }
     oldStartIndex = startIndex;      
     currentTemplateWord = templateWords[startIndex];
-    letters = [];
+    letters.splice(0, letters.length);
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
       let x = canvasElem.width - (Math.floor(Math.random() * 500)) - (2 * letterWidth);
       let y = letterHeight + (Math.floor(Math.random() * 500));
       let yDirection = 1 + (Math.floor(Math.random() * 4));
-      let letterObject = new LetterObject(
+      const letterObject = new LetterObject(
         x, 
         y, 
         letterWidth, 
