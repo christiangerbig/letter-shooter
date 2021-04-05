@@ -5,8 +5,9 @@ const scoresTable = [
   1000
 ];
 
-// ---------- Main screen ----------
-const displayMainScreen = () => {
+
+// ---------- Display game screen ----------
+const displayGameScreen = () => {
   // Init classes
   class SpaceshipObject {
     constructor(x, y, w, h, im) {
@@ -47,9 +48,8 @@ const displayMainScreen = () => {
     }
   };
 
-
   // Init arrays
-    const templateWords = [
+  const templateWords = [
     "HOUSE",
     "CAT",
     "CIRCLE",
@@ -93,7 +93,6 @@ const displayMainScreen = () => {
   const shotHorizSpeed = 15;
   const alphabetCharactersNum = 26;
 
-
   // Init variables
   let energy = 90;
   let score = 0;
@@ -109,11 +108,9 @@ const displayMainScreen = () => {
   let shotEnabled = false;
   let intervalId = null;
 
-
   // Init Canvas
   const canvasElem = document.querySelector("canvas");
   const ctx = canvasElem.getContext("2d");
-
 
   // Load picture files
   const bgImage = document.createElement("img");
@@ -156,7 +153,6 @@ const displayMainScreen = () => {
     }
   );
 
-
   // Load sound files
   const posHitSound = new Audio("./samples/PosHit.mp3");
   posHitSound.addEventListener(
@@ -186,17 +182,15 @@ const displayMainScreen = () => {
     }
   );
 
-
   // Init game music
   gameMusic.loop="loop";
   gameMusic.play();
-
 
   // Init objects
   let xOff = 5;
   let yOff = 8;
   for (let i = 0; i < alphabetCharactersNum; i++) {
-    let letterObjectInfo = new LetterObjectInfo(
+    const letterObjectInfo = new LetterObjectInfo(
       xOff, 
       yOff, 
       alphabetChars[i]
@@ -209,7 +203,7 @@ const displayMainScreen = () => {
     }
   }
 
-  let spaceship = new SpaceshipObject(
+  const spaceship = new SpaceshipObject(
     10, 
     canvasElem.height / 2, 
     163, 
@@ -217,7 +211,7 @@ const displayMainScreen = () => {
     spaceshipImage
   );
 
-  let shot = new ShotObject(
+  const shot = new ShotObject(
     116, 
     canvasElem.height / 2, 
     23, 
@@ -240,9 +234,7 @@ const displayMainScreen = () => {
     letters.push(letterObject);
   }
 
-
   // Add event listeners
-
   // Handler for mouse move up or down
   const handleMouseUpDown = (e) => {
     if ((e.clientY > (4 * spaceship.height)) && (e.clientY < canvasElem.height - (8 * spaceship.height))) {
@@ -259,7 +251,6 @@ const displayMainScreen = () => {
   }
   // Add handler for click on left mouse button
   document.addEventListener("mousedown", handleLeftMouseButton);
-
 
   // Display background picture
   const displayBgPicture = () => {
@@ -515,10 +506,9 @@ const displayMainScreen = () => {
     gameMusic.currentTime = 0;
     gameOverSound.play();
     // Start end screen
-    displayEndScreen(score);
+    displayGameoverScreen(score);
   }
   
-
   // Game loop
   const animateAll = () => {
     // Always display background picture
@@ -554,8 +544,8 @@ const displayMainScreen = () => {
 }
 
 
-// Display intro screen
-const displayIntroScreen = () => {
+// ---------- Display splash screen ----------
+const displaySplashScreen = () => {
   // Handler for click on start button
   const handleStartButton = () => {
     // DOM-Manipulation
@@ -566,17 +556,34 @@ const displayIntroScreen = () => {
     // Remove handler for click on start button
     const startButtonElem = document.getElementById("startButton");
     startButtonElem.removeEventListener("click", handleStartButton);
-    // Start main screen
-    displayMainScreen();
+    // Start game
+    displayGameScreen();
   }
   // Add handler for click on start button
   const startButtonElem = document.getElementById("startButton");
   startButtonElem.addEventListener("click", handleStartButton);
 }
 
-
-// Display end screen
-const displayEndScreen = (score) => {
+// ---------- Display gameover screen ----------
+const displayGameoverScreen = (score) => {
+  // Create highscore table
+  const createHighScoreTable = () => {
+    // Insert score in highscore table and sort entries
+    if ((scoresTable.length < 10) && (score !== 0)) {
+      scoresTable.push(score);
+      scoresTable.sort((a, b) => b - a);
+    }
+    // Create highscore table list elements
+    const ulElem = document.getElementById("scoreList");
+    ulElem.innerHTML = "" // clear the list
+    for (let i = 0; i < scoresTable.length; i++) {
+      let scoreStr = scoresTable[i].toString();
+      scoreStr = scoreStr.padStart(6, 0, 0);
+      const liElem = document.createElement("li");
+      liElem.innerText = scoreStr;
+      ulElem.appendChild(liElem);
+    }
+  }
   // DOM-manipulation
   const gameContainerElem = document.getElementById("gameContainer");
   gameContainerElem.classList.add("displayOff");
@@ -584,21 +591,7 @@ const displayEndScreen = (score) => {
   gameContainerElem.classList.add("cursorOff");
   const endContainerElem = document.getElementById("endContainer");
   endContainerElem.classList.remove("displayOff");
-  // Insert score in highscore table and sort entries
-  if ((scoresTable.length < 10) && (score !== 0)) {
-    scoresTable.push(score);
-    scoresTable.sort((a, b) => b - a);
-  }
-  // Display highscore table
-  const ulElem = document.getElementById("scoreList");
-  ulElem.innerHTML = "" // clear the list
-  for (let i = 0; i < scoresTable.length; i++) {
-    let scoreStr = scoresTable[i].toString();
-    scoreStr = scoreStr.padStart(6, 0, 0);
-    const liElem = document.createElement("li");
-    liElem.innerText = scoreStr;
-    ulElem.appendChild(liElem);
-  }
+  createHighScoreTable();
   // Handler for click on restart button
   const handleRestartButton = () => {
     // DOM manipulation
@@ -611,8 +604,8 @@ const displayEndScreen = (score) => {
     // Remove handler for click on restart button
     const restartButtonElem = document.getElementById("restartButton");
     restartButtonElem.removeEventListener("click", handleRestartButton);
-    // Start main screen
-    displayMainScreen();
+    // Restart game
+    displayGameScreen();
   }
   // Add handler for click on restart button
   const restartButtonElem = document.getElementById("restartButton");
@@ -620,5 +613,5 @@ const displayEndScreen = (score) => {
 }
 
 
-// Start intro screen
-displayIntroScreen();
+// Start game
+displaySplashScreen();
