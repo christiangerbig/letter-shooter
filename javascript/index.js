@@ -8,6 +8,7 @@ const scoresTable = [
 
 // ---------- Display game screen ----------
 const displayGameScreen = () => {
+
   // Init classes
   class SpaceshipObject {
     constructor(x, y, w, h, im) {
@@ -89,7 +90,6 @@ const displayGameScreen = () => {
   const letterHeight = 40;
   const letterHorizGap = 17;
   const letterVertGap = 7;
-
   const shotHorizSpeed = 15;
   const alphabetCharactersNum = 26;
 
@@ -99,14 +99,13 @@ const displayGameScreen = () => {
   let lives = 3;
   let nextLevel = false;
   let gameOver = false;
+  let shotEnabled = false;
+  let intervalId = null;
 
   let assembledWord = "      ";
   let startIndex = Math.floor(Math.random() * templateWords.length);
   let oldStartIndex = startIndex;
   let currentTemplateWord = templateWords[startIndex];
-
-  let shotEnabled = false;
-  let intervalId = null;
 
   // Init Canvas
   const canvasElem = document.querySelector("canvas");
@@ -122,15 +121,15 @@ const displayGameScreen = () => {
   );
 
   const spaceshipImage = document.createElement("img");
-  spaceshipImage.src = "./images/Ships-4.png";
+  spaceshipImage.src = "./images/Ships.png";
   spaceshipImage.addEventListener(
     "load",
     () => {
     }
   );
-
+    
   const shotImage = document.createElement("img");
-  shotImage.src = "./images/Shot-2.png";
+  shotImage.src = "./images/Shot.png";
   shotImage.addEventListener(
     "load",
     () => {
@@ -146,7 +145,7 @@ const displayGameScreen = () => {
   );
 
   const lettersImage = document.createElement("img");
-  lettersImage.src = "./images/Charset_Alchemy-5.png";
+  lettersImage.src = "./images/Charset.png";
   lettersImage.addEventListener(
     "load",
     () => {
@@ -154,29 +153,29 @@ const displayGameScreen = () => {
   );
 
   // Load sound files
-  const posHitSound = new Audio("./samples/PosHit.mp3");
+  const gameMusic = new Audio("./sounds/RetroRulez.mp3");
+  gameMusic.addEventListener(
+    "load",
+    () => {
+    }
+  );
+
+  const posHitSound = new Audio("./sounds/PosHit.mp3");
   posHitSound.addEventListener(
     "load",
     () => {
     }
   );
   
-  const negHitSound = new Audio("./samples/NegHit.mp3");
+  const negHitSound = new Audio("./sounds/NegHit.mp3");
   negHitSound.addEventListener(
     "load",
     () => {
     }
   );
 
-  const gameOverSound = new Audio("./samples/GameOver.mp3");
+  const gameOverSound = new Audio("./sounds/GameOver.mp3");
   gameOverSound.addEventListener(
-    "load",
-    () => {
-    }
-  );
-
-  const gameMusic = new Audio("./samples/RetroRulez.mp3");
-  gameMusic.addEventListener(
     "load",
     () => {
     }
@@ -296,27 +295,32 @@ const displayGameScreen = () => {
 
   // Check if missing letter was hit
   const checkMissingLetter = (i) => {
+
     // Insert hit letter in assembled word
-    let buffer = "";
-    let isLetter = false;
-    for (let j = 0; j < currentTemplateWord.length; j++) {
-      if (letters[i].char === currentTemplateWord[j]) {
-        posHitSound.play();
-        score += 100;
-        isLetter = true;
-        for (let k = 0; k < assembledWord.length; k++) {
-          let char = assembledWord[k];
-          (j !== k) ? buffer += char : buffer += letters[i].char;
+    const insertHitLetter = (i) => {
+      let buffer = "";
+      let isLetterHit = false;
+      for (let j = 0; j < currentTemplateWord.length; j++) {
+        if (letters[i].char === currentTemplateWord[j]) {
+          posHitSound.play();
+          score += 100;
+          isLetterHit = true;
+          for (let k = 0; k < assembledWord.length; k++) {
+            let char = assembledWord[k];
+            (j !== k) ? buffer += char : buffer += letters[i].char;
+          }
+          assembledWord = buffer;
+          // Clear hit letter in current template word
+          buffer = currentTemplateWord.replace(letters[i].char, " ");
+          currentTemplateWord = buffer;
+          break;
         }
-        assembledWord = buffer;
-        // Clear hit letter in current template word
-        buffer = currentTemplateWord.replace(letters[i].char, " ");
-        currentTemplateWord = buffer;
-        break;
       }
+      return isLetterHit;
     }
+
     // Reduce energy if wrong letter was hit
-    if (!(isLetter)) {
+    const reduceEnergy = () => {
       negHitSound.play();
       if (energy > 30) {
         energy -= 30;
@@ -326,6 +330,9 @@ const displayGameScreen = () => {
         (lives === 0) ? gameOver = true : energy = 90;        
       }
     }
+    
+    (insertHitLetter(i)) ? null : reduceEnergy();
+
     // Check if all missed letters are hit
     for (let k = 0; k < currentTemplateWord.length; k++) {
       if (currentTemplateWord[k] !== " ") {
@@ -518,7 +525,10 @@ const displayGameScreen = () => {
       checkTemplateWord();
     }
     // Graphic elements only displayed if game not over
-    if (!gameOver) {
+    if (gameOver) {
+      stopGame();
+    }
+    else {
       displaySpaceship();
       shootBullet();
       moveLetters();
@@ -527,10 +537,6 @@ const displayGameScreen = () => {
       displayLives();
       displayTemplateWord();
       displayAssembledWord();
-    }
-    // Prepare game over
-    else {
-      stopGame();
     }
   }
 
@@ -546,6 +552,7 @@ const displayGameScreen = () => {
 
 // ---------- Display splash screen ----------
 const displaySplashScreen = () => {
+  
   // Handler for click on start button
   const handleStartButton = () => {
     // DOM-Manipulation
@@ -566,8 +573,9 @@ const displaySplashScreen = () => {
 
 // ---------- Display gameover screen ----------
 const displayGameoverScreen = (score) => {
+
   // Create highscore table
-  const createHighScoreTable = () => {
+  const createHighScoreTable = (score) => {
     // Insert score in highscore table and sort entries
     if ((scoresTable.length < 10) && (score !== 0)) {
       scoresTable.push(score);
@@ -591,7 +599,7 @@ const displayGameoverScreen = (score) => {
   gameContainerElem.classList.add("cursorOff");
   const endContainerElem = document.getElementById("endContainer");
   endContainerElem.classList.remove("displayOff");
-  createHighScoreTable();
+  createHighScoreTable(score);
   // Handler for click on restart button
   const handleRestartButton = () => {
     // DOM manipulation
