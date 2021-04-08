@@ -1,83 +1,92 @@
-Letter Shooter
+# Letter Shooter
 
-Description
+
+## Description
+
 Letter Shooter is a game where the player moves a spaceship vertically on the screen and can shoot with bullets at flying letters. The player gets a template word and has to shoot the characters of this given word out of a formation of letters. If the player hits the right letter his score is increased by 100. If the player hits the wrong letter out of this formation, he looses energy. If the energy is zero, he looses one of his three lives. The game ends if he has lost all his three lives. After that the highscore table with the position of the player is displayed.
 
-MVP (DOM - CANVAS)
--intro part with start button
--main part with:
-*game music is played in the background and is looped if end of song is reached
-*move the spaceship with the mouse
-*shoot with bullets at the letters
-*the letters are bouncing up and down
-*random fetch of a word template out of an array
-*if the right letter was hit a positive sound is displayed
-*if the wrong letter was hit a negative sound is displayed
-*the letters matching the letters of the word template disappear out of the flying letters formation
-*the letters of the template word are displayed at the left bottom of the screen
-*the matching letters are displayed at the right bottom of the screen
-*energy is displayed as a bar on the top left of the screen and is decreased if the wrong letter was hit
-*current player score is displayed at the top centre of the screen
-*lifes left are displayed at the right top of the screen
-*a life gets lost, if energy has reached zero
-*game over after all lives are lost
-end part with:
-*a game over sound is played
-*display high score table after game over
-*restart game supported
 
-Data structure
+## MVP (DOM - CANVAS)
+
+- intro part with start button
+
+- main part with:
+  - game music is played in the background and is looped if end of song is reached
+  - move the spaceship with the mouse
+  - shoot with bullets at the letters
+  - the letters are bouncing up and down
+  - random fetch of a word template out of an array
+  - if the right letter was hit a positive sound is displayed
+  - if the wrong letter was hit a negative sound is displayed
+  - the letters matching the letters of the word template disappear out of the flying letters formation
+  - the letters of the template word are displayed at the left bottom of the screen
+  - the matching letters are displayed at the right bottom of the screen
+  - energy is displayed as a bar on the top left of the screen and is decreased if the wrong letter was hit
+  - current player score is displayed at the top centre of the screen
+  - lifes left are displayed at the right top of the screen
+  - a life gets lost, if energy has reached zero
+  - game over after all lives are lost
+
+- end part with:
+  - a game over sound is played
+  - display high score table after game over
+  - restart game supported
+
+
+## Data structure
+
 intro.js
--displayIntroScreen() {}
+- displayIntroScreen() {}
 
 game.js
--displayMainScreen() {}
--displayBGPicture() {}
--moveSpaceship() {}
--shootBullet() {}
--moveLetters() {}
--checkLetterHit() {}
--displayTemplateWord() {}
--displayAssembledWord() {}
--displayEnergy() {}
--displayLives() {}
--displayScore() {}
+- displayMainScreen() {}
+- displayBGPicture() {}
+- moveSpaceship() {}
+- shootBullet() {}
+- moveLetters() {}
+- checkLetterHit() {}
+- displayTemplateWord() {}
+- displayAssembledWord() {}
+- displayEnergy() {}
+- displayLives() {}
+- displayScore() {}
 
 end.js
--displayEndScreen() {}
+- displayEndScreen() {}
 
-Classes
+## Classes
 
--Letter
-X-Position
-Y-Position
-Width
-Height
-Y-Direction
-char
+- Letter
+  - X-Position
+  - Y-Position
+  - Width
+  - Height
+  - Y-Direction
+  - char
 
--LetterObjectInfo
-x-Offset
-y-Offset
-char
+- LetterObjectInfo
+  - x-Offset
+  - y-Offset
+  - char
 
--Spaceship
-X-Position
-Y-Posiztion
-Width
-Height
-URL-image
+- Spaceship
+  - X-Position
+  - Y-Posiztion
+  - Width
+  - Height
+  - URL-image
 
--Shot
-X-Position
-Y-Position
-Width
-Height
-URL-image
+- Shot
+  - X-Position
+  - Y-Position
+  - Width
+  - Height
+  - URL-image
 
-Arrays
 
--templateWords
+## Arrays
+
+- templateWords
 "HOUSE",
 "CAT",
 "CIRCLE",
@@ -89,7 +98,7 @@ Arrays
 "ROSE",
 "BOOKS"
 
--flyingLetters
+- flyingLetters
 "HFEODUSRELA",
 "DTGCSEAFTBQ",
 "ELRTCUNILCF",
@@ -101,21 +110,23 @@ Arrays
 "SLXEJROWDAU",
 "BQWGOZKSYOF"
 
--alphabetChars
+- alphabetChars
 "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
 "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
 "U", "V", "W", "X", "Y", "Z"
 
--letterObjects
--letters
+- letterObjects
+- letters
 
-States y States Transitions
-Definition of the different states and their transition (transition functions)
--splashScreen
--gameScreen
--gameoverScreen
 
-Task
+## States y States Transitions
+
+- splashScreen
+- gameScreen
+- gameoverScreen
+
+# Task
+
 intro - Build DOM
 intro - addEventListener
 
@@ -139,7 +150,8 @@ end - display high score
 end - build DOM
 end - addEventListener
 
-Links
+
+# Links
 
 Git
 https://christiangerbig.github.io/letter-shooter/
