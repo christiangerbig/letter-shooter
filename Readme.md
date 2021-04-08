@@ -125,33 +125,33 @@ end.js
 - gameScreen
 - gameoverScreen
 
-# Task
+## Task
 
-intro - Build DOM
-intro - addEventListener
+- intro - Build DOM
+- intro - addEventListener
 
-game - start-loop
-game - build canvas
-game - update canvas
-game - draw canvass
-game - move spaceship
-game - shot handler
-game - check collisions
-game - move letters
-game - show words
-game - display energy
-game - display lives
-game - display score
-game - play music
-game - play positive/negative samples for letters hit
+- game - start-loop
+- game - build canvas
+- game - update canvas
+- game - draw canvass
+- game - move spaceship
+- game - shot handler
+- game - check collisions
+- game - move letters
+- game - show words
+- game - display energy
+- game - display lives
+- game - display score
+- game - play music
+- game - play positive/negative samples for letters hit
 
-end - play game over sound
-end - display high score
-end - build DOM
-end - addEventListener
+- end - play game over sound
+- end - display high score
+- end - build DOM
+- end - addEventListener
 
 
-# Links
+## Links
 
 Git
 https://christiangerbig.github.io/letter-shooter/
