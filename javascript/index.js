@@ -556,19 +556,16 @@ const displaySplashScreen = () => {
   // Handler for click on start button
   const handleStartButton = () => {
     // DOM-Manipulation
-    const introContainerElem = document.getElementById("introContainer");
-    introContainerElem.classList.add("displayOff");
-    const gameContainerElem = document.getElementById("gameContainer");
-    gameContainerElem.classList.remove("displayOff");
+    document.getElementById("introContainer").classList.add("displayOff");
+    document.getElementById("gameContainer").classList.remove("displayOff");
     // Remove handler for click on start button
-    const startButtonElem = document.getElementById("startButton");
-    startButtonElem.removeEventListener("click", handleStartButton);
+    document.getElementById("startButton").removeEventListener("click", handleStartButton);
     // Start game
     displayGameScreen();
   }
   // Add handler for click on start button
-  const startButtonElem = document.getElementById("startButton");
-  startButtonElem.addEventListener("click", handleStartButton);
+  document.getElementById("startButton").addEventListener("click", handleStartButton);
+
 }
 
 // ---------- Display gameover screen ----------
@@ -583,7 +580,7 @@ const displayGameoverScreen = (score) => {
     }
     // Create highscore table list elements
     const ulElem = document.getElementById("scoreList");
-    ulElem.innerHTML = "" // clear the list
+    ulElem.innerHTML = ""; // clear the list
     for (let i = 0; i < scoresTable.length; i++) {
       let scoreStr = scoresTable[i].toString();
       scoreStr = scoreStr.padStart(6, 0, 0);
@@ -597,27 +594,22 @@ const displayGameoverScreen = (score) => {
   gameContainerElem.classList.add("displayOff");
   gameContainerElem.classList.remove("cursorOn");
   gameContainerElem.classList.add("cursorOff");
-  const endContainerElem = document.getElementById("endContainer");
-  endContainerElem.classList.remove("displayOff");
+  document.getElementById("endContainer").classList.remove("displayOff");
   createHighScoreTable(score);
   // Handler for click on restart button
   const handleRestartButton = () => {
     // DOM manipulation
-    const ulElem = document.getElementById("scoreList");
-    ulElem.innerHTML = "";
-    const endContainerElem = document.getElementById("endContainer");
-    endContainerElem.classList.add("displayOff");
-    const gameContainerElem = document.getElementById("gameContainer");
-    gameContainerElem.classList.remove("displayOff");
+    document.getElementById("scoreList").innerHTML = "";
+    document.getElementById("endContainer").classList.add("displayOff");
+    document.getElementById("gameContainer").classList.remove("displayOff");
     // Remove handler for click on restart button
-    const restartButtonElem = document.getElementById("restartButton");
-    restartButtonElem.removeEventListener("click", handleRestartButton);
+    document.getElementById("restartButton").removeEventListener("click", handleRestartButton);
     // Restart game
     displayGameScreen();
   }
   // Add handler for click on restart button
-  const restartButtonElem = document.getElementById("restartButton");
-  restartButtonElem.addEventListener("click", handleRestartButton);
+  document.getElementById("restartButton").addEventListener("click", handleRestartButton);
+
 }
 
 
