@@ -111,74 +111,69 @@ const displayGameScreen = () => {
   const canvasElem = document.querySelector("canvas");
   const ctx = canvasElem.getContext("2d");
 
-  // Load picture files
+  // Handler for loading of graphics or sound to be finished
+  const handleLoadFinished = () => {
+    }
+
+    // Load picture files
   const bgImage = document.createElement("img");
   bgImage.src = "./images/Andromeda.png";
   bgImage.addEventListener(
     "load",
-    () => {
-    }
+    handleLoadFinished
   );
 
   const spaceshipImage = document.createElement("img");
   spaceshipImage.src = "./images/Ships.png";
   spaceshipImage.addEventListener(
     "load",
-    () => {
-    }
+    handleLoadFinished
   );
     
   const shotImage = document.createElement("img");
   shotImage.src = "./images/Shot.png";
   shotImage.addEventListener(
     "load",
-    () => {
-    }
+    handleLoadFinished
   );
 
   const lifeImage = document.createElement("img");
   lifeImage.src = "./images/Ship-sm.png";
   lifeImage.addEventListener(
     "load",
-    () => {
-    }
+    handleLoadFinished
   );
 
   const lettersImage = document.createElement("img");
   lettersImage.src = "./images/Charset.png";
   lettersImage.addEventListener(
     "load",
-    () => {
-    }
+    handleLoadFinished
   );
 
   // Load sound files
   const gameMusic = new Audio("./sounds/RetroRulez.mp3");
   gameMusic.addEventListener(
     "load",
-    () => {
-    }
+    handleLoadFinished
   );
 
   const posHitSound = new Audio("./sounds/PosHit.mp3");
   posHitSound.addEventListener(
     "load",
-    () => {
-    }
+    handleLoadFinished
   );
   
   const negHitSound = new Audio("./sounds/NegHit.mp3");
   negHitSound.addEventListener(
     "load",
-    () => {
-    }
+    handleLoadFinished
   );
 
   const gameOverSound = new Audio("./sounds/GameOver.mp3");
   gameOverSound.addEventListener(
     "load",
-    () => {
-    }
+    handleLoadFinished
   );
 
   // Init game music
@@ -241,7 +236,10 @@ const displayGameScreen = () => {
     }
   }
   // Add handler for mouse move up or down
-  document.addEventListener("mousemove", handleMouseUpDown);
+  document.addEventListener(
+    "mousemove", 
+    handleMouseUpDown
+  );
 
   // Handler for click on left mouse button
   const handleLeftMouseButton = () => {
@@ -249,7 +247,10 @@ const displayGameScreen = () => {
     shot.yPos = spaceship.yPos + letterHorizGap;
   }
   // Add handler for click on left mouse button
-  document.addEventListener("mousedown", handleLeftMouseButton);
+  document.addEventListener(
+    "mousedown", 
+    handleLeftMouseButton
+  );
 
   // Display background picture
   const displayBgPicture = () => {
@@ -505,8 +506,14 @@ const displayGameScreen = () => {
     // Stop interval
     clearInterval(intervalId);
     // Remove event listeners
-    document.removeEventListener("mousemove", handleMouseUpDown);
-    document.removeEventListener("mousedown", handleLeftMouseButton);
+    document.removeEventListener(
+      "mousemove", 
+      handleMouseUpDown
+    );
+    document.removeEventListener(
+      "mousedown", 
+      handleLeftMouseButton
+    );
     // Stop game music and play game over sound
     gameMusic.currentTime = 0; 
     gameMusic.pause(); 
@@ -559,12 +566,18 @@ const displaySplashScreen = () => {
     document.getElementById("introContainer").classList.add("displayOff");
     document.getElementById("gameContainer").classList.remove("displayOff");
     // Remove handler for click on start button
-    document.getElementById("startButton").removeEventListener("click", handleStartButton);
+    document.getElementById("startButton").removeEventListener(
+      "click", 
+      handleStartButton
+    );
     // Start game
     displayGameScreen();
   }
   // Add handler for click on start button
-  document.getElementById("startButton").addEventListener("click", handleStartButton);
+  document.getElementById("startButton").addEventListener(
+    "click", 
+    handleStartButton
+  );
 
 }
 
@@ -603,12 +616,18 @@ const displayGameoverScreen = (score) => {
     document.getElementById("endContainer").classList.add("displayOff");
     document.getElementById("gameContainer").classList.remove("displayOff");
     // Remove handler for click on restart button
-    document.getElementById("restartButton").removeEventListener("click", handleRestartButton);
+    document.getElementById("restartButton").removeEventListener(
+      "click", 
+      handleRestartButton
+    );
     // Restart game
     displayGameScreen();
   }
   // Add handler for click on restart button
-  document.getElementById("restartButton").addEventListener("click", handleRestartButton);
+  document.getElementById("restartButton").addEventListener(
+    "click", 
+    handleRestartButton
+  );
 
 }
 
