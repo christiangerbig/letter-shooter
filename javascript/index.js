@@ -11,41 +11,41 @@ const displayGameScreen = () => {
 
   // Init classes
   class SpaceshipObject {
-    constructor(x, y, w, h, im) {
-      this.xPos = x;
-      this.yPos = y;
-      this.width = w;
-      this.height = h;
-      this.imageUrl = im;
+    constructor(xPosition, yPosition, width, height, imageUrl) {
+      this.xPosition = xPosition;
+      this.yPosition = yPosition;
+      this.width = width;
+      this.height = height;
+      this.imageUrl = imageUrl;
     }
   };
 
   class ShotObject {
-    constructor(x, y, w, h, im) {
-      this.xPos = x;
-      this.yPos = y;
-      this.width = w;
-      this.height = h;
-      this.imageUrl = im;
+    constructor(xPosition, yPosition , width, height, imageUrl) {
+      this.xPosition = xPosition;
+      this.yPosition = yPosition;
+      this.width = width;
+      this.height = height;
+      this.imageUrl = imageUrl;
     }
   };
 
   class LetterObject {
-    constructor(x, y, w, h, di, ch) {
-      this.xPos = x;
-      this.yPos = y;
-      this.width = w;
-      this.height = h;
-      this.yDirection = di
-      this.char = ch;
+    constructor(xPosition, yPosition, width, height, yDirection, char) {
+      this.xPosition = xPosition;
+      this.yPosition = yPosition;
+      this.width = width;
+      this.height = height;
+      this.yDirection = yDirection
+      this.char = char;
     }
   };
 
   class LetterObjectInfo {
-    constructor(x, y, ch) {
-      this.xOff = x;
-      this.yOff = y;
-      this.char = ch;
+    constructor(xOffset, yOffset, char) {
+      this.xOffset = xOffset;
+      this.yOffset = yOffset;
+      this.char = char;
     }
   };
 
@@ -101,7 +101,6 @@ const displayGameScreen = () => {
   let gameOver = false;
   let shotEnabled = false;
   let intervalId = null;
-
   let assembledWord = "      ";
   let startIndex = Math.floor(Math.random() * templateWords.length);
   let oldStartIndex = startIndex;
@@ -111,69 +110,135 @@ const displayGameScreen = () => {
   const canvasElem = document.querySelector("canvas");
   const ctx = canvasElem.getContext("2d");
 
-  // Handler for loading of graphics or sound to be finished
-  const handleLoadFinished = () => {
-    }
-
-    // Load picture files
+  // Handler for load background image
+  const handleBgImageLoad = () => {
+    bgImage.removeEventListener(
+      "load",
+      handleBgImageLoad
+    );
+  }
+    // Add handler for load background image
   const bgImage = document.createElement("img");
   bgImage.src = "./images/Andromeda.png";
   bgImage.addEventListener(
     "load",
-    handleLoadFinished
+    handleBgImageLoad
   );
 
+  // Handler for load spaceship image
+  const handleSpaceshipImageLoad = () => {
+    spaceshipImage.removeEventListener(
+      "load",
+      handleSpaceshipImageLoad
+    );
+  }
+  // Add handler for load spaceship image
   const spaceshipImage = document.createElement("img");
   spaceshipImage.src = "./images/Ships.png";
   spaceshipImage.addEventListener(
     "load",
-    handleLoadFinished
+    handleSpaceshipImageLoad
   );
     
+  // Handler for load shot image
+  const handleShotImageLoad = () => {
+    shotImage.removeEventListener(
+      "load",
+      handleShotImageLoad
+    );
+  }
+  // Add handler for load shot image
   const shotImage = document.createElement("img");
   shotImage.src = "./images/Shot.png";
   shotImage.addEventListener(
     "load",
-    handleLoadFinished
+    handleShotImageLoad
   );
 
+  // Handler for load life image
+  const handleLifeImageLoad = () => {
+    lifeImage.removeEventListener(
+      "load",
+      handleLifeImageLoad
+    );
+  }
+  // Add handler for load life image
   const lifeImage = document.createElement("img");
   lifeImage.src = "./images/Ship-sm.png";
   lifeImage.addEventListener(
     "load",
-    handleLoadFinished
+    handleLifeImageLoad
   );
 
+  // Handler for load letters image
+  const handleLettersImageLoad = () => {
+    lettersImage.removeEventListener(
+      "load",
+      handleLettersImageLoad
+    );
+  }
+  // Add handler for load letters image
   const lettersImage = document.createElement("img");
   lettersImage.src = "./images/Charset.png";
   lettersImage.addEventListener(
     "load",
-    handleLoadFinished
+    handleLettersImageLoad
   );
 
-  // Load sound files
+  // Handler for load game music
+  const handleGameMusicLoad = () => {
+    gameMusic.removeEventListener(
+      "load",
+      handleGameMusicLoad
+    );
+  }
+  // Add handler for load game music
   const gameMusic = new Audio("./sounds/RetroRulez.mp3");
   gameMusic.addEventListener(
     "load",
-    handleLoadFinished
+    handleGameMusicLoad
   );
 
+  // Handler for load positive hit sound
+  const handlePosHitSoundLoad = () => {
+    posHitSound.removeEventListener(
+      "load",
+      handlePosHitSoundLoad
+    );
+  }
+  // Add handler for load positive hit sound
   const posHitSound = new Audio("./sounds/PosHit.mp3");
   posHitSound.addEventListener(
     "load",
-    handleLoadFinished
+    handlePosHitSoundLoad
   );
   
+  // Handler for load negative hit sound
+  const handleNegHitSoundLoad = () => {
+    negHitSound.removeEventListener(
+      "load",
+      handleNegHitSoundLoad
+    );
+  }
+  // Add handler for load negative hit sound
   const negHitSound = new Audio("./sounds/NegHit.mp3");
   negHitSound.addEventListener(
     "load",
-    handleLoadFinished
+    handleNegHitSoundLoad
   );
 
+  // Handler for load game over sound
+  const handleGameOverSoundLoad = () => {
+    gameOverSound.removeEventListener(
+      "load",
+      handleGameOverSoundLoad
+    );
+  }
+  // Add handler for load game over sound
   const gameOverSound = new Audio("./sounds/GameOver.mp3");
   gameOverSound.addEventListener(
     "load",
-    handleLoadFinished
+    handleGameOverSoundLoad
   );
 
   // Init game music
@@ -181,19 +246,19 @@ const displayGameScreen = () => {
   gameMusic.play();
 
   // Init objects
-  let xOff = 5;
-  let yOff = 8;
+  let xOffset = 5;
+  let yOffset = 8;
   for (let i = 0; i < alphabetCharactersNum; i++) {
     const letterObjectInfo = new LetterObjectInfo(
-      xOff, 
-      yOff, 
+      xOffset, 
+      yOffset, 
       alphabetChars[i]
     );
     letterObjects.push(letterObjectInfo);
-    xOff += letterWidth + letterHorizGap;
-    if (xOff > 608) {
-      xOff = 5;
-      yOff += letterHeight + letterVertGap;
+    xOffset += letterWidth + letterHorizGap;
+    if (xOffset > 608) {
+      xOffset = 5;
+      yOffset += letterHeight + letterVertGap;
     }
   }
 
@@ -214,12 +279,12 @@ const displayGameScreen = () => {
   );
 
   for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-    let x = canvasElem.width - (Math.floor(Math.random() * 500)) - letterWidth;
-    let y = letterHeight + (Math.floor(Math.random() * 500));
+    let xPosition = canvasElem.width - (Math.floor(Math.random() * 500)) - letterWidth;
+    let yPosition = letterHeight + (Math.floor(Math.random() * 500));
     let yDirection = 1 + (Math.floor(Math.random() * 3));
     const letterObject = new LetterObject(
-      x, 
-      y, 
+      xPosition, 
+      yPosition, 
       letterWidth, 
       letterHeight, 
       yDirection, 
@@ -232,7 +297,7 @@ const displayGameScreen = () => {
   // Handler for mouse move up or down
   const handleMouseUpDown = (e) => {
     if ((e.clientY > (4 * spaceship.height)) && (e.clientY < canvasElem.height - (8 * spaceship.height))) {
-      spaceship.yPos = e.clientY;
+      spaceship.yPosition = e.clientY;
     }
   }
   // Add handler for mouse move up or down
@@ -244,7 +309,7 @@ const displayGameScreen = () => {
   // Handler for click on left mouse button
   const handleLeftMouseButton = () => {
     shotEnabled = true;
-    shot.yPos = spaceship.yPos + letterHorizGap;
+    shot.yPosition = spaceship.yPosition + letterHorizGap;
   }
   // Add handler for click on left mouse button
   document.addEventListener(
@@ -269,8 +334,8 @@ const displayGameScreen = () => {
       0, 
       110, 
       55, 
-      spaceship.xPos, 
-      spaceship.yPos, 
+      spaceship.xPosition, 
+      spaceship.yPosition, 
       110, 
       55
     );
@@ -282,14 +347,14 @@ const displayGameScreen = () => {
     if (shotEnabled) {
       ctx.drawImage(
         shot.imageUrl, 
-        shot.xPos, 
-        shot.yPos
+        shot.xPosition, 
+        shot.yPosition
       );
-      shot.xPos += shotHorizSpeed;
+      shot.xPosition += shotHorizSpeed;
       // Check shot against right border
-      if (shot.xPos > canvasElem.width) {
+      if (shot.xPosition > canvasElem.width) {
         shotEnabled = false;
-        shot.xPos = 116;
+        shot.xPosition = 116;
       }
     }
   }
@@ -308,7 +373,7 @@ const displayGameScreen = () => {
           isLetterHit = true;
           for (let k = 0; k < assembledWord.length; k++) {
             let char = assembledWord[k];
-            (j !== k) ? buffer += char : buffer += letters[i].char;
+            (j === k) ? buffer += letters[i].char : buffer += char;
           }
           assembledWord = buffer;
           // Clear hit letter in current template word
@@ -346,16 +411,16 @@ const displayGameScreen = () => {
   // Check collision shot vs. letter(s)
   const checkLetterHit = (i) => {
     // ( shot.xr >= letter.xl ) && ( shot.xl <= letter.xr )
-    const xCollisionCheck1 = ((shot.xPos + shot.width) >= letters[i].xPos) && (shot.xPos <= (letters[i].xPos + letters[i].width));
+    const xCollisionCheck1 = ((shot.xPosition + shot.width) >= letters[i].xPosition) && (shot.xPosition <= (letters[i].xPosition + letters[i].width));
     // ( shot.yt >= letter.yt ) && ( shot.yt <= letter.yb )
-    const yCollisionCheck1 = (shot.yPos >= letters[i].yPos) && (shot.yPos <= (letters[i].yPos + letters[i].height));
+    const yCollisionCheck1 = (shot.yPosition >= letters[i].yPosition) && (shot.yPosition <= (letters[i].yPosition + letters[i].height));
     // ( shot.yb <= letter.yb ) && ( shot.yt >= letter.yt )
-    const yCollisionCheck2 = ((shot.yPos + shot.height) <= (letters[i].ypos + letters[i].height)) && (shot.yPos >= letters[i].yPos);
+    const yCollisionCheck2 = ((shot.yPosition + shot.height) <= (letters[i].yPosition + letters[i].height)) && (shot.yPosition >= letters[i].yPosition);
     if (xCollisionCheck1 && (yCollisionCheck1 || yCollisionCheck2)) {
       checkMissingLetter(i);
       letters.splice(i, 1);
       shotEnabled = false;
-      shot.xPos = 116;
+      shot.xPosition = 116;
       return true;
     }
     return false;
@@ -374,12 +439,12 @@ const displayGameScreen = () => {
       }
       ctx.drawImage(
         lettersImage, 
-        currentLetterObject.xOff,
-        currentLetterObject.yOff,
+        currentLetterObject.xOffset,
+        currentLetterObject.yOffset,
         letterWidth,
         letterHeight,
-        letters[i].xPos, 
-        letters[i].yPos,
+        letters[i].xPosition, 
+        letters[i].yPosition,
         letterWidth,
         letterHeight
       );
@@ -387,10 +452,10 @@ const displayGameScreen = () => {
         continue;
       }
       // Top / bottom border check
-      if ((letters[i].yPos < 0) || (letters[i].yPos > (600 - letterHeight))) {
+      if ((letters[i].yPosition < 0) || (letters[i].yPosition > (600 - letterHeight))) {
         letters[i].yDirection *= - 1;
       }
-      letters[i].yPos += letters[i].yDirection;
+      letters[i].yPosition += letters[i].yDirection;
     }
   }
 
@@ -436,14 +501,14 @@ const displayGameScreen = () => {
     );
     // Display life symbols only if lives are left
     if (lives !== 0) {
-      let livesStartXPos = 705;
+      let livesStartXPosition = 705;
       for (let i = 0; i < lives; i++) {
         ctx.drawImage(
           lifeImage, 
-          livesStartXPos, 
+          livesStartXPosition, 
           17
         );
-        livesStartXPos += 30;
+        livesStartXPosition += 30;
       }
     }
   }
@@ -480,12 +545,12 @@ const displayGameScreen = () => {
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-      let x = canvasElem.width - (Math.floor(Math.random() * 500)) - (2 * letterWidth);
-      let y = letterHeight + (Math.floor(Math.random() * 500));
+      let xPosition = canvasElem.width - (Math.floor(Math.random() * 500)) - (2 * letterWidth);
+      let yPosition = letterHeight + (Math.floor(Math.random() * 500));
       let yDirection = 1 + (Math.floor(Math.random() * 4));
       const letterObject = new LetterObject(
-        x, 
-        y, 
+        xPosition, 
+        yPosition, 
         letterWidth, 
         letterHeight, 
         yDirection, 
@@ -500,7 +565,7 @@ const displayGameScreen = () => {
   const stopGame = () => {
     gameOver = false;
     // DOM-Manipulation
-    const gameContainerElem = document.getElementById("gameContainer");
+    const gameContainerElem = document.querySelector("#gameContainer");
     gameContainerElem.classList.remove("cursorOff");
     gameContainerElem.classList.add("cursorOn");
     // Stop interval
@@ -563,10 +628,10 @@ const displaySplashScreen = () => {
   // Handler for click on start button
   const handleStartButton = () => {
     // DOM-Manipulation
-    document.getElementById("introContainer").classList.add("displayOff");
-    document.getElementById("gameContainer").classList.remove("displayOff");
+    document.querySelector("#introContainer").classList.add("displayOff");
+    document.querySelector("#gameContainer").classList.remove("displayOff");
     // Remove handler for click on start button
-    document.getElementById("startButton").removeEventListener(
+    document.querySelector("#startButton").removeEventListener(
       "click", 
       handleStartButton
     );
@@ -574,7 +639,7 @@ const displaySplashScreen = () => {
     displayGameScreen();
   }
   // Add handler for click on start button
-  document.getElementById("startButton").addEventListener(
+  document.querySelector("#startButton").addEventListener(
     "click", 
     handleStartButton
   );
@@ -592,7 +657,7 @@ const displayGameoverScreen = (score) => {
       scoresTable.sort((a, b) => b - a);
     }
     // Create highscore table list elements
-    const ulElem = document.getElementById("scoreList");
+    const ulElem = document.querySelector("#scoreList");
     ulElem.innerHTML = ""; // clear the list
     for (let i = 0; i < scoresTable.length; i++) {
       let scoreStr = scoresTable[i].toString();
@@ -603,20 +668,20 @@ const displayGameoverScreen = (score) => {
     }
   }
   // DOM-manipulation
-  const gameContainerElem = document.getElementById("gameContainer");
+  const gameContainerElem = document.querySelector("#gameContainer");
   gameContainerElem.classList.add("displayOff");
   gameContainerElem.classList.remove("cursorOn");
   gameContainerElem.classList.add("cursorOff");
-  document.getElementById("endContainer").classList.remove("displayOff");
+  document.querySelector("#endContainer").classList.remove("displayOff");
   createHighScoreTable(score);
   // Handler for click on restart button
   const handleRestartButton = () => {
     // DOM manipulation
-    document.getElementById("scoreList").innerHTML = "";
-    document.getElementById("endContainer").classList.add("displayOff");
-    document.getElementById("gameContainer").classList.remove("displayOff");
+    document.querySelector("#scoreList").innerHTML = "";
+    document.querySelector("#endContainer").classList.add("displayOff");
+    document.querySelector("#gameContainer").classList.remove("displayOff");
     // Remove handler for click on restart button
-    document.getElementById("restartButton").removeEventListener(
+    document.querySelector("#restartButton").removeEventListener(
       "click", 
       handleRestartButton
     );
@@ -624,7 +689,7 @@ const displayGameoverScreen = (score) => {
     displayGameScreen();
   }
   // Add handler for click on restart button
-  document.getElementById("restartButton").addEventListener(
+  document.querySelector("#restartButton").addEventListener(
     "click", 
     handleRestartButton
   );
