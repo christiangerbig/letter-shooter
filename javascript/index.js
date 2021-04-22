@@ -5,7 +5,7 @@ class ElementsObject {
     this.introContainer = introContainer;
     this.startButton = startButton;
     this.gameContainer = gameContainer;
-    this.canvas = canvas
+    this.canvas = canvas;
     this.endContainer = endContainer;
     this.scoreList = scoreList;
     this.scoreEntry = scoreEntry;
