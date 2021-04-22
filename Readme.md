@@ -64,14 +64,14 @@ end.js
   - Y-Direction
   - char
 
-- LetterObjectInfo
+- LetterSubRectangle
   - x-Offset
   - y-Offset
   - char
 
 - Spaceship
   - X-Position
-  - Y-Posiztion
+  - Y-Position
   - Width
   - Height
   - URL-image
@@ -82,6 +82,16 @@ end.js
   - Width
   - Height
   - URL-image
+
+- Elements
+  - introContainer
+  - startButton
+  - gameContainer
+  - canvas
+  - endContainer
+  - scoreList
+  - scoreEntry
+  - restartButton
 
 
 ## Arrays
