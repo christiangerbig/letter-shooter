@@ -134,160 +134,218 @@ const displayGameScreen = () => {
   let oldStartIndex = startIndex;
   let currentTemplateWord = templateWords[startIndex];
 
-  // ----- Add event listeners -----
-  // Handler for load background image
-  const handleBgImageLoad = () => {
-    bgImage.removeEventListener(
+  // Load background image
+  const loadBgImage = () => {
+    // Handler for load background image
+    const handleBgImageLoad = () => {
+      bgImage.removeEventListener(
+        "load",
+        handleBgImageLoad
+      );
+    }
+    // Add handler for load background image
+    const bgImage = document.createElement("img");
+    bgImage.src = "./images/Andromeda.png";
+    bgImage.addEventListener(
       "load",
       handleBgImageLoad
     );
+    return bgImage;
   }
-  // Add handler for load background image
-  const bgImage = document.createElement("img");
-  bgImage.src = "./images/Andromeda.png";
-  bgImage.addEventListener(
-    "load",
-    handleBgImageLoad
-  );
 
-  // Handler for load spaceship image
-  const handleSpaceshipImageLoad = () => {
-    spaceshipImage.removeEventListener(
+  // Load spaceship image
+  const loadSpaceshipImage = () => {
+    // Handler for load spaceship image
+    const handleSpaceshipImageLoad = () => {
+      spaceshipImage.removeEventListener(
+        "load",
+        handleSpaceshipImageLoad
+      );
+    }
+    // Add handler for load spaceship image
+    const spaceshipImage = document.createElement("img");
+    spaceshipImage.src = "./images/Ships.png";
+    spaceshipImage.addEventListener(
       "load",
       handleSpaceshipImageLoad
     );
+    return spaceshipImage;
   }
-  // Add handler for load spaceship image
-  const spaceshipImage = document.createElement("img");
-  spaceshipImage.src = "./images/Ships.png";
-  spaceshipImage.addEventListener(
-    "load",
-    handleSpaceshipImageLoad
-  );
-    
-  // Handler for load shot image
-  const handleShotImageLoad = () => {
-    shotImage.removeEventListener(
+
+  // Load shot image
+  const loadShotImage = () => {
+    // Handler for load shot image
+    const handleShotImageLoad = () => {
+      shotImage.removeEventListener(
+        "load",
+        handleShotImageLoad
+      );
+    }
+    // Add handler for load shot image
+    const shotImage = document.createElement("img");
+    shotImage.src = "./images/Shot.png";
+    shotImage.addEventListener(
       "load",
       handleShotImageLoad
     );
+    return shotImage;
   }
-  // Add handler for load shot image
-  const shotImage = document.createElement("img");
-  shotImage.src = "./images/Shot.png";
-  shotImage.addEventListener(
-    "load",
-    handleShotImageLoad
-  );
 
-  // Handler for load life image
-  const handleLifeImageLoad = () => {
-    lifeImage.removeEventListener(
+  // Load life image
+  const loadlifeImage = () => {
+    // Handler for load life image
+    const handleLifeImageLoad = () => {
+      lifeImage.removeEventListener(
+        "load",
+        handleLifeImageLoad
+      );
+    }
+    // Add handler for load life image
+    const lifeImage = document.createElement("img");
+    lifeImage.src = "./images/Ship-sm.png";
+    lifeImage.addEventListener(
       "load",
       handleLifeImageLoad
     );
+    return lifeImage;
   }
-  // Add handler for load life image
-  const lifeImage = document.createElement("img");
-  lifeImage.src = "./images/Ship-sm.png";
-  lifeImage.addEventListener(
-    "load",
-    handleLifeImageLoad
-  );
 
-  // Handler for load letters image
-  const handleLettersImageLoad = () => {
-    lettersImage.removeEventListener(
+  // Load letters image
+  const loadLettersImage = () => {
+    // Handler for load letters image
+    const handleLettersImageLoad = () => {
+      lettersImage.removeEventListener(
+        "load",
+        handleLettersImageLoad
+      );
+    }
+    // Add handler for load letters image
+    const lettersImage = document.createElement("img");
+    lettersImage.src = "./images/Charset.png";
+    lettersImage.addEventListener(
       "load",
       handleLettersImageLoad
     );
+    return lettersImage;
   }
-  // Add handler for load letters image
-  const lettersImage = document.createElement("img");
-  lettersImage.src = "./images/Charset.png";
-  lettersImage.addEventListener(
-    "load",
-    handleLettersImageLoad
-  );
 
-  // Handler for load game music
-  const handleGameMusicLoad = () => {
-    gameMusic.removeEventListener(
+  // Load game music
+  const loadGameMusic = () => {
+    // Handler for load game music
+    const handleGameMusicLoad = () => {
+      gameMusic.removeEventListener(
+        "load",
+        handleGameMusicLoad
+      );
+    }
+    // Add handler for load game music
+    const gameMusic = new Audio("./sounds/RetroRulez.mp3");
+    gameMusic.addEventListener(
       "load",
       handleGameMusicLoad
     );
+    return gameMusic;
   }
-  // Add handler for load game music
-  const gameMusic = new Audio("./sounds/RetroRulez.mp3");
-  gameMusic.addEventListener(
-    "load",
-    handleGameMusicLoad
-  );
 
-  // Handler for load positive hit sound
-  const handlePosHitSoundLoad = () => {
-    posHitSound.removeEventListener(
+  // Load positive hit sound
+  const loadPositiveHitSound = () => {
+    // Handler for load positive hit sound
+    const handlepositiveHitSoundLoad = () => {
+      positiveHitSound.removeEventListener(
+        "load",
+        handlepositiveHitSoundLoad
+      );
+    }
+    // Add handler for load positive hit sound
+    const positiveHitSound = new Audio("./sounds/PosHit.mp3");
+    positiveHitSound.addEventListener(
       "load",
-      handlePosHitSoundLoad
+      handlepositiveHitSoundLoad
     );
+    return positiveHitSound;
   }
-  // Add handler for load positive hit sound
-  const posHitSound = new Audio("./sounds/PosHit.mp3");
-  posHitSound.addEventListener(
-    "load",
-    handlePosHitSoundLoad
-  );
-  
-  // Handler for load negative hit sound
-  const handleNegHitSoundLoad = () => {
-    negHitSound.removeEventListener(
-      "load",
-      handleNegHitSoundLoad
-    );
-  }
-  // Add handler for load negative hit sound
-  const negHitSound = new Audio("./sounds/NegHit.mp3");
-  negHitSound.addEventListener(
-    "load",
-    handleNegHitSoundLoad
-  );
 
-  // Handler for load game over sound
-  const handleGameOverSoundLoad = () => {
-    gameOverSound.removeEventListener(
+  // Load negative hit sound
+  const loadNegativeHitSound = () => {
+    // Handler for load negative hit sound
+    const handlenegativeHitSoundLoad = () => {
+      negativeHitSound.removeEventListener(
+        "load",
+        handlenegativeHitSoundLoad
+      );
+    }
+    // Add handler for load negative hit sound
+    const negativeHitSound = new Audio("./sounds/NegHit.mp3");
+    negativeHitSound.addEventListener(
+      "load",
+      handlenegativeHitSoundLoad
+    );
+    return negativeHitSound;
+  }
+
+  // Load game over sound
+  const loadGameOverSound = () => {
+    // Handler for load game over sound
+    const handleGameOverSoundLoad = () => {
+      gameOverSound.removeEventListener(
+        "load",
+        handleGameOverSoundLoad
+      );
+    }
+    // Add handler for load game over sound
+    const gameOverSound = new Audio("./sounds/GameOver.mp3");
+    gameOverSound.addEventListener(
       "load",
       handleGameOverSoundLoad
     );
+    return gameOverSound;
   }
-  // Add handler for load game over sound
-  const gameOverSound = new Audio("./sounds/GameOver.mp3");
-  gameOverSound.addEventListener(
-    "load",
-    handleGameOverSoundLoad
-  );
+  
+  // Load images and sound
+  const bgImage = loadBgImage();
+  const spaceshipImage = loadSpaceshipImage();
+  const shotImage = loadShotImage();
+  const lifeImage = loadlifeImage();
+  const lettersImage = loadLettersImage();
+  const gameMusic = loadGameMusic();
+  const positiveHitSound = loadPositiveHitSound();
+  const negativeHitSound = loadNegativeHitSound(); 
+  const gameOverSound = loadGameOverSound();
 
-  // Handler for mouse move up or down
-  const handleMouseUpDown = (e) => {
-    if ((e.clientY > (4 * spaceship.height)) && (e.clientY < elements.canvas.height - (8 * spaceship.height))) {
-      spaceship.yPosition = e.clientY;
+  // Add mouse up or down handler
+  const addMouseUpDownHandler = () => {
+    // Handler for mouse move up or down
+    const handleMouseUpDown = (e) => {
+      if ((e.clientY > (4 * spaceship.height)) && (e.clientY < elements.canvas.height - (8 * spaceship.height))) {
+        spaceship.yPosition = e.clientY;
+      }
     }
+    // Add handler for mouse move up or down
+    document.addEventListener(
+      "mousemove", 
+      handleMouseUpDown
+    );
+    return handleMouseUpDown;
   }
-  // Add handler for mouse move up or down
-  document.addEventListener(
-    "mousemove", 
-    handleMouseUpDown
-  );
 
-  // Handler for click on left mouse button
-  const handleLeftMouseButton = () => {
-    shotEnabled = true;
-    shot.yPosition = spaceship.yPosition + letterHorizGap;
+  // Add click on left mouse button handler
+  const addLeftMouseButtonHandler = () => {
+    // Handler for click on left mouse button
+    const handleLeftMouseButton = () => {
+      shotEnabled = true;
+      shot.yPosition = spaceship.yPosition + letterHorizGap;
+    }
+    // Add handler for click on left mouse button
+    document.addEventListener(
+      "mousedown", 
+      handleLeftMouseButton
+    );
+    return handleLeftMouseButton;
   }
-  // Add handler for click on left mouse button
-  document.addEventListener(
-    "mousedown", 
-    handleLeftMouseButton
-  );
+ 
+   // Add mouse handlers
+  const handleMouseUpDown = addMouseUpDownHandler();
+  const handleLeftMouseButton = addLeftMouseButtonHandler();
 
   // Init objects
   let xOffset = 5;
@@ -392,7 +450,7 @@ const displayGameScreen = () => {
       let isLetterHit = false;
       for (let j = 0; j < currentTemplateWord.length; j++) {
         if (letters[i].char === currentTemplateWord[j]) {
-          posHitSound.play();
+          positiveHitSound.play();
           score += 100;
           isLetterHit = true;
           for (let k = 0; k < assembledWord.length; k++) {
@@ -411,7 +469,7 @@ const displayGameScreen = () => {
 
     // Reduce energy if wrong letter was hit
     const reduceEnergy = () => {
-      negHitSound.play();
+      negativeHitSound.play();
       if (energy > 30) {
         energy -= 30;
       }
