@@ -32,6 +32,9 @@ const elements = new ElementsObject(
   document.querySelector("#restartButton")
 );
 
+// Init constants
+const { introContainer, startButton, gameContainer, canvas, endContainer, scoreList, restartButton } = elements;
+
 
 // ---------- Display game screen ----------
 const displayGameScreen = () => {
@@ -119,7 +122,7 @@ const displayGameScreen = () => {
   const letterVertGap = 7;
   const shotHorizSpeed = 15;
   const alphabetCharactersNum = 26;
-  const renderingContext = elements.canvas.getContext("2d");
+  const renderingContext = canvas.getContext("2d");
 
   // Init variables
   let energy = 90;
@@ -316,7 +319,7 @@ const displayGameScreen = () => {
   const addMouseUpDownHandler = () => {
     // Handler for mouse move up or down
     const handleMouseUpDown = (e) => {
-      if ((e.clientY > (4 * spaceship.height)) && (e.clientY < elements.canvas.height - (8 * spaceship.height))) {
+      if ((e.clientY > (4 * spaceship.height)) && (e.clientY < canvas.height - (8 * spaceship.height))) {
         spaceship.yPosition = e.clientY;
       }
     }
@@ -366,7 +369,7 @@ const displayGameScreen = () => {
 
   const spaceship = new SpaceshipObject(
     10, 
-    elements.canvas.height / 2, 
+    canvas.height / 2, 
     163, 
     16, 
     spaceshipImage
@@ -374,14 +377,14 @@ const displayGameScreen = () => {
 
   const shot = new ShotObject(
     116, 
-    elements.canvas.height / 2, 
+    canvas.height / 2, 
     23, 
     16, 
     shotImage
   );
 
   for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-    let xPosition = elements.canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
+    let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
     let yPosition = letterHeight + (Math.floor(Math.random() * 500));
     let yDirection = 1 + (Math.floor(Math.random() * 3));
     const letter = new LetterObject(
@@ -434,7 +437,7 @@ const displayGameScreen = () => {
       );
       shot.xPosition += shotHorizSpeed;
       // Check shot against right border
-      if (shot.xPosition > elements.canvas.width) {
+      if (shot.xPosition > canvas.width) {
         shotEnabled = false;
         shot.xPosition = 116;
       }
@@ -601,7 +604,7 @@ const displayGameScreen = () => {
     renderingContext.fillText(
       templateWords[startIndex], 
       10, 
-      elements.canvas.height - 15
+      canvas.height - 15
     );
   }
 
@@ -612,7 +615,7 @@ const displayGameScreen = () => {
     renderingContext.fillText(
       assembledWord, 
       620, 
-      elements.canvas.height - 15
+      canvas.height - 15
     );
   }
 
@@ -626,7 +629,7 @@ const displayGameScreen = () => {
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-      let xPosition = elements.canvas.width - (Math.floor(Math.random() * 500)) - (2 * letterWidth);
+      let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - (2 * letterWidth);
       let yPosition = letterHeight + (Math.floor(Math.random() * 500));
       let yDirection = 1 + (Math.floor(Math.random() * 4));
       const letter = new LetterObject(
@@ -646,7 +649,6 @@ const displayGameScreen = () => {
   const stopGame = () => {
     gameOver = false;
     // DOM-Manipulation
-    const { gameContainer } = elements;
     gameContainer.classList.remove("cursorOff");
     gameContainer.classList.add("cursorOn");
     // Stop interval
@@ -709,7 +711,6 @@ const displaySplashScreen = () => {
   // Handler for click on start button
   const handleStartButton = () => {
     // DOM-Manipulation
-    const { introContainer, gameContainer, startButton } = elements;
     introContainer.classList.add("displayOff");
     gameContainer.classList.remove("displayOff");
     // Remove handler for click on start button
@@ -721,7 +722,7 @@ const displaySplashScreen = () => {
     displayGameScreen();
   }
   // Add handler for click on start button
-  elements.startButton.addEventListener(
+  startButton.addEventListener(
     "click", 
     handleStartButton
   );
@@ -747,7 +748,6 @@ const displayGameoverScreen = (score) => {
     }
   }
   // DOM-manipulation
-  const { gameContainer, endContainer, scoreList, restartButton } = elements;
   gameContainer.classList.add("displayOff");
   gameContainer.classList.remove("cursorOn");
   gameContainer.classList.add("cursorOff");
