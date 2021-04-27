@@ -352,7 +352,7 @@ const displayGameScreen = () => {
 
   // Init objects
 
-  // Init x/y offset of each letter in letters image
+  // Init xy offset of each letter in letters image
   const initializeLetterObjects = () => {
     let xOffset = 5;
     let yOffset = 8;
@@ -388,7 +388,6 @@ const displayGameScreen = () => {
     shotImage
   );
 
-  // Init random flying letters
   const initializeFlyingLetters = () => {
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
       let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
@@ -637,13 +636,27 @@ const displayGameScreen = () => {
     oldStartIndex = startIndex;      
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
-    initializeFlyingLetters();
+    for (let i = 0; i < flyingLetters[startIndex].length; i++) {
+      let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - (2 * letterWidth);
+      let yPosition = letterHeight + (Math.floor(Math.random() * 500));
+      let yDirection = 1 + (Math.floor(Math.random() * 4));
+      const letter = new LetterObject(
+        xPosition, 
+        yPosition, 
+        letterWidth, 
+        letterHeight, 
+        yDirection, 
+        flyingLetters[startIndex][i]
+      );
+      letters.push(letter);
+    }
     nextLevel = false;
   }
 
   // Stop game if no lives left
   const stopGame = () => {
     gameOver = false;
+    // DOM-Manipulation
     gameContainer.classList.remove("cursorOff");
     gameContainer.classList.add("cursorOn");
     // Stop interval
@@ -705,6 +718,7 @@ const displaySplashScreen = () => {
   
   // Handler for click on start button
   const handleStartButton = () => {
+    // DOM-Manipulation
     introContainer.classList.add("displayOff");
     gameContainer.classList.remove("displayOff");
     // Remove handler for click on start button
@@ -741,6 +755,7 @@ const displayGameoverScreen = (score) => {
       scoreList.appendChild(elements.scoreEntry);
     }
   }
+  // DOM-manipulation
   gameContainer.classList.add("displayOff");
   gameContainer.classList.remove("cursorOn");
   gameContainer.classList.add("cursorOff");
@@ -748,6 +763,7 @@ const displayGameoverScreen = (score) => {
   createHighScoreTable(score);
   // Handler for click on restart button
   const handleRestartButton = () => {
+    // DOM manipulation
     scoreList.innerHTML = "";
     endContainer.classList.add("displayOff");
     gameContainer.classList.remove("displayOff");
