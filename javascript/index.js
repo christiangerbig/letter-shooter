@@ -1,5 +1,5 @@
 // ---------- Global ----------
-// Init class
+// Initialize class
 class ElementsObject {
   constructor(introContainer, startButton, gameContainer, canvas, endContainer, scoreList, scoreEntry, restartButton) {
     this.introContainer = introContainer;
@@ -13,14 +13,14 @@ class ElementsObject {
   }
 };
 
-// Init array
+// Initialize array
 const scoresTable = [
   10100,
   9000,
   1000
 ];
 
-// Init object
+// Initialize object
 const elements = new ElementsObject(
   document.querySelector("#introContainer"),
   document.querySelector("#startButton"),
@@ -32,14 +32,14 @@ const elements = new ElementsObject(
   document.querySelector("#restartButton")
 );
 
-// Init constants
+// Initialize constants
 const { introContainer, startButton, gameContainer, canvas, endContainer, scoreList, restartButton } = elements;
 
 
 // ---------- Display game screen ----------
 const displayGameScreen = () => {
 
-  // Init classes
+  // Initialize classes
   class SpaceshipObject {
     constructor(xPosition, yPosition, width, height, imageUrl) {
       this.xPosition = xPosition;
@@ -79,7 +79,7 @@ const displayGameScreen = () => {
     }
   };
 
-  // Init arrays
+  // Initialize arrays
   const templateWords = [
     "HOUSE",
     "CAT",
@@ -115,16 +115,17 @@ const displayGameScreen = () => {
   const letterObjects = [];
   const letters = [];
 
-  // Init constants
+  // Initialize constants
+  const letterVerticalSpeed = 4;
   const letterWidth = 50;
   const letterHeight = 40;
-  const letterHorizGap = 17;
-  const letterVertGap = 7;
-  const shotHorizSpeed = 15;
+  const letterHorizontalGap = 17;
+  const letterVerticalGap = 7;
+  const shotHorizontalSpeed = 15;
   const alphabetCharactersNum = 26;
   const renderingContext = canvas.getContext("2d");
 
-  // Init variables
+  // Initialize variables
   let energy = 90;
   let score = 0;
   let lives = 3;
@@ -336,7 +337,7 @@ const displayGameScreen = () => {
     // Handler for click on left mouse button
     const handleLeftMouseButton = () => {
       shotEnabled = true;
-      shot.yPosition = spaceship.yPosition + letterHorizGap;
+      shot.yPosition = spaceship.yPosition + letterHorizontalGap;
     }
     // Add handler for click on left mouse button
     document.addEventListener(
@@ -350,9 +351,9 @@ const displayGameScreen = () => {
   const handleMouseUpDown = addMouseUpDownHandler();
   const handleLeftMouseButton = addLeftMouseButtonHandler();
 
-  // Init objects
+  // Initialize objects
 
-  // Init xy offset of each letter in letters image
+  // Initialize xy offset of each letter in letters image
   const initializeLetterObjects = () => {
     let xOffset = 5;
     let yOffset = 8;
@@ -363,10 +364,10 @@ const displayGameScreen = () => {
         alphabetCharacters[i]
       );
       letterObjects.push(letterSubRectangle);
-      xOffset += letterWidth + letterHorizGap;
+      xOffset += letterWidth + letterHorizontalGap;
       if (xOffset > 608) {
         xOffset = 5;
-        yOffset += letterHeight + letterVertGap;
+        yOffset += letterHeight + letterVerticalGap;
       }
     }
   }
@@ -392,7 +393,7 @@ const displayGameScreen = () => {
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
       let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
       let yPosition = letterHeight + (Math.floor(Math.random() * 500));
-      let yDirection = 1 + (Math.floor(Math.random() * 3));
+      let yDirection = 1 + (Math.floor(Math.random() * letterVerticalSpeed));
       const letter = new LetterObject(
         xPosition, 
         yPosition, 
@@ -406,7 +407,7 @@ const displayGameScreen = () => {
   }
   initializeFlyingLetters();
 
-  // Init game music
+  // Initialize game music
   gameMusic.loop="loop";
   gameMusic.play();
 
@@ -443,7 +444,7 @@ const displayGameScreen = () => {
         shot.xPosition, 
         shot.yPosition
       );
-      shot.xPosition += shotHorizSpeed;
+      shot.xPosition += shotHorizontalSpeed;
       // Check shot against right border
       if (shot.xPosition > canvas.width) {
         shotEnabled = false;
@@ -637,9 +638,9 @@ const displayGameScreen = () => {
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-      let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - (2 * letterWidth);
+      let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
       let yPosition = letterHeight + (Math.floor(Math.random() * 500));
-      let yDirection = 1 + (Math.floor(Math.random() * 4));
+      let yDirection = 1 + (Math.floor(Math.random() * letterVerticalSpeed));
       const letter = new LetterObject(
         xPosition, 
         yPosition, 
@@ -656,7 +657,6 @@ const displayGameScreen = () => {
   // Stop game if no lives left
   const stopGame = () => {
     gameOver = false;
-    // DOM-Manipulation
     gameContainer.classList.remove("cursorOff");
     gameContainer.classList.add("cursorOn");
     // Stop interval
@@ -718,7 +718,6 @@ const displaySplashScreen = () => {
   
   // Handler for click on start button
   const handleStartButton = () => {
-    // DOM-Manipulation
     introContainer.classList.add("displayOff");
     gameContainer.classList.remove("displayOff");
     // Remove handler for click on start button
@@ -755,7 +754,6 @@ const displayGameoverScreen = (score) => {
       scoreList.appendChild(elements.scoreEntry);
     }
   }
-  // DOM-manipulation
   gameContainer.classList.add("displayOff");
   gameContainer.classList.remove("cursorOn");
   gameContainer.classList.add("cursorOff");
@@ -763,7 +761,6 @@ const displayGameoverScreen = (score) => {
   createHighScoreTable(score);
   // Handler for click on restart button
   const handleRestartButton = () => {
-    // DOM manipulation
     scoreList.innerHTML = "";
     endContainer.classList.add("displayOff");
     gameContainer.classList.remove("displayOff");
