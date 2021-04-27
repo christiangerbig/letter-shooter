@@ -637,20 +637,6 @@ const displayGameScreen = () => {
     oldStartIndex = startIndex;      
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
-    /*for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-      let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
-      let yPosition = letterHeight + (Math.floor(Math.random() * 500));
-      let yDirection = 1 + (Math.floor(Math.random() * letterVerticalSpeed));
-      const letter = new LetterObject(
-        xPosition, 
-        yPosition, 
-        letterWidth, 
-        letterHeight, 
-        yDirection, 
-        flyingLetters[startIndex][i]
-      );
-      letters.push(letter);
-    }*/
     initializeFlyingLetters();
     nextLevel = false;
   }
