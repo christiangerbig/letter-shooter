@@ -122,7 +122,6 @@ const displayGameScreen = () => {
   const letterHorizontalGap = 17;
   const letterVerticalGap = 7;
   const shotHorizontalSpeed = 15;
-  const alphabetCharactersNum = 26;
   const renderingContext = canvas.getContext("2d");
 
   // Initialize variables
@@ -357,19 +356,21 @@ const displayGameScreen = () => {
   const initializeLetterObjects = () => {
     let xOffset = 5;
     let yOffset = 8;
-    for (let i = 0; i < alphabetCharactersNum; i++) {
-      const letterSubRectangle = new LetterSubRectangleObject(
-        xOffset, 
-        yOffset, 
-        alphabetCharacters[i]
-      );
-      letterObjects.push(letterSubRectangle);
-      xOffset += letterWidth + letterHorizontalGap;
-      if (xOffset > 608) {
-        xOffset = 5;
-        yOffset += letterHeight + letterVerticalGap;
+    alphabetCharacters.forEach(
+      (character) => {
+        const letterSubRectangle = new LetterSubRectangleObject(
+          xOffset, 
+          yOffset, 
+          character
+        );
+        letterObjects.push(letterSubRectangle);
+        xOffset += letterWidth + letterHorizontalGap;
+        if (xOffset > 608) {
+          xOffset = 5;
+          yOffset += letterHeight + letterVerticalGap;
+        }
       }
-    }
+    );
   }
   initializeLetterObjects();
 
@@ -466,8 +467,7 @@ const displayGameScreen = () => {
           score += 100;
           isLetterHit = true;
           for (let k = 0; k < assembledWord.length; k++) {
-            let character = assembledWord[k];
-            (j === k) ? buffer += letters[i].character : buffer += character;
+            (j === k) ? buffer += letters[i].character : buffer += assembledWord[k];
           }
           assembledWord = buffer;
           // Clear hit letter in current template word
@@ -525,7 +525,7 @@ const displayGameScreen = () => {
     for (let i = 0; i < letters.length; i++) {
       let currentCharacter = letters[i].character;
       let currentLetter = null;
-      for (j = 0; j < alphabetCharactersNum; j++) {
+      for (j = 0; j < alphabetCharacters.length; j++) {
         if (currentCharacter === letterObjects[j].character ) {
           currentLetter = letterObjects[j];
           break;
@@ -702,7 +702,7 @@ const displayGameScreen = () => {
 
 // ---------- Display splash screen ----------
 const displaySplashScreen = () => {
-  
+
   // Handler for click on start button
   const handleStartButton = () => {
     introContainer.classList.add("displayOff");
@@ -720,7 +720,6 @@ const displaySplashScreen = () => {
     "click", 
     handleStartButton
   );
-
 }
 
 // ---------- Display gameover screen ----------
@@ -735,11 +734,13 @@ const displayGameoverScreen = (score) => {
     }
     // Create highscore table list elements
     scoreList.innerHTML = ""; // clear the list
-    for (let i = 0; i < scoresTable.length; i++) {
-      elements.scoreEntry = document.createElement("li");
-      elements.scoreEntry.innerText = scoresTable[i].toString().padStart(6, 0, 0);
-      scoreList.appendChild(elements.scoreEntry);
-    }
+    scoresTable.forEach(
+      (score) => {
+        elements.scoreEntry = document.createElement("li");
+        elements.scoreEntry.innerText = score.toString().padStart(6, 0, 0);
+        scoreList.appendChild(elements.scoreEntry);
+      }
+    );
   }
   gameContainer.classList.add("displayOff");
   gameContainer.classList.remove("cursorOn");
