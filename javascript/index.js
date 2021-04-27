@@ -28,7 +28,7 @@ const elements = new ElementsObject(
   document.querySelector("canvas"),
   document.querySelector("#endContainer"),
   document.querySelector("#scoreList"),
-  0,
+  null,
   document.querySelector("#restartButton")
 );
 
@@ -61,21 +61,21 @@ const displayGameScreen = () => {
   };
 
   class LetterObject {
-    constructor(xPosition, yPosition, width, height, yDirection, char) {
+    constructor(xPosition, yPosition, width, height, yDirection, character) {
       this.xPosition = xPosition;
       this.yPosition = yPosition;
       this.width = width;
       this.height = height;
       this.yDirection = yDirection
-      this.char = char;
+      this.character = character;
     }
   };
 
   class LetterSubRectangleObject {
-    constructor(xOffset, yOffset, char) {
+    constructor(xOffset, yOffset, character ) {
       this.xOffset = xOffset;
       this.yOffset = yOffset;
-      this.char = char;
+      this.character = character;
     }
   };
 
@@ -106,7 +106,7 @@ const displayGameScreen = () => {
     "BQWGOZKSYOF"
   ];
 
-  const alphabetChars = [
+  const alphabetCharacters = [
     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
     "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
     "U", "V", "W", "X", "Y", "Z"
@@ -224,7 +224,7 @@ const displayGameScreen = () => {
     }
     // Add handler for load letters image
     const lettersImage = document.createElement("img");
-    lettersImage.src = "./images/Charset.png";
+    lettersImage.src = "./images/Characters-Set.png";
     lettersImage.addEventListener(
       "load",
       handleLettersImageLoad
@@ -351,21 +351,26 @@ const displayGameScreen = () => {
   const handleLeftMouseButton = addLeftMouseButtonHandler();
 
   // Init objects
-  let xOffset = 5;
-  let yOffset = 8;
-  for (let i = 0; i < alphabetCharactersNum; i++) {
-    const letterSubRectangle = new LetterSubRectangleObject(
-      xOffset, 
-      yOffset, 
-      alphabetChars[i]
-    );
-    letterObjects.push(letterSubRectangle);
-    xOffset += letterWidth + letterHorizGap;
-    if (xOffset > 608) {
-      xOffset = 5;
-      yOffset += letterHeight + letterVertGap;
+
+  // Init x/y offset of each letter in letters image
+  const initializeLetterObjects = () => {
+    let xOffset = 5;
+    let yOffset = 8;
+    for (let i = 0; i < alphabetCharactersNum; i++) {
+      const letterSubRectangle = new LetterSubRectangleObject(
+        xOffset, 
+        yOffset, 
+        alphabetCharacters[i]
+      );
+      letterObjects.push(letterSubRectangle);
+      xOffset += letterWidth + letterHorizGap;
+      if (xOffset > 608) {
+        xOffset = 5;
+        yOffset += letterHeight + letterVertGap;
+      }
     }
   }
+  initializeLetterObjects();
 
   const spaceship = new SpaceshipObject(
     10, 
@@ -383,20 +388,24 @@ const displayGameScreen = () => {
     shotImage
   );
 
-  for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-    let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
-    let yPosition = letterHeight + (Math.floor(Math.random() * 500));
-    let yDirection = 1 + (Math.floor(Math.random() * 3));
-    const letter = new LetterObject(
-      xPosition, 
-      yPosition, 
-      letterWidth, 
-      letterHeight, 
-      yDirection, 
-      flyingLetters[startIndex][i]
-    );
-    letters.push(letter);
+  // Init random flying letters
+  const initializeFlyingLetters = () => {
+    for (let i = 0; i < flyingLetters[startIndex].length; i++) {
+      let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
+      let yPosition = letterHeight + (Math.floor(Math.random() * 500));
+      let yDirection = 1 + (Math.floor(Math.random() * 3));
+      const letter = new LetterObject(
+        xPosition, 
+        yPosition, 
+        letterWidth, 
+        letterHeight, 
+        yDirection, 
+        flyingLetters[startIndex][i]
+      );
+      letters.push(letter);
+    }
   }
+  initializeFlyingLetters();
 
   // Init game music
   gameMusic.loop="loop";
@@ -452,17 +461,17 @@ const displayGameScreen = () => {
       let buffer = "";
       let isLetterHit = false;
       for (let j = 0; j < currentTemplateWord.length; j++) {
-        if (letters[i].char === currentTemplateWord[j]) {
+        if (letters[i].character === currentTemplateWord[j]) {
           positiveHitSound.play();
           score += 100;
           isLetterHit = true;
           for (let k = 0; k < assembledWord.length; k++) {
-            let char = assembledWord[k];
-            (j === k) ? buffer += letters[i].char : buffer += char;
+            let character = assembledWord[k];
+            (j === k) ? buffer += letters[i].character : buffer += character;
           }
           assembledWord = buffer;
           // Clear hit letter in current template word
-          buffer = currentTemplateWord.replace(letters[i].char, " ");
+          buffer = currentTemplateWord.replace(letters[i].character, " ");
           currentTemplateWord = buffer;
           break;
         }
@@ -514,10 +523,10 @@ const displayGameScreen = () => {
   // Display letters and do collision check if shot is enabled
   const moveLetters = () => {
     for (let i = 0; i < letters.length; i++) {
-      let currentChar = letters[i].char;
+      let currentCharacter = letters[i].character;
       let currentLetter = null;
       for (j = 0; j < alphabetCharactersNum; j++) {
-        if (currentChar === letterObjects[j].char) {
+        if (currentCharacter === letterObjects[j].character ) {
           currentLetter = letterObjects[j];
           break;
         }
@@ -628,27 +637,13 @@ const displayGameScreen = () => {
     oldStartIndex = startIndex;      
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
-    for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-      let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - (2 * letterWidth);
-      let yPosition = letterHeight + (Math.floor(Math.random() * 500));
-      let yDirection = 1 + (Math.floor(Math.random() * 4));
-      const letter = new LetterObject(
-        xPosition, 
-        yPosition, 
-        letterWidth, 
-        letterHeight, 
-        yDirection, 
-        flyingLetters[startIndex][i]
-      );
-      letters.push(letter);
-    }
+    initializeFlyingLetters();
     nextLevel = false;
   }
 
   // Stop game if no lives left
   const stopGame = () => {
     gameOver = false;
-    // DOM-Manipulation
     gameContainer.classList.remove("cursorOff");
     gameContainer.classList.add("cursorOn");
     // Stop interval
@@ -710,7 +705,6 @@ const displaySplashScreen = () => {
   
   // Handler for click on start button
   const handleStartButton = () => {
-    // DOM-Manipulation
     introContainer.classList.add("displayOff");
     gameContainer.classList.remove("displayOff");
     // Remove handler for click on start button
@@ -747,7 +741,6 @@ const displayGameoverScreen = (score) => {
       scoreList.appendChild(elements.scoreEntry);
     }
   }
-  // DOM-manipulation
   gameContainer.classList.add("displayOff");
   gameContainer.classList.remove("cursorOn");
   gameContainer.classList.add("cursorOff");
@@ -755,7 +748,6 @@ const displayGameoverScreen = (score) => {
   createHighScoreTable(score);
   // Handler for click on restart button
   const handleRestartButton = () => {
-    // DOM manipulation
     scoreList.innerHTML = "";
     endContainer.classList.add("displayOff");
     gameContainer.classList.remove("displayOff");
