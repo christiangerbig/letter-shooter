@@ -116,6 +116,7 @@ const displayGameScreen = () => {
   const letters = [];
 
   // Initialize constants
+  const definedAssembledWord = " ".repeat(5);
   const letterVerticalSpeed = 4;
   const letterWidth = 50;
   const letterHeight = 40;
@@ -132,7 +133,7 @@ const displayGameScreen = () => {
   let gameOver = false;
   let shotEnabled = false;
   let intervalId = null;
-  let assembledWord = "      ";
+  let assembledWord = definedAssembledWord;
   let startIndex = Math.floor(Math.random() * templateWords.length);
   let oldStartIndex = startIndex;
   let currentTemplateWord = templateWords[startIndex];
@@ -573,11 +574,10 @@ const displayGameScreen = () => {
 
   // Display current player score in the centre of the top screen
   const displayScore = () => {
-    let scoreStr = score.toString().padStart(6,0,0);
     renderingContext.font = "22px Coda Caption";
     renderingContext.fillStyle = "orange";
     renderingContext.fillText(
-      `Score ${scoreStr}`,
+      `Score ${score.toString().padStart(6,0,0)}`,
       320,
       30
     );
@@ -630,7 +630,7 @@ const displayGameScreen = () => {
 
   // Get next random template word if all missing letters were hit
   const checkTemplateWord = () => {
-    assembledWord = "      ";
+    assembledWord = definedAssembledWord;
     while (startIndex === oldStartIndex) {
       startIndex = Math.floor(Math.random() * templateWords.length);
     }
