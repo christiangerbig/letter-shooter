@@ -51,7 +51,7 @@ game.js
 - displayLives() {}
 - displayScore() {}
 
-gmaeOver.js
+gameOver.js
 - displayGameOverScreen() {}
 
 ## Classes
