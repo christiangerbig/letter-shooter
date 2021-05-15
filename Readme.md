@@ -8,9 +8,9 @@ Letter Shooter is a game where the player moves a spaceship vertically on the sc
 
 ## MVP (DOM - CANVAS)
 
-- intro part with start button
+- Splash screen with start button
 
-- main part with:
+- Game screen screen with:
   - game music is played in the background and is looped if end of song is reached
   - move the spaceship with the mouse
   - shoot with bullets at the letters
@@ -27,7 +27,7 @@ Letter Shooter is a game where the player moves a spaceship vertically on the sc
   - a life gets lost, if energy has reached zero
   - game over after all lives are lost
 
-- end part with:
+- Game over screen with:
   - a game over sound is played
   - display high score table after game over
   - restart game supported
@@ -35,11 +35,11 @@ Letter Shooter is a game where the player moves a spaceship vertically on the sc
 
 ## Data structure
 
-intro.js
-- displayIntroScreen() {}
+splash.js
+- displaySplashScreen() {}
 
 game.js
-- displayMainScreen() {}
+- displayGameScreen() {}
 - displayBGPicture() {}
 - moveSpaceship() {}
 - shootBullet() {}
@@ -51,8 +51,8 @@ game.js
 - displayLives() {}
 - displayScore() {}
 
-end.js
-- displayEndScreen() {}
+gmaeOver.js
+- displayGameOverScreen() {}
 
 ## Classes
 
@@ -137,8 +137,8 @@ end.js
 
 ## Task
 
-- intro - Build DOM
-- intro - addEventListener
+- splash - Build DOM
+- splash - addEventListener
 
 - game - start-loop
 - game - build canvas
@@ -155,10 +155,10 @@ end.js
 - game - play music
 - game - play positive/negative samples for letters hit
 
-- end - play game over sound
-- end - display high score
-- end - build DOM
-- end - addEventListener
+- game over - play game over sound
+- game over - display high score
+- game over - build DOM
+- game over - addEventListener
 
 
 ## Links

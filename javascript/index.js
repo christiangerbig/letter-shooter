@@ -1,12 +1,12 @@
 // ---------- Global ----------
 // Initialize class
 class ElementsObject {
-  constructor(introContainer, startButton, gameContainer, canvas, endContainer, scoreList, scoreEntry, restartButton) {
-    this.introContainer = introContainer;
+  constructor(splashContainer, startButton, gameContainer, canvas, gameOverContainer, scoreList, scoreEntry, restartButton) {
+    this.splashContainer = splashContainer;
     this.startButton = startButton;
     this.gameContainer = gameContainer;
     this.canvas = canvas;
-    this.endContainer = endContainer;
+    this.gameOverContainer = gameOverContainer;
     this.scoreList = scoreList;
     this.scoreEntry = scoreEntry;
     this.restartButton = restartButton;
@@ -22,18 +22,18 @@ const scoresTable = [
 
 // Initialize object
 const elements = new ElementsObject(
-  document.querySelector("#introContainer"),
+  document.querySelector("#splashContainer"),
   document.querySelector("#startButton"),
   document.querySelector("#gameContainer"),
   document.querySelector("canvas"),
-  document.querySelector("#endContainer"),
+  document.querySelector("#gameOverContainer"),
   document.querySelector("#scoreList"),
   null,
   document.querySelector("#restartButton")
 );
 
 // Initialize constants
-const { introContainer, startButton, gameContainer, canvas, endContainer, scoreList, restartButton } = elements;
+const { splashContainer, startButton, gameContainer, canvas, gameOverContainer, scoreList, restartButton } = elements;
 
 
 // ---------- Display game screen ----------
@@ -705,7 +705,7 @@ const displaySplashScreen = () => {
 
   // Handler for click on start button
   const handleStartButton = () => {
-    introContainer.classList.add("displayOff");
+    splashContainer.classList.add("displayOff");
     gameContainer.classList.remove("displayOff");
     // Remove handler for click on start button
     startButton.removeEventListener(
@@ -745,12 +745,12 @@ const displayGameoverScreen = (score) => {
   gameContainer.classList.add("displayOff");
   gameContainer.classList.remove("cursorOn");
   gameContainer.classList.add("cursorOff");
-  endContainer.classList.remove("displayOff");
+  gameOverContainer.classList.remove("displayOff");
   createHighScoreTable(score);
   // Handler for click on restart button
   const handleRestartButton = () => {
     scoreList.innerHTML = "";
-    endContainer.classList.add("displayOff");
+    gameOverContainer.classList.add("displayOff");
     gameContainer.classList.remove("displayOff");
     // Remove handler for click on restart button
     restartButton.removeEventListener(
