@@ -158,5 +158,7 @@ gameOver.js
 ## Links
 
 [Repository Link](https://github.com/christiangerbig/letter-shooter)
+
 [Deployed Link](https://christiangerbig.github.io/letter-shooter/)
+
 [Slides Link](https://docs.google.com/presentation/d/19SUX9neMiqWqEPA53OpoDVEWDInEuT_owJnXoIe3P_Q/edit?usp=sharing)
