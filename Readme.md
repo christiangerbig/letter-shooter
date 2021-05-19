@@ -1,10 +1,8 @@
 # Letter Shooter
 
-
 ## Description
 
 Letter Shooter is a game where the player moves a spaceship vertically on the screen and can shoot with bullets at flying letters. The player gets a template word and has to shoot the characters of this given word out of a formation of letters. If the player hits the right letter his score is increased by 100. If the player hits the wrong letter out of this formation, he looses energy. If the energy is zero, he looses one of his three lives. The game ends if he has lost all his three lives. After that the highscore table with the position of the player is displayed.
-
 
 ## MVP (DOM - CANVAS)
 
@@ -31,7 +29,6 @@ Letter Shooter is a game where the player moves a spaceship vertically on the sc
   - a game over sound is played
   - display high score table after game over
   - restart game supported
-
 
 ## Data structure
 
@@ -93,7 +90,6 @@ gameOver.js
   - scoreEntry
   - restartButton
 
-
 ## Arrays
 
 - templateWords
@@ -128,7 +124,6 @@ gameOver.js
 - letterObjects
 - letters
 
-
 ## States y States Transitions
 
 - splashScreen
@@ -160,11 +155,8 @@ gameOver.js
 - game over - build DOM
 - game over - addEventListener
 
-
 ## Links
 
-Git
-https://christiangerbig.github.io/letter-shooter/
-
-Slides
-https://docs.google.com/presentation/d/19SUX9neMiqWqEPA53OpoDVEWDInEuT_owJnXoIe3P_Q/edit?usp=sharing
+[Repository Link](https://github.com/christiangerbig/letter-shooter)
+[Deployed Link](https://christiangerbig.github.io/letter-shooter/)
+[Slides Link](https://docs.google.com/presentation/d/19SUX9neMiqWqEPA53OpoDVEWDInEuT_owJnXoIe3P_Q/edit?usp=sharing)
