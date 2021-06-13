@@ -393,9 +393,9 @@ const displayGameScreen = () => {
 
   const initializeFlyingLetters = () => {
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-      let xPosition = canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
-      let yPosition = letterHeight + (Math.floor(Math.random() * 500));
-      let yDirection = 1 + (Math.floor(Math.random() * letterVerticalSpeed));
+      const xPosition = canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
+      const yPosition = letterHeight + (Math.floor(Math.random() * 500));
+      const yDirection = 1 + (Math.floor(Math.random() * letterVerticalSpeed));
       const letter = new LetterObject(
         xPosition, 
         yPosition, 
@@ -524,7 +524,7 @@ const displayGameScreen = () => {
   // Display letters and do collision check if shot is enabled
   const moveLetters = () => {
     for (let i = 0; i < letters.length; i++) {
-      let currentCharacter = letters[i].character;
+      const currentCharacter = letters[i].character;
       let currentLetter = null;
       for (j = 0; j < alphabetCharacters.length; j++) {
         if (currentCharacter === letterObjects[j].character ) {
