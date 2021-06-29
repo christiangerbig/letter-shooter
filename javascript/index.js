@@ -141,12 +141,10 @@ const displayGameScreen = () => {
   // Load background image
   const loadBgImage = () => {
     // Handler for load background image
-    const handleBgImageLoad = () => {
-      bgImage.removeEventListener(
-        "load",
-        handleBgImageLoad
-      );
-    }
+    const handleBgImageLoad = () => bgImage.removeEventListener(
+      "load",
+      handleBgImageLoad
+    )
     // Add handler for load background image
     const bgImage = document.createElement("img");
     bgImage.src = "./images/Andromeda.png";
@@ -160,12 +158,10 @@ const displayGameScreen = () => {
   // Load spaceship image
   const loadSpaceshipImage = () => {
     // Handler for load spaceship image
-    const handleSpaceshipImageLoad = () => {
-      spaceshipImage.removeEventListener(
-        "load",
-        handleSpaceshipImageLoad
-      );
-    }
+    const handleSpaceshipImageLoad = () => spaceshipImage.removeEventListener(
+      "load",
+      handleSpaceshipImageLoad
+    )
     // Add handler for load spaceship image
     const spaceshipImage = document.createElement("img");
     spaceshipImage.src = "./images/Ships.png";
@@ -179,12 +175,10 @@ const displayGameScreen = () => {
   // Load shot image
   const loadShotImage = () => {
     // Handler for load shot image
-    const handleShotImageLoad = () => {
-      shotImage.removeEventListener(
-        "load",
-        handleShotImageLoad
-      );
-    }
+    const handleShotImageLoad = () => shotImage.removeEventListener(
+      "load",
+      handleShotImageLoad
+    )
     // Add handler for load shot image
     const shotImage = document.createElement("img");
     shotImage.src = "./images/Shot.png";
@@ -198,12 +192,10 @@ const displayGameScreen = () => {
   // Load life image
   const loadlifeImage = () => {
     // Handler for load life image
-    const handleLifeImageLoad = () => {
-      lifeImage.removeEventListener(
-        "load",
-        handleLifeImageLoad
-      );
-    }
+    const handleLifeImageLoad = () => lifeImage.removeEventListener(
+      "load",
+      handleLifeImageLoad
+    )
     // Add handler for load life image
     const lifeImage = document.createElement("img");
     lifeImage.src = "./images/Ship-sm.png";
@@ -217,12 +209,10 @@ const displayGameScreen = () => {
   // Load letters image
   const loadLettersImage = () => {
     // Handler for load letters image
-    const handleLettersImageLoad = () => {
-      lettersImage.removeEventListener(
-        "load",
-        handleLettersImageLoad
-      );
-    }
+    const handleLettersImageLoad = () => lettersImage.removeEventListener(
+      "load",
+      handleLettersImageLoad
+    )
     // Add handler for load letters image
     const lettersImage = document.createElement("img");
     lettersImage.src = "./images/Characters-Set.png";
@@ -236,12 +226,10 @@ const displayGameScreen = () => {
   // Load game music
   const loadGameMusic = () => {
     // Handler for load game music
-    const handleGameMusicLoad = () => {
-      gameMusic.removeEventListener(
-        "load",
-        handleGameMusicLoad
-      );
-    }
+    const handleGameMusicLoad = () => gameMusic.removeEventListener(
+      "load",
+      handleGameMusicLoad
+    )
     // Add handler for load game music
     const gameMusic = new Audio("./sounds/RetroRulez.mp3");
     gameMusic.addEventListener(
@@ -254,12 +242,10 @@ const displayGameScreen = () => {
   // Load positive hit sound
   const loadPositiveHitSound = () => {
     // Handler for load positive hit sound
-    const handlepositiveHitSoundLoad = () => {
-      positiveHitSound.removeEventListener(
-        "load",
-        handlepositiveHitSoundLoad
-      );
-    }
+    const handlepositiveHitSoundLoad = () => positiveHitSound.removeEventListener(
+      "load",
+      handlepositiveHitSoundLoad
+    )
     // Add handler for load positive hit sound
     const positiveHitSound = new Audio("./sounds/PosHit.mp3");
     positiveHitSound.addEventListener(
@@ -272,12 +258,10 @@ const displayGameScreen = () => {
   // Load negative hit sound
   const loadNegativeHitSound = () => {
     // Handler for load negative hit sound
-    const handlenegativeHitSoundLoad = () => {
-      negativeHitSound.removeEventListener(
-        "load",
-        handlenegativeHitSoundLoad
-      );
-    }
+    const handlenegativeHitSoundLoad = () => negativeHitSound.removeEventListener(
+      "load",
+      handlenegativeHitSoundLoad
+    )
     // Add handler for load negative hit sound
     const negativeHitSound = new Audio("./sounds/NegHit.mp3");
     negativeHitSound.addEventListener(
@@ -290,12 +274,10 @@ const displayGameScreen = () => {
   // Load game over sound
   const loadGameOverSound = () => {
     // Handler for load game over sound
-    const handleGameOverSoundLoad = () => {
-      gameOverSound.removeEventListener(
-        "load",
-        handleGameOverSoundLoad
-      );
-    }
+    const handleGameOverSoundLoad = () => gameOverSound.removeEventListener(
+      "load",
+      handleGameOverSoundLoad
+    )
     // Add handler for load game over sound
     const gameOverSound = new Audio("./sounds/GameOver.mp3");
     gameOverSound.addEventListener(
@@ -414,28 +396,24 @@ const displayGameScreen = () => {
   gameMusic.play();
 
   // Display background picture
-  const displayBgPicture = () => {
-    renderingContext.drawImage(
-      bgImage, 
-      0, 
-      0
-    );
-  }
+  const displayBgPicture = () => renderingContext.drawImage(
+    bgImage, 
+    0, 
+    0
+  )
 
   // Display spaceship
-  const displaySpaceship = () => {
-    renderingContext.drawImage(
-      spaceship.imageUrl, 
-      0, 
-      0, 
-      110, 
-      55, 
-      spaceship.xPosition, 
-      spaceship.yPosition, 
-      110, 
-      55
-    );
-  }
+  const displaySpaceship = () => renderingContext.drawImage(
+    spaceship.imageUrl, 
+    0, 
+    0, 
+    110, 
+    55, 
+    spaceship.xPosition, 
+    spaceship.yPosition, 
+    110, 
+    55
+  )
 
   // Display shot
   const shootBullet = () => {
@@ -491,7 +469,6 @@ const displayGameScreen = () => {
         (lives === 0) ? gameOver = true : energy = 90;        
       }
     }
-    
     (insertHitLetter(i)) ? null : reduceEnergy();
 
     // Check if all missed letters are hit
