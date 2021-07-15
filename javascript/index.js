@@ -301,8 +301,8 @@ const displayGameScreen = () => {
   // Add mouse up or down handler
   const addMouseUpDownHandler = () => {
     // Handler for mouse move up or down
-    const handleMouseUpDown = (e) => {
-      if ((e.clientY > (4 * spaceship.height)) && (e.clientY < canvas.height - (8 * spaceship.height))) spaceship.yPosition = e.clientY;
+    const handleMouseUpDown = event => {
+      if ((event.clientY > (4 * spaceship.height)) && (event.clientY < canvas.height - (8 * spaceship.height))) spaceship.yPosition = event.clientY;
     }
     // Add handler for mouse move up or down
     document.addEventListener(
@@ -432,10 +432,10 @@ const displayGameScreen = () => {
   }
 
   // Check if missing letter was hit
-  const checkMissingLetter = (i) => {
+  const checkMissingLetter = i => {
 
     // Insert hit letter in assembled word
-    const insertHitLetter = (i) => {
+    const insertHitLetter = i => {
       let buffer = "";
       let isLetterHit = false;
       for (let j = 0; j < currentTemplateWord.length; j++) {
@@ -477,7 +477,7 @@ const displayGameScreen = () => {
   }
 
   // Check collision shot vs. letter(s)
-  const checkLetterHit = (i) => {
+  const checkLetterHit = i => {
     // ( shot.xr >= letter.xl ) && ( shot.xl <= letter.xr )
     const xCollisionCheck1 = ((shot.xPosition + shot.width) >= letters[i].xPosition) && (shot.xPosition <= (letters[i].xPosition + letters[i].width));
     // ( shot.yt >= letter.yt ) && ( shot.yt <= letter.yb )
@@ -659,7 +659,7 @@ const displayGameScreen = () => {
   }
 
   // Handler for interval timer
-  const handleIntervalTimer = () => requestAnimationFrame(animateAll);
+  const handleIntervalTimer = () => requestAnimationFrame(animateAll)
   // Start game by interval
   intervalId = setInterval(
     handleIntervalTimer,
@@ -694,7 +694,7 @@ const displaySplashScreen = () => {
 const displayGameoverScreen = (score) => {
 
   // Create highscore table
-  const createHighScoreTable = (score) => {
+  const createHighScoreTable = score => {
     // Insert score in highscore table and sort entries
     if ((scoresTable.length < 10) && (score !== 0)) {
       scoresTable.push(score);
