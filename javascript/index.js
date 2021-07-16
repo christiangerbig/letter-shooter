@@ -129,9 +129,9 @@ const displayGameScreen = () => {
   let energy = 90;
   let score = 0;
   let lives = 3;
-  let nextLevel = false;
-  let gameOver = false;
-  let shotEnabled = false;
+  let isNextLevel = false;
+  let isGameOver = false;
+  let isShotEnabled = false;
   let intervalId = null;
   let assembledWord = definedAssembledWord;
   let startIndex = Math.floor(Math.random() * templateWords.length);
@@ -316,7 +316,7 @@ const displayGameScreen = () => {
   const addLeftMouseButtonHandler = () => {
     // Handler for click on left mouse button
     const handleLeftMouseButton = () => {
-      shotEnabled = true;
+      isShotEnabled = true;
       shot.yPosition = spaceship.yPosition + letterHorizontalGap;
     }
     // Add handler for click on left mouse button
@@ -416,7 +416,7 @@ const displayGameScreen = () => {
   // Display shot
   const shootBullet = () => {
     // only if shot enabled
-    if (shotEnabled) {
+    if (isShotEnabled) {
       renderingContext.drawImage(
         shot.imageUrl,
         shot.xPosition,
@@ -425,7 +425,7 @@ const displayGameScreen = () => {
       shot.xPosition += shotHorizontalSpeed;
       // Check shot against right border
       if (shot.xPosition > canvas.width) {
-        shotEnabled = false;
+        isShotEnabled = false;
         shot.xPosition = 116;
       }
     }
@@ -464,7 +464,7 @@ const displayGameScreen = () => {
       }
       else {
         lives -= 1;
-        (lives === 0) ? gameOver = true : energy = 90;
+        (lives === 0) ? isGameOver = true : energy = 90;
       }
     }
     (insertHitLetter(i)) ? null : reduceEnergy();
@@ -473,7 +473,7 @@ const displayGameScreen = () => {
     for (let k = 0; k < currentTemplateWord.length; k++) {
       if (currentTemplateWord[k] !== " ") return;
     }
-    nextLevel = true;
+    isNextLevel = true;
   }
 
   // Check collision shot vs. letter(s)
@@ -487,7 +487,7 @@ const displayGameScreen = () => {
     if (xCollisionCheck1 && (yCollisionCheck1 || yCollisionCheck2)) {
       checkMissingLetter(i);
       letters.splice(i, 1);
-      shotEnabled = false;
+      isShotEnabled = false;
       shot.xPosition = 116;
       return true;
     }
@@ -516,7 +516,7 @@ const displayGameScreen = () => {
         letterWidth,
         letterHeight
       );
-      if (shotEnabled && checkLetterHit(i)) continue;
+      if (isShotEnabled && checkLetterHit(i)) continue;
 
       // Top / bottom border check
       if ((letters[i].yPosition < 0) || (letters[i].yPosition > (600 - letterHeight))) letters[i].yDirection *= - 1;
@@ -608,12 +608,12 @@ const displayGameScreen = () => {
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
     initializeFlyingLetters();
-    nextLevel = false;
+    isNextLevel = false;
   }
 
   // Stop game if no lives left
   const stopGame = () => {
-    gameOver = false;
+    isGameOver = false;
     gameContainer.classList.remove("cursorOff");
     gameContainer.classList.add("cursorOn");
     // Stop interval
@@ -641,9 +641,9 @@ const displayGameScreen = () => {
     // Always display background picture
     displayBgPicture();
     // Check template word if level is finished
-    if (nextLevel) checkTemplateWord();
+    if (isNextLevel) checkTemplateWord();
     // Graphic elements only displayed if game not over
-    if (gameOver) {
+    if (isGameOver) {
       stopGame();
     }
     else {
