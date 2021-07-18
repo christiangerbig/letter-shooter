@@ -79,6 +79,16 @@ const displayGameScreen = () => {
     }
   };
 
+  class LetterConstantsObject {
+    constructor(width, height, horizontalGap, verticalGap, maxVerticalSpeed) {
+      this.width = width;
+      this.height = height;
+      this.horizontalGap = horizontalGap;
+      this.verticalGap = verticalGap;
+      this.maxVerticalSpeed = maxVerticalSpeed;
+    }
+  }
+
   // Initialize arrays
   const templateWords = [
     "HOUSE",
@@ -116,24 +126,16 @@ const displayGameScreen = () => {
   const letters = [];
 
   // Initialize constants
-  const definedAssembledWord = " ".repeat(5);
-  const letterVerticalSpeed = 4;
-  const letterWidth = 50;
-  const letterHeight = 40;
-  const letterHorizontalGap = 17;
-  const letterVerticalGap = 7;
-  const shotHorizontalSpeed = 15;
   const renderingContext = canvas.getContext("2d");
-
+  const definedAssembledWord = " ".repeat(5);
+  const maxLives = 3
+  const maxEnergy = 90;
+  const energyCountdownStep = 30;
+  const shotHorizontalSpeed = 15;
+  
   // Initialize variables
-  let energy = 90;
-  let score = 0;
-  let lives = 3;
-  let isNextLevel = false;
-  let isGameOver = false;
-  let isShotEnabled = false;
-  let intervalId = null;
-  let assembledWord = definedAssembledWord;
+  let [energy, score, lives, assembledWord, intervalId] = [maxEnergy, 0, maxLives, definedAssembledWord, null];
+  let [isNextLevel, isGameOver, isShotEnabled] = [false, false, false];
   let startIndex = Math.floor(Math.random() * templateWords.length);
   let oldStartIndex = startIndex;
   let currentTemplateWord = templateWords[startIndex];
@@ -317,7 +319,7 @@ const displayGameScreen = () => {
     // Handler for click on left mouse button
     const handleLeftMouseButton = () => {
       isShotEnabled = true;
-      shot.yPosition = spaceship.yPosition + letterHorizontalGap;
+      shot.yPosition = spaceship.yPosition + letterConstants.horizontalGap;
     }
     // Add handler for click on left mouse button
     document.addEventListener(
@@ -333,10 +335,19 @@ const displayGameScreen = () => {
 
   // Initialize objects
 
+  // Initialize letter constant values
+  const letterConstants = new LetterConstantsObject(
+    50,
+    40,
+    17,
+    7,
+    4
+  );
+
   // Initialize xy offset of each letter in letters image
   const initializeLetterObjects = () => {
-    let xOffset = 5;
-    let yOffset = 8;
+    const {width, height, horizontalGap, verticalGap} = letterConstants;
+    let [xOffset, yOffset] = [5, 8];
     alphabetCharacters.forEach(
       (character) => {
         const letterSubRectangle = new LetterSubRectangleObject(
@@ -345,10 +356,10 @@ const displayGameScreen = () => {
           character
         );
         letterObjects.push(letterSubRectangle);
-        xOffset += letterWidth + letterHorizontalGap;
+        xOffset += width + horizontalGap;
         if (xOffset > 608) {
           xOffset = 5;
-          yOffset += letterHeight + letterVerticalGap;
+          yOffset += height + verticalGap;
         }
       }
     );
@@ -372,15 +383,16 @@ const displayGameScreen = () => {
   );
 
   const initializeFlyingLetters = () => {
+    const {width, height, maxVerticalSpeed} = letterConstants;
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
-      const xPosition = canvas.width - (Math.floor(Math.random() * 500)) - letterWidth;
-      const yPosition = letterHeight + (Math.floor(Math.random() * 500));
-      const yDirection = 1 + (Math.floor(Math.random() * letterVerticalSpeed));
+      const xPosition = canvas.width - (Math.floor(Math.random() * 500)) - width;
+      const yPosition = height + (Math.floor(Math.random() * 500));
+      const yDirection = 1 + (Math.floor(Math.random() * maxVerticalSpeed));
       const letter = new LetterObject(
         xPosition,
         yPosition,
-        letterWidth,
-        letterHeight,
+        width,
+        height,
         yDirection,
         flyingLetters[startIndex][i]
       );
@@ -436,15 +448,14 @@ const displayGameScreen = () => {
 
     // Insert hit letter in assembled word
     const insertHitLetter = i => {
-      let buffer = "";
-      let isLetterHit = false;
+      let [buffer, isLetterHit] = ["", false];
       for (let j = 0; j < currentTemplateWord.length; j++) {
         if (letters[i].character === currentTemplateWord[j]) {
           positiveHitSound.play();
           score += 100;
           isLetterHit = true;
           for (let k = 0; k < assembledWord.length; k++) {
-            (j === k) ? buffer += letters[i].character : buffer += assembledWord[k];
+            j === k ? buffer += letters[i].character : buffer += assembledWord[k];
           }
           assembledWord = buffer;
           // Clear hit letter in current template word
@@ -459,15 +470,15 @@ const displayGameScreen = () => {
     // Reduce energy if wrong letter was hit
     const reduceEnergy = () => {
       negativeHitSound.play();
-      if (energy > 30) {
-        energy -= 30;
+      if (energy > energyCountdownStep) {
+        energy -= energyCountdownStep;
       }
       else {
         lives -= 1;
-        (lives === 0) ? isGameOver = true : energy = 90;
+        lives === 0 ? isGameOver = true : energy = maxEnergy;
       }
     }
-    (insertHitLetter(i)) ? null : reduceEnergy();
+    insertHitLetter(i) ? null : reduceEnergy();
 
     // Check if all missed letters are hit
     for (let k = 0; k < currentTemplateWord.length; k++) {
@@ -505,21 +516,22 @@ const displayGameScreen = () => {
           break;
         }
       }
+      const {width, height} = letterConstants;
       renderingContext.drawImage(
         lettersImage,
         currentLetter.xOffset,
         currentLetter.yOffset,
-        letterWidth,
-        letterHeight,
+        width,
+        height,
         letters[i].xPosition,
         letters[i].yPosition,
-        letterWidth,
-        letterHeight
+        width,
+        height
       );
       if (isShotEnabled && checkLetterHit(i)) continue;
 
-      // Top / bottom border check
-      if ((letters[i].yPosition < 0) || (letters[i].yPosition > (600 - letterHeight))) letters[i].yDirection *= - 1;
+      // Top / bottom border check-
+      if ((letters[i].yPosition < 0) || (letters[i].yPosition > (600 - letterConstants.height))) letters[i].yDirection *= - 1;
       letters[i].yPosition += letters[i].yDirection;
     }
   }
@@ -601,9 +613,7 @@ const displayGameScreen = () => {
   // Get next random template word if all missing letters were hit
   const checkTemplateWord = () => {
     assembledWord = definedAssembledWord;
-    while (startIndex === oldStartIndex) {
-      startIndex = Math.floor(Math.random() * templateWords.length);
-    }
+    while (startIndex === oldStartIndex) startIndex = Math.floor(Math.random() * templateWords.length);
     oldStartIndex = startIndex;
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
@@ -691,7 +701,7 @@ const displaySplashScreen = () => {
 }
 
 // ---------- Display gameover screen ----------
-const displayGameoverScreen = (score) => {
+const displayGameoverScreen = score => {
 
   // Create highscore table
   const createHighScoreTable = score => {
