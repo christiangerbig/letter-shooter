@@ -127,7 +127,7 @@ const displayGameScreen = () => {
 
   // Initialize constants
   const renderingContext = canvas.getContext("2d");
-  const definedAssembledWord = " ".repeat(5);
+  const definedAssembledWord = " ".repeat(6);
   const maxLives = 3
   const maxEnergy = 90;
   const energyCountdownStep = 30;
@@ -483,7 +483,9 @@ const displayGameScreen = () => {
     insertHitLetter(i) ? null : reduceEnergy();
 
     // Check if all missed letters are hit
-    for (let k = 0; k < currentTemplateWord.length; k++) if (currentTemplateWord[k] !== " ") return;
+    for (let k = 0; k < currentTemplateWord.length; k++) {
+      if (currentTemplateWord[k] !== " ") return;
+    }
     isNextLevel = true;
   }
 
