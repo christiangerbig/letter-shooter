@@ -304,7 +304,9 @@ const displayGameScreen = () => {
   const addMouseUpDownHandler = () => {
     // Handler for mouse move up or down
     const handleMouseUpDown = event => {
-      if ((event.clientY > (4 * spaceship.height)) && (event.clientY < canvas.height - (8 * spaceship.height))) spaceship.yPosition = event.clientY;
+      const {height} = spaceship;
+      const {clientY} = event;
+      if ((clientY > (4 * height)) && (clientY < canvas.height - (8 * height))) spaceship.yPosition = clientY;
     }
     // Add handler for mouse move up or down
     document.addEventListener(
@@ -481,20 +483,19 @@ const displayGameScreen = () => {
     insertHitLetter(i) ? null : reduceEnergy();
 
     // Check if all missed letters are hit
-    for (let k = 0; k < currentTemplateWord.length; k++) {
-      if (currentTemplateWord[k] !== " ") return;
-    }
+    for (let k = 0; k < currentTemplateWord.length; k++) if (currentTemplateWord[k] !== " ") return;
     isNextLevel = true;
   }
 
   // Check collision shot vs. letter(s)
   const checkLetterHit = i => {
+    const {xPosition, yPosition, width, height} = shot;
     // ( shot.xr >= letter.xl ) && ( shot.xl <= letter.xr )
-    const xCollisionCheck1 = ((shot.xPosition + shot.width) >= letters[i].xPosition) && (shot.xPosition <= (letters[i].xPosition + letters[i].width));
+    const xCollisionCheck1 = ((xPosition + width) >= letters[i].xPosition) && (xPosition <= (letters[i].xPosition + letters[i].width));
     // ( shot.yt >= letter.yt ) && ( shot.yt <= letter.yb )
-    const yCollisionCheck1 = (shot.yPosition >= letters[i].yPosition) && (shot.yPosition <= (letters[i].yPosition + letters[i].height));
+    const yCollisionCheck1 = (yPosition >= letters[i].yPosition) && (yPosition <= (letters[i].yPosition + letters[i].height));
     // ( shot.yb <= letter.yb ) && ( shot.yt >= letter.yt )
-    const yCollisionCheck2 = ((shot.yPosition + shot.height) <= (letters[i].yPosition + letters[i].height)) && (shot.yPosition >= letters[i].yPosition);
+    const yCollisionCheck2 = ((yPosition + height) <= (letters[i].yPosition + letters[i].height)) && (yPosition >= letters[i].yPosition);
     if (xCollisionCheck1 && (yCollisionCheck1 || yCollisionCheck2)) {
       checkMissingLetter(i);
       letters.splice(i, 1);
@@ -530,8 +531,8 @@ const displayGameScreen = () => {
       );
       if (isShotEnabled && checkLetterHit(i)) continue;
 
-      // Top / bottom border check-
-      if ((letters[i].yPosition < 0) || (letters[i].yPosition > (600 - letterConstants.height))) letters[i].yDirection *= - 1;
+      // Top / bottom border check
+      if ((letters[i].yPosition < 0) || (letters[i].yPosition > (600 - letterConstants.height))) letters[i].yDirection *= - 1; // Change vertical direction
       letters[i].yPosition += letters[i].yDirection;
     }
   }
