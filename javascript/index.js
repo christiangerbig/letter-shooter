@@ -351,7 +351,7 @@ const displayGameScreen = () => {
     const {width, height, horizontalGap, verticalGap} = letterConstants;
     let [xOffset, yOffset] = [5, 8];
     alphabetCharacters.forEach(
-      (character) => {
+      character => {
         const letterSubRectangle = new LetterSubRectangleObject(
           xOffset,
           yOffset,
@@ -716,7 +716,7 @@ const displayGameoverScreen = score => {
     // Create highscore table list elements
     scoreList.innerHTML = ""; // clear the list
     scoresTable.forEach(
-      (score) => {
+      score => {
         elements.scoreEntry = document.createElement("li");
         elements.scoreEntry.innerText = score.toString().padStart(6, 0, 0);
         scoreList.appendChild(elements.scoreEntry);
