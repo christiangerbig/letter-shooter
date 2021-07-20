@@ -480,7 +480,7 @@ const displayGameScreen = () => {
         lives === 0 ? isGameOver = true : energy = maxEnergy;
       }
     }
-    insertHitLetter(i) ? null : reduceEnergy();
+    !insertHitLetter(i) && reduceEnergy();
 
     // Check if all missed letters are hit
     for (let k = 0; k < currentTemplateWord.length; k++) {
