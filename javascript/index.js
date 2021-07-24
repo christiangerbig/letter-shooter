@@ -425,23 +425,21 @@ const displayGameScreen = game => {
     // Insert hit letter in assembled word
     const insertHitLetter = (i, game) => {
       const {letters} = game;
-      game.isLetterHit = false;
       let buffer = "";
       for (let j = 0; j < currentTemplateWord.length; j++) {
         if (letters[i].character === currentTemplateWord[j]) {
           positiveHitSound.play();
           game.score += scoreCountStep;
-          game.isLetterHit = true;
           for (let k = 0; k < assembledWord.length; k++) {
             j === k ? buffer += letters[i].character : buffer += assembledWord[k];
           }
           assembledWord = buffer;
           buffer = currentTemplateWord.replace(letters[i].character, " "); // Clear hit letter in current template word
           currentTemplateWord = buffer;
-          break;
+          return true;
         }
       }
-      return game.isLetterHit;
+      return false;
     }
 
     // Reduce energy if wrong letter was hit
@@ -486,7 +484,7 @@ const displayGameScreen = game => {
 
   // Display letters and do collision check if shot is enabled
   const moveLetters = (game, shot) => {
-    const {isShotEnabled,alphabetCharacters, letterConstants, letterObjects, letters} = game;
+    const {isShotEnabled, alphabetCharacters, letterConstants, letterObjects, letters} = game;
     for (let i = 0; i < letters.length; i++) {
       const currentCharacter = letters[i].character;
       let currentLetter = null;
