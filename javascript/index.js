@@ -1,13 +1,11 @@
 // ---------- Global ----------
-// Initialize constants
 const maxLives = 3
 const maxEnergy = 90;
-const energyCountdownStep = 30;
+const energyCountStep = 30;
 const scoreCountStep = 100;
 const shotHorizontalSpeed = 15;
 
-// Initialize object
-let game = {
+const game = {
   energy: maxEnergy,
   score: 0,
   lives: maxLives,
@@ -74,17 +72,14 @@ let game = {
 // ---------- Display game screen ----------
 const displayGameScreen = game => {
 
-  // Initialize constants
   const renderingContext = game.elements.canvas.getContext("2d");
   const definedAssembledWord = " ".repeat(6);
 
-  // Initialize variables
   let startIndex = Math.floor(Math.random() * game.templateWords.length);
   let oldStartIndex = startIndex;
   let currentTemplateWord = game.templateWords[startIndex];
-  let assembledWord =  definedAssembledWord;
+  let assembledWord = definedAssembledWord;
 
-  // Initialize classes
   class SpaceshipObject {
     constructor(xPosition, yPosition, width, height, imageUrl) {
       this.xPosition = xPosition;
@@ -445,8 +440,8 @@ const displayGameScreen = game => {
     // Reduce energy if wrong letter was hit
     const reduceEnergy = game => {
       negativeHitSound.play();
-      if (game.energy > energyCountdownStep) {
-        game.energy -= energyCountdownStep;
+      if (game.energy > energyCountStep) {
+        game.energy -= energyCountStep;
       }
       else {
         game.lives -= 1;
