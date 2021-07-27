@@ -71,14 +71,13 @@ const game = {
 
 // ---------- Display game screen ----------
 const displayGameScreen = game => {
-
-  const renderingContext = game.elements.canvas.getContext("2d");
+  const {elements, templateWords} = game;
+  const renderingContext = elements.canvas.getContext("2d");
   const definedAssembledWord = " ".repeat(6);
 
-  let startIndex = Math.floor(Math.random() * game.templateWords.length);
-  let oldStartIndex = startIndex;
-  let currentTemplateWord = game.templateWords[startIndex];
-  let assembledWord = definedAssembledWord;
+  let startIndex = Math.floor(Math.random() * templateWords.length);
+  let currentTemplateWord = templateWords[startIndex];
+  let [oldStartIndex, assembledWord]  = [startIndex, definedAssembledWord];
 
   class SpaceshipObject {
     constructor(xPosition, yPosition, width, height, imageUrl) {
@@ -171,7 +170,7 @@ const displayGameScreen = game => {
   }
 
   // Load life image
-  const loadlifeImage = () => {
+  const loadLifeImage = () => {
     // Handler for load life image
     const handleLifeImageLoad = () => lifeImage.removeEventListener(
       "load",
@@ -239,15 +238,15 @@ const displayGameScreen = game => {
   // Load negative hit sound
   const loadNegativeHitSound = () => {
     // Handler for load negative hit sound
-    const handlenegativeHitSoundLoad = () => negativeHitSound.removeEventListener(
+    const handleNegativeHitSoundLoad = () => negativeHitSound.removeEventListener(
       "load",
-      handlenegativeHitSoundLoad
+      handleNegativeHitSoundLoad
     )
     // Add handler for load negative hit sound
     const negativeHitSound = new Audio("./sounds/NegHit.mp3");
     negativeHitSound.addEventListener(
       "load",
-      handlenegativeHitSoundLoad
+      handleNegativeHitSoundLoad
     );
     return negativeHitSound;
   }
@@ -272,7 +271,7 @@ const displayGameScreen = game => {
   const bgImage = loadBgImage();
   const spaceshipImage = loadSpaceshipImage();
   const shotImage = loadShotImage();
-  const lifeImage = loadlifeImage();
+  const lifeImage = loadLifeImage();
   const lettersImage = loadLettersImage();
   const gameMusic = loadGameMusic();
   const positiveHitSound = loadPositiveHitSound();
@@ -283,9 +282,9 @@ const displayGameScreen = game => {
   const addMouseUpDownHandler = () => {
     // Handler for mouse move up or down
     const handleMouseUpDown = event => {
-      const {height} = spaceship;
       const {clientY} = event;
-      if ((clientY > (4 * height)) && (clientY < game.elements.canvas.height - (8 * height))) spaceship.yPosition = clientY;
+      const {height} = spaceship;
+      ((clientY > (4 * height)) && (clientY < game.elements.canvas.height - (8 * height))) && (spaceship.yPosition = clientY);
     }
     // Add handler for mouse move up or down
     document.addEventListener(
@@ -326,8 +325,7 @@ const displayGameScreen = game => {
           character
         );
         letterObjects.push(letterSubRectangle);
-        xOffset += width + horizontalGap;
-        if (xOffset > 608) {
+        if ((xOffset += width + horizontalGap) > 608) {
           xOffset = 5;
           yOffset += height + verticalGap;
         }
@@ -336,9 +334,11 @@ const displayGameScreen = game => {
   }
   initializeLetterObjects(game);
 
+  const {canvas} = game.elements;
+
   const spaceship = new SpaceshipObject(
     10,
-    game.elements.canvas.height / 2,
+    canvas.height / 2,
     163,
     16,
     spaceshipImage
@@ -346,7 +346,7 @@ const displayGameScreen = game => {
 
   const shot = new ShotObject(
     116,
-    game.elements.canvas.height / 2,
+    canvas.height / 2,
     23,
     16,
     shotImage
@@ -407,10 +407,7 @@ const displayGameScreen = game => {
       );
       shot.xPosition += shotHorizontalSpeed;
       // Check shot against right border
-      if (shot.xPosition > game.elements.canvas.width) {
-        game.isShotEnabled = false;
-        shot.xPosition = 116;
-      }
+      (shot.xPosition > game.elements.canvas.width) && ([game.isShotEnabled, shot.xPosition] = [false, 116]);
     }
   }
 
@@ -429,8 +426,7 @@ const displayGameScreen = game => {
             j === k ? buffer += letters[i].character : buffer += assembledWord[k];
           }
           assembledWord = buffer;
-          buffer = currentTemplateWord.replace(letters[i].character, " "); // Clear hit letter in current template word
-          currentTemplateWord = buffer;
+          currentTemplateWord = currentTemplateWord.replace(letters[i].character, " "); // Clear hit letter in current template word
           return true;
         }
       }
@@ -440,13 +436,7 @@ const displayGameScreen = game => {
     // Reduce energy if wrong letter was hit
     const reduceEnergy = game => {
       negativeHitSound.play();
-      if (game.energy > energyCountStep) {
-        game.energy -= energyCountStep;
-      }
-      else {
-        game.lives -= 1;
-        game.lives === 0 ? game.isGameOver = true : game.energy = maxEnergy;
-      }
+      game.energy > energyCountStep ? game.energy -= energyCountStep : (game.lives -= 1) === 0 ? game.isGameOver = true : game.energy = maxEnergy;
     }
     !insertHitLetter(i, game) && reduceEnergy(game);
 
@@ -502,9 +492,7 @@ const displayGameScreen = game => {
         height
       );
       if (isShotEnabled && checkLetterHit(i, game, shot)) continue;
-
-      // Top / bottom border check
-      if ((letters[i].yPosition < 0) || (letters[i].yPosition > (600 - letterConstants.height))) letters[i].yDirection *= - 1; // Change vertical direction
+      ((letters[i].yPosition < 0) || (letters[i].yPosition > (600 - letterConstants.height))) && (letters[i].yDirection *= - 1); // Top / bottom border check with vertical direction change
       letters[i].yPosition += letters[i].yDirection;
     }
   }
@@ -586,13 +574,11 @@ const displayGameScreen = game => {
   // Get next random template word if all missing letters were hit
   const checkTemplateWord = game => {
     const {templateWords, letters} = game;
-    assembledWord = definedAssembledWord;
     while (startIndex === oldStartIndex) startIndex = Math.floor(Math.random() * templateWords.length);
-    oldStartIndex = startIndex;
+    [oldStartIndex, assembledWord, game.isNextLevel] = [startIndex, definedAssembledWord, false];
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
     initializeFlyingLetters(game);
-    game.isNextLevel = false;
   }
 
   // Display gameover screen
@@ -629,6 +615,7 @@ const displayGameScreen = game => {
       game.letterObjects = [];
       game.letters = [];
     }
+
     const {gameContainer, gameOverContainer, restartButton} = game.elements;
     gameContainer.classList.add("displayOff");
     gameContainer.classList.remove("cursorOn");
@@ -637,8 +624,8 @@ const displayGameScreen = game => {
     createHighScoreTable(game);
     // Handler for click on restart button
     const handleRestartButton = () => {
-      const {gameContainer, gameOverContainer, scoreList, restartButton} = game.elements;
-      scoreList.innerHTML = "";
+      const {gameContainer, gameOverContainer, restartButton} = game.elements;
+      game.elements.scoreList.innerHTML = ""; // clear the list
       gameOverContainer.classList.add("displayOff");
       gameContainer.classList.remove("displayOff");
       // Remove handler for click on restart button
@@ -690,7 +677,7 @@ const displayGameScreen = game => {
     // Always display background picture
     displayBgPicture(bgImage);
     // Check template word if level is finished
-    if (isNextLevel) checkTemplateWord(game);
+    isNextLevel && checkTemplateWord(game);
     // Graphic elements only displayed if game not over
     if (isGameOver) {
       stopGame(game);
@@ -718,7 +705,7 @@ const displayGameScreen = game => {
 
 
 // ---------- Display splash screen ----------
-const displaySplashScreen = (game) => {
+const displaySplashScreen = game => {
 
   // Handler for click on start button
   const handleStartButton = () => {
