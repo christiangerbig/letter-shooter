@@ -426,9 +426,9 @@ const displayGameScreen = (constants, variables) => {
   }
 
   // Check if missing letter was hit
-  const checkMissingLetter = (i, constants, variables) => {
+  const checkMissingLetter = (constants, variables, i) => {
     // Insert hit letter in assembled word
-    const insertHitLetter = (i, constants, variables) => {
+    const insertHitLetter = (constants, variables, i) => {
       const {letters} = variables;
       let buffer = "";
       for (let j = 0; j < currentTemplateWord.length; j++) {
@@ -450,7 +450,7 @@ const displayGameScreen = (constants, variables) => {
       negativeHitSound.play();
       variables.energy > energyCountStep ? variables.energy -= energyCountStep : (variables.lives -= 1) === 0 ? variables.isGameOver = true : variables.energy = maxEnergy;
     }
-    !insertHitLetter(i, constants, variables) && reduceEnergy(constants, variables);
+    !insertHitLetter(constants, variables, i) && reduceEnergy(constants, variables);
 
     // Check if all missed letters are hit
     for (let k = 0; k < currentTemplateWord.length; k++) {
@@ -460,7 +460,7 @@ const displayGameScreen = (constants, variables) => {
   }
 
   // Check collision shot vs. letter(s)
-  const checkLetterHit = (i, constants, variables, shot, checkMissingLetter) => {
+  const checkLetterHit = (constants, variables, i, shot, checkMissingLetter) => {
     const {letters} = variables;
     const {xPosition, yPosition, width, height} = shot;
     // ( shot.xr >= letter.xl ) && ( shot.xl <= letter.xr )
@@ -470,7 +470,7 @@ const displayGameScreen = (constants, variables) => {
     // ( shot.yb <= letter.yb ) && ( shot.yt >= letter.yt )
     const yCollisionCheck2 = ((yPosition + height) <= (letters[i].yPosition + letters[i].height)) && (yPosition >= letters[i].yPosition);
     if (xCollisionCheck1 && (yCollisionCheck1 || yCollisionCheck2)) {
-      checkMissingLetter(i, constants, variables);
+      checkMissingLetter(constants, variables, i);
       letters.splice(i, 1);
       variables.isShotEnabled = false;
       shot.xPosition = 116;
@@ -504,7 +504,7 @@ const displayGameScreen = (constants, variables) => {
         width,
         height
       );
-      if (isShotEnabled && checkLetterHit(i, constants, variables, shot, checkMissingLetter)) continue;
+      if (isShotEnabled && checkLetterHit(constants, variables, i, shot, checkMissingLetter)) continue;
       ((letters[i].yPosition < 0) || (letters[i].yPosition > (600 - letterConstants.height))) && (letters[i].yDirection *= - 1); // Top / bottom border check with vertical direction change
       letters[i].yPosition += letters[i].yDirection;
     }
@@ -597,14 +597,15 @@ const displayGameScreen = (constants, variables) => {
 
   // Display gameover screen
   const displayGameoverScreen = (constants, variables, displayGameScreen) => {
-    const {gameContainer, gameOverContainer, scoreList, restartButton} = constants.elements;
+    const {gameContainer, gameOverContainer, restartButton} = constants.elements;
     gameContainer.classList.add("displayOff");
     gameContainer.classList.remove("cursorOn");
     gameContainer.classList.add("cursorOff");
     gameOverContainer.classList.remove("displayOff");
     // Create highscore table
     const createHighScoreTable = (constants, variables) => {
-      const {scoresTable} = constants;
+      const {scoresTable, elements} = constants;
+      const {scoreList} = elements;
       const {score} = variables;
       // Insert score in highscore table and sort entries
       if ((scoresTable.length < 10) && (score !== 0)) {
@@ -623,10 +624,10 @@ const displayGameScreen = (constants, variables) => {
     }
     createHighScoreTable(constants, variables);
     // Reset all game variables to default 
-    const resetAllVariables = (constants, variables) => {
-      variables.energy = constants.maxEnergy;
+    const resetAllVariables = ({maxEnergy, maxLives}, variables) => {
+      variables.energy = maxEnergy;
       variables.score = 0;
-      variables.lives = constants.maxLives;
+      variables.lives = maxLives;
       variables.isNextLevel = false; 
       variables.isGameOver = false;
       variables.isShotEnabled = false;
@@ -653,7 +654,7 @@ const displayGameScreen = (constants, variables) => {
       initializeGameRestart(constants, variables, resetAllVariables, displayGameScreen);
     }
     // Add handler for click on restart button
-    restartButton.addEventListener(
+    constants.elements.restartButton.addEventListener(
       "click",
       () => handleRestartButton(constants, variables, resetAllVariables, displayGameScreen)
     );
