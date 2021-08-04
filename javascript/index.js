@@ -618,7 +618,7 @@ const displayGameScreen = (constants, variables) => {
     initializeFlyingLetters(constants, variables);
   }
 
-  // Display gameover screen
+  // ---------- Display gameover screen ----------
   const displayGameoverScreen = (constants, variables) => {
     const {gameOverContainer, restartButton} = constants.elements;
     gameOverContainer.classList.remove("displayOff");
