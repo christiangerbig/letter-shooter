@@ -97,8 +97,7 @@ const displayGameScreen = (constants, variables) => {
   let [oldStartIndex, assembledWord]  = [startIndex, definedAssembledWord];
 
   constants.renderingContext = canvas.getContext("2d");
-  gameContainer.classList.remove("displayOff");
-
+  
   class SpaceshipObject {
     constructor(xPosition, yPosition, width, height, imageUrl) {
       this.xPosition = xPosition;
@@ -410,7 +409,7 @@ const displayGameScreen = (constants, variables) => {
   initializeGameMusic(constants);
   const handleMouseUpDown = addMouseUpDownHandler(constants);
   const handleLeftMouseButton = addLeftMouseButtonHandler(constants, variables);
-
+  gameContainer.classList.remove("displayOff");
 
   // Display background picture
   const displayBgPicture = ({bgImage, renderingContext}) => renderingContext.drawImage(
@@ -626,8 +625,7 @@ const displayGameScreen = (constants, variables) => {
   // ---------- Display gameover screen ----------
   const displayGameoverScreen = (constants, variables) => {
     const {gameOverContainer, restartButton} = constants.elements;
-    gameOverContainer.classList.remove("displayOff");
-
+    
     // Create highscore table
     const createHighScoreTable = (constants, variables) => {
       const {scoresTable, elements} = constants;
@@ -668,13 +666,14 @@ const displayGameScreen = (constants, variables) => {
           }
 
           scoreList.innerHTML = ""; // clear the list
-          gameOverContainer.classList.add("displayOff");
           // Remove handler for click on restart button
           restartButton.removeEventListener(
             "click",
             handleRestartButton
           );
+          
           resetAllVariables(constants, variables);
+          gameOverContainer.classList.add("displayOff");
           displayGameScreen(constants, variables);
         }
         initializeGameRestart(constants, variables);
@@ -689,10 +688,13 @@ const displayGameScreen = (constants, variables) => {
 
     createHighScoreTable(constants, variables);
     addRestartButtonHandler(constants, variables);
+    gameOverContainer.classList.remove("displayOff");
   }
 
   // Stop game if no lives left
   const stopGame = (constants, variables) => {
+    const {gameContainer} = constants.elements;
+
     // Stop interval
     const stopInterval = ({intervalId, requestId}) => {
       if (intervalId) {
@@ -725,10 +727,10 @@ const displayGameScreen = (constants, variables) => {
       gameOverSound.play();
     }
     
-    constants.elements.gameContainer.classList.add("displayOff");
     stopInterval(variables);
     removeMouseEventListeners();
     stopGameMusic(constants);
+    gameContainer.classList.add("displayOff");
     displayGameoverScreen(constants, variables);
   }
 
@@ -769,18 +771,18 @@ const displayGameScreen = (constants, variables) => {
 // ---------- Display splash screen ----------
 const displaySplashScreen = (constants, variables) => {
   const {splashContainer} = constants.elements;
-  splashContainer.classList.remove("displayOff");
+  
   // Handler for click on start button
   const handleStartButton = (constants, variables) => {
     // Initialize game start
     const initializeGameScreen = (constants, variables) => {
       const {splashContainer, startButton} = constants.elements;
-      splashContainer.classList.add("displayOff");
       // Remove handler for click on start button
       startButton.removeEventListener(
         "click",
         handleStartButton
       );
+      splashContainer.classList.add("displayOff");
       displayGameScreen(constants, variables);
     }
     initializeGameScreen(constants, variables);
@@ -790,6 +792,7 @@ const displaySplashScreen = (constants, variables) => {
     "click",
     () => handleStartButton(constants, variables)
   );
+  splashContainer.classList.remove("displayOff");
 }
 
 // Start game
