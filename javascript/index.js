@@ -18,6 +18,7 @@ const constants = {
   renderingContext: null,
   shot: null,
   spaceship: null,
+  // HTML elements
   elements: {
     splashContainer: document.querySelector("#splashContainer"),
     startButton: document.querySelector("#startButton"),
@@ -39,6 +40,7 @@ const constants = {
     "ROSE",
     "BOOKS"
   ],
+  // Letter combinations for every word
   flyingLetters: [
     "HFEODUSRELA",
     "DTGCSEAFTBQ",
