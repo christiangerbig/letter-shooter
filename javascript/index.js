@@ -40,7 +40,7 @@ const constants = {
     "ROSE",
     "BOOKS"
   ],
-  // Letter combinations for every word
+  // Letter combinations for each word
   flyingLetters: [
     "HFEODUSRELA",
     "DTGCSEAFTBQ",
