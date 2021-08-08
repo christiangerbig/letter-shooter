@@ -1,4 +1,5 @@
 // ---------- Global ----------
+
 const constants = {
   maxLives: 3,
   maxEnergy: 90,
@@ -284,17 +285,6 @@ const displayGameScreen = (constants, variables) => {
     return gameOverSound;
   }
 
-  // Load images and sound
-  constants.bgImage = loadBgImage();
-  constants.spaceshipImage = loadSpaceshipImage();
-  constants.shotImage = loadShotImage();
-  constants.lifeImage = loadLifeImage();
-  constants.lettersImage = loadLettersImage();
-  constants.gameMusic = loadGameMusic();
-  constants.positiveHitSound = loadPositiveHitSound();
-  constants.negativeHitSound = loadNegativeHitSound();
-  constants.gameOverSound = loadGameOverSound();
-
   // Initialize xy offset of each letter in letters image
   const initializeLetterObjects = ({alphabetCharacters, letterConstants}, {letterObjects}) => {
     const {width, height, horizontalGap, verticalGap} = letterConstants;
@@ -314,7 +304,6 @@ const displayGameScreen = (constants, variables) => {
       }
     );
   }
-  initializeLetterObjects(constants, variables);
 
   // Create spaceship object
   const initializeSpaceshipObject = ({spaceshipImage, elements}) => {
@@ -327,7 +316,6 @@ const displayGameScreen = (constants, variables) => {
     );
     return spaceship;
   }
-  constants.spaceship = initializeSpaceshipObject(constants);
 
   // Create shot object
   const initializeShotObject = ({shotImage, elements}) => {
@@ -340,7 +328,6 @@ const displayGameScreen = (constants, variables) => {
     );
     return shot;
   }
-  constants.shot = initializeShotObject(constants);
 
   // Initialize start xy position on display of each letter
   const initializeFlyingLetters = ({elements, flyingLetters, letterConstants}, {letters}) => {
@@ -360,12 +347,12 @@ const displayGameScreen = (constants, variables) => {
       letters.push(letter);
     }
   }
-  initializeFlyingLetters(constants, variables);
 
   // Initialize game music
-  const {gameMusic} = constants;
-  gameMusic.loop = "loop";
-  gameMusic.play();
+  const initializeGameMusic = ({gameMusic}) => {
+    gameMusic.loop = "loop";
+    gameMusic.play();
+  }
 
   // Add mouse up or down handler
   const addMouseUpDownHandler = (constants) => {
@@ -385,7 +372,6 @@ const displayGameScreen = (constants, variables) => {
     );
     return handleMouseUpDown;
   }
-  const handleMouseUpDown = addMouseUpDownHandler(constants);
 
   // Add click on left mouse button handler
   const addLeftMouseButtonHandler = (constants, variables) => {
@@ -405,7 +391,24 @@ const displayGameScreen = (constants, variables) => {
     );
     return handleLeftMouseButton;
   }
+
+  constants.bgImage = loadBgImage();
+  constants.spaceshipImage = loadSpaceshipImage();
+  constants.shotImage = loadShotImage();
+  constants.lifeImage = loadLifeImage();
+  constants.lettersImage = loadLettersImage();
+  constants.gameMusic = loadGameMusic();
+  constants.positiveHitSound = loadPositiveHitSound();
+  constants.negativeHitSound = loadNegativeHitSound();
+  constants.gameOverSound = loadGameOverSound();
+  initializeLetterObjects(constants, variables);
+  constants.spaceship = initializeSpaceshipObject(constants);
+  constants.shot = initializeShotObject(constants);
+  initializeFlyingLetters(constants, variables);
+  initializeGameMusic(constants);
+  const handleMouseUpDown = addMouseUpDownHandler(constants);
   const handleLeftMouseButton = addLeftMouseButtonHandler(constants, variables);
+
 
   // Display background picture
   const displayBgPicture = ({bgImage, renderingContext}) => renderingContext.drawImage(
@@ -643,54 +646,63 @@ const displayGameScreen = (constants, variables) => {
         }
       );
     }
-    createHighScoreTable(constants, variables);
+    
+    const addRestartButtonHandler = (constants, variables) => {
+      // Handler for click on restart button
+      const handleRestartButton = (constants, variables) => {
+        // Restart game
+        const initializeGameRestart = (constants, variables) => {
+          const {gameOverContainer, scoreList, restartButton} = constants.elements;
+          // Reset all game variables to default 
+          const resetAllVariables = ({maxEnergy, maxLives}, variables) => {
+            variables.energy = maxEnergy;
+            variables.score = 0;
+            variables.lives = maxLives;
+            variables.isNextLevel = false; 
+            variables.isGameOver = false;
+            variables.isShotEnabled = false;
+            variables.letterObjects = [];
+            variables.letters = [];
+          }
 
-    // Handler for click on restart button
-    const handleRestartButton = (constants, variables) => {
-      // Restart game
-      const initializeGameRestart = (constants, variables) => {
-
-        // Reset all game variables to default 
-        const resetAllVariables = ({maxEnergy, maxLives}, variables) => {
-          variables.energy = maxEnergy;
-          variables.score = 0;
-          variables.lives = maxLives;
-          variables.isNextLevel = false; 
-          variables.isGameOver = false;
-          variables.isShotEnabled = false;
-          variables.intervalId = null;
-          variables.letterObjects = [];
-          variables.letters = [];
+          scoreList.innerHTML = ""; // clear the list
+          gameOverContainer.classList.add("displayOff");
+          // Remove handler for click on restart button
+          restartButton.removeEventListener(
+            "click",
+            handleRestartButton
+          );
+          resetAllVariables(constants, variables);
+          displayGameScreen(constants, variables);
         }
-
-        const {gameOverContainer, scoreList, restartButton} = constants.elements;
-        scoreList.innerHTML = ""; // clear the list
-        gameOverContainer.classList.add("displayOff");
-        // Remove handler for click on restart button
-        restartButton.removeEventListener(
-          "click",
-          handleRestartButton
-        );
-        resetAllVariables(constants, variables);
-        displayGameScreen(constants, variables);
+        initializeGameRestart(constants, variables);
       }
-      initializeGameRestart(constants, variables);
+      // Add handler for click on restart button
+      restartButton.addEventListener(
+        "click",
+        () => handleRestartButton(constants, variables)
+      );
+      return handleRestartButton
     }
-    // Add handler for click on restart button
-    restartButton.addEventListener(
-      "click",
-      () => handleRestartButton(constants, variables)
-    );
+
+    createHighScoreTable(constants, variables);
+    addRestartButtonHandler(constants, variables);
   }
 
   // Stop game if no lives left
   const stopGame = (constants, variables) => {
     // Stop interval
     const stopInterval = ({intervalId, requestId}) => {
-      intervalId && (clearInterval(intervalId));
-      requestId && (cancelAnimationFrame(requestId));
+      if (intervalId) {
+        clearInterval(intervalId);
+        variables.intervalId = null;
+      }
+      if (requestId) {
+        cancelAnimationFrame(requestId);
+        variables.requestId = null;
+      }
     }
-    
+
     // Remove event listeners
     const removeMouseEventListeners = () => {
       document.removeEventListener(
@@ -740,14 +752,17 @@ const displayGameScreen = (constants, variables) => {
   }
 
   // Start game by interval
-  variables.intervalId = setInterval(
-    () => variables.requestId = requestAnimationFrame(
-      () => renderAll(constants, variables)
-    ),
-    10 // 60 frames per second
-  );
+  const startInterval = variables => {
+    variables.intervalId = setInterval(
+      () => variables.requestId = requestAnimationFrame(
+        () => renderAll(constants, variables)
+      ),
+      10 // 60 frames per second
+    );
+  }
+  
+  startInterval(variables);
 }
-
 
 // ---------- Display splash screen ----------
 const displaySplashScreen = (constants, variables) => {
