@@ -26,7 +26,7 @@ const constants = {
     canvas: document.querySelector("canvas"),
     gameOverContainer: document.querySelector("#gameOverContainer"),
     scoreList: document.querySelector("#scoreList"),
-    restartButton: document.querySelector("#restartButton") 
+    restartButton: document.querySelector("#restartButton")
   },
   templateWords: [
     "HOUSE",
@@ -70,13 +70,13 @@ const constants = {
     9000,
     1000
   ]
-}
+};
 
 const variables = {
   energy: constants.maxEnergy,
   score: 0,
   lives: constants.maxLives,
-  isNextLevel: false, 
+  isNextLevel: false,
   isGameOver: false,
   isShotEnabled: false,
   intervalId: null,
@@ -88,16 +88,16 @@ const variables = {
 
 // ---------- Display game screen ----------
 const displayGameScreen = (constants, variables) => {
-  const {elements, templateWords} = constants;
-  const {gameContainer, canvas} = elements;
+  const { elements, templateWords } = constants;
+  const { gameContainer, canvas } = elements;
   const definedAssembledWord = " ".repeat(6);
 
   let startIndex = Math.floor(Math.random() * templateWords.length);
   let currentTemplateWord = templateWords[startIndex];
-  let [oldStartIndex, assembledWord]  = [startIndex, definedAssembledWord];
+  let [oldStartIndex, assembledWord] = [startIndex, definedAssembledWord];
 
   constants.renderingContext = canvas.getContext("2d");
-  
+
   class SpaceshipObject {
     constructor(xPosition, yPosition, width, height, imageUrl) {
       this.xPosition = xPosition;
@@ -143,7 +143,7 @@ const displayGameScreen = (constants, variables) => {
     const handleBgImageLoad = () => bgImage.removeEventListener(
       "load",
       handleBgImageLoad
-    )
+    );
     // Add handler for load background image
     const bgImage = document.createElement("img");
     bgImage.src = "./images/Andromeda.png";
@@ -152,7 +152,7 @@ const displayGameScreen = (constants, variables) => {
       handleBgImageLoad
     );
     return bgImage;
-  }
+  };
 
   // Load spaceship image
   const loadSpaceshipImage = () => {
@@ -160,7 +160,7 @@ const displayGameScreen = (constants, variables) => {
     const handleSpaceshipImageLoad = () => spaceshipImage.removeEventListener(
       "load",
       handleSpaceshipImageLoad
-    )
+    );
     // Add handler for load spaceship image
     const spaceshipImage = document.createElement("img");
     spaceshipImage.src = "./images/Ships.png";
@@ -169,7 +169,7 @@ const displayGameScreen = (constants, variables) => {
       handleSpaceshipImageLoad
     );
     return spaceshipImage;
-  }
+  };
 
   // Load shot image
   const loadShotImage = () => {
@@ -177,7 +177,7 @@ const displayGameScreen = (constants, variables) => {
     const handleShotImageLoad = () => shotImage.removeEventListener(
       "load",
       handleShotImageLoad
-    )
+    );
     // Add handler for load shot image
     const shotImage = document.createElement("img");
     shotImage.src = "./images/Shot.png";
@@ -186,7 +186,7 @@ const displayGameScreen = (constants, variables) => {
       handleShotImageLoad
     );
     return shotImage;
-  }
+  };
 
   // Load life image
   const loadLifeImage = () => {
@@ -194,7 +194,7 @@ const displayGameScreen = (constants, variables) => {
     const handleLifeImageLoad = () => lifeImage.removeEventListener(
       "load",
       handleLifeImageLoad
-    )
+    );
     // Add handler for load life image
     const lifeImage = document.createElement("img");
     lifeImage.src = "./images/Ship-sm.png";
@@ -203,7 +203,7 @@ const displayGameScreen = (constants, variables) => {
       handleLifeImageLoad
     );
     return lifeImage;
-  }
+  };
 
   // Load letters image
   const loadLettersImage = () => {
@@ -211,7 +211,7 @@ const displayGameScreen = (constants, variables) => {
     const handleLettersImageLoad = () => lettersImage.removeEventListener(
       "load",
       handleLettersImageLoad
-    )
+    );
     // Add handler for load letters image
     const lettersImage = document.createElement("img");
     lettersImage.src = "./images/Characters-Set.png";
@@ -220,7 +220,7 @@ const displayGameScreen = (constants, variables) => {
       handleLettersImageLoad
     );
     return lettersImage;
-  }
+  };
 
   // Load game music
   const loadGameMusic = () => {
@@ -228,7 +228,7 @@ const displayGameScreen = (constants, variables) => {
     const handleGameMusicLoad = () => gameMusic.removeEventListener(
       "load",
       handleGameMusicLoad
-    )
+    );
     // Add handler for load game music
     const gameMusic = new Audio("./sounds/RetroRulez.mp3");
     gameMusic.addEventListener(
@@ -236,7 +236,7 @@ const displayGameScreen = (constants, variables) => {
       handleGameMusicLoad
     );
     return gameMusic;
-  }
+  };
 
   // Load positive hit sound
   const loadPositiveHitSound = () => {
@@ -244,7 +244,7 @@ const displayGameScreen = (constants, variables) => {
     const handlepositiveHitSoundLoad = () => positiveHitSound.removeEventListener(
       "load",
       handlepositiveHitSoundLoad
-    )
+    );
     // Add handler for load positive hit sound
     const positiveHitSound = new Audio("./sounds/PosHit.mp3");
     positiveHitSound.addEventListener(
@@ -252,7 +252,7 @@ const displayGameScreen = (constants, variables) => {
       handlepositiveHitSoundLoad
     );
     return positiveHitSound;
-  }
+  };
 
   // Load negative hit sound
   const loadNegativeHitSound = () => {
@@ -260,7 +260,7 @@ const displayGameScreen = (constants, variables) => {
     const handleNegativeHitSoundLoad = () => negativeHitSound.removeEventListener(
       "load",
       handleNegativeHitSoundLoad
-    )
+    );
     // Add handler for load negative hit sound
     const negativeHitSound = new Audio("./sounds/NegHit.mp3");
     negativeHitSound.addEventListener(
@@ -268,7 +268,7 @@ const displayGameScreen = (constants, variables) => {
       handleNegativeHitSoundLoad
     );
     return negativeHitSound;
-  }
+  };
 
   // Load game over sound
   const loadGameOverSound = () => {
@@ -276,7 +276,7 @@ const displayGameScreen = (constants, variables) => {
     const handleGameOverSoundLoad = () => gameOverSound.removeEventListener(
       "load",
       handleGameOverSoundLoad
-    )
+    );
     // Add handler for load game over sound
     const gameOverSound = new Audio("./sounds/GameOver.mp3");
     gameOverSound.addEventListener(
@@ -284,11 +284,11 @@ const displayGameScreen = (constants, variables) => {
       handleGameOverSoundLoad
     );
     return gameOverSound;
-  }
+  };
 
   // Initialize xy offset of each letter in letters image
-  const initializeLetterObjects = ({alphabetCharacters, letterConstants}, {letterObjects}) => {
-    const {width, height, horizontalGap, verticalGap} = letterConstants;
+  const initializeLetterObjects = ({ alphabetCharacters, letterConstants }, { letterObjects }) => {
+    const { width, height, horizontalGap, verticalGap } = letterConstants;
     let [xOffset, yOffset] = [5, 8];
     alphabetCharacters.forEach(
       character => {
@@ -304,10 +304,10 @@ const displayGameScreen = (constants, variables) => {
         }
       }
     );
-  }
+  };
 
   // Create spaceship object
-  const initializeSpaceshipObject = ({spaceshipImage, elements}) => {
+  const initializeSpaceshipObject = ({ spaceshipImage, elements }) => {
     const spaceship = new SpaceshipObject(
       10,
       elements.canvas.height / 2,
@@ -316,10 +316,10 @@ const displayGameScreen = (constants, variables) => {
       spaceshipImage
     );
     return spaceship;
-  }
+  };
 
   // Create shot object
-  const initializeShotObject = ({shotImage, elements}) => {
+  const initializeShotObject = ({ shotImage, elements }) => {
     const shot = new ShotObject(
       116,
       elements.canvas.height / 2,
@@ -328,11 +328,11 @@ const displayGameScreen = (constants, variables) => {
       shotImage
     );
     return shot;
-  }
+  };
 
   // Initialize start xy position on display of each letter
-  const initializeFlyingLetters = ({elements, flyingLetters, letterConstants}, {letters}) => {
-    const {width, height, maxVerticalSpeed} = letterConstants;
+  const initializeFlyingLetters = ({ elements, flyingLetters, letterConstants }, { letters }) => {
+    const { width, height, maxVerticalSpeed } = letterConstants;
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
       const xPosition = elements.canvas.width - (Math.floor(Math.random() * 500)) - width;
       const yPosition = height + (Math.floor(Math.random() * 500));
@@ -347,51 +347,51 @@ const displayGameScreen = (constants, variables) => {
       );
       letters.push(letter);
     }
-  }
+  };
 
   // Initialize game music
-  const initializeGameMusic = ({gameMusic}) => {
+  const initializeGameMusic = ({ gameMusic }) => {
     gameMusic.loop = "loop";
     gameMusic.play();
-  }
+  };
 
   // Add mouse up or down handler
   const addMouseUpDownHandler = (constants) => {
     // Handler for mouse move up or down
     const handleMouseUpDown = (event, constants) => {
       // Get vertical spacehip position
-      const calculateSpaceshipPosition = ({clientY}, {spaceship, elements}) => {
-        const {height} = spaceship;
+      const calculateSpaceshipPosition = ({ clientY }, { spaceship, elements }) => {
+        const { height } = spaceship;
         ((clientY > (4 * height)) && (clientY < elements.canvas.height - (8 * height))) && (spaceship.yPosition = clientY);
-      }
+      };
       calculateSpaceshipPosition(event, constants);
-    }
+    };
     // Add handler for mouse move up or down
     document.addEventListener(
       "mousemove",
       event => handleMouseUpDown(event, constants)
     );
     return handleMouseUpDown;
-  }
+  };
 
   // Add click on left mouse button handler
   const addLeftMouseButtonHandler = (constants, variables) => {
     // Handler for click on left mouse button
     const handleLeftMouseButton = (constants, variables) => {
       // Get vertical shot position
-      const calcualteShotPosition = ({shot, spaceship, letterConstants}, variables) => {
+      const calcualteShotPosition = ({ shot, spaceship, letterConstants }, variables) => {
         variables.isShotEnabled = true;
         shot.yPosition = spaceship.yPosition + letterConstants.horizontalGap;
-      }
+      };
       calcualteShotPosition(constants, variables);
-    }
+    };
     // Add handler for click on left mouse button
     document.addEventListener(
       "mousedown",
       () => handleLeftMouseButton(constants, variables)
     );
     return handleLeftMouseButton;
-  }
+  };
 
   constants.bgImage = loadBgImage();
   constants.spaceshipImage = loadSpaceshipImage();
@@ -412,15 +412,15 @@ const displayGameScreen = (constants, variables) => {
   gameContainer.classList.remove("displayOff");
 
   // Display background picture
-  const displayBgPicture = ({bgImage, renderingContext}) => renderingContext.drawImage(
+  const displayBgPicture = ({ bgImage, renderingContext }) => renderingContext.drawImage(
     bgImage,
     0,
     0
-  )
+  );
 
   // Display spaceship
-  const displaySpaceship = ({spaceship, renderingContext}) => {
-    const {xPosition, yPosition, imageUrl} = spaceship;
+  const displaySpaceship = ({ spaceship, renderingContext }) => {
+    const { xPosition, yPosition, imageUrl } = spaceship;
     renderingContext.drawImage(
       imageUrl,
       0,
@@ -432,13 +432,13 @@ const displayGameScreen = (constants, variables) => {
       110,
       55
     );
-  }
+  };
 
   // Display shot
-  const shootBullet = ({shotHorizontalSpeed, elements, renderingContext, shot}, variables) => {
+  const shootBullet = ({ shotHorizontalSpeed, elements, renderingContext, shot }, variables) => {
     // only if shot enabled
     if (variables.isShotEnabled) {
-      const {xPosition, yPosition, imageUrl} = shot;
+      const { xPosition, yPosition, imageUrl } = shot;
       renderingContext.drawImage(
         imageUrl,
         xPosition,
@@ -448,14 +448,14 @@ const displayGameScreen = (constants, variables) => {
       // Check shot against right border
       (shot.xPosition > elements.canvas.width) && ([variables.isShotEnabled, shot.xPosition] = [false, 116]);
     }
-  }
+  };
 
   // Check if missing letter was hit
   const checkMissingLetter = (constants, variables, i) => {
     // Insert hit letter in assembled word
     const insertHitLetter = (constants, variables, i) => {
-      const {positiveHitSound} = constants;
-      const {letters} = variables;
+      const { positiveHitSound } = constants;
+      const { letters } = variables;
       let buffer = "";
       for (let j = 0; j < currentTemplateWord.length; j++) {
         if (letters[i].character === currentTemplateWord[j]) {
@@ -470,12 +470,12 @@ const displayGameScreen = (constants, variables) => {
         }
       }
       return false;
-    }
+    };
     // Reduce energy if wrong letter was hit
-    const reduceEnergy = ({maxEnergy, energyCountStep, negativeHitSound}, variables) => {
+    const reduceEnergy = ({ maxEnergy, energyCountStep, negativeHitSound }, variables) => {
       negativeHitSound.play();
       variables.energy > energyCountStep ? variables.energy -= energyCountStep : (variables.lives -= 1) === 0 ? variables.isGameOver = true : variables.energy = maxEnergy;
-    }
+    };
     !insertHitLetter(constants, variables, i) && reduceEnergy(constants, variables);
 
     // Check if all missed letters are hit
@@ -483,13 +483,13 @@ const displayGameScreen = (constants, variables) => {
       if (currentTemplateWord[k] !== " ") return false;
     }
     return true;
-  }
+  };
 
   // Check collision shot vs. letter(s)
   const checkLetterHit = (constants, variables, i) => {
-    const {shot} = constants;
-    const {letters} = variables;
-    const {xPosition, yPosition, width, height} = shot;
+    const { shot } = constants;
+    const { letters } = variables;
+    const { xPosition, yPosition, width, height } = shot;
     // ( shot.xr >= letter.xl ) && ( shot.xl <= letter.xr )
     const xCollisionCheck1 = ((xPosition + width) >= letters[i].xPosition) && (xPosition <= (letters[i].xPosition + letters[i].width));
     // ( shot.yt >= letter.yt ) && ( shot.yt <= letter.yb )
@@ -504,12 +504,12 @@ const displayGameScreen = (constants, variables) => {
       return true;
     }
     return false;
-  }
+  };
 
   // Display letters and do collision check if shot is enabled
   const moveLetters = (constants, variables) => {
-    const {lettersImage, renderingContext, alphabetCharacters, letterConstants} = constants;
-    const {isShotEnabled, letterObjects, letters} = variables;
+    const { lettersImage, renderingContext, alphabetCharacters, letterConstants } = constants;
+    const { isShotEnabled, letterObjects, letters } = variables;
     for (let i = 0; i < letters.length; i++) {
       const currentCharacter = letters[i].character;
       let currentLetter = null;
@@ -519,7 +519,7 @@ const displayGameScreen = (constants, variables) => {
           break;
         }
       }
-      const {width, height} = letterConstants;
+      const { width, height } = letterConstants;
       renderingContext.drawImage(
         lettersImage,
         currentLetter.xOffset,
@@ -535,10 +535,10 @@ const displayGameScreen = (constants, variables) => {
       ((letters[i].yPosition < 0) || (letters[i].yPosition > (600 - letterConstants.height))) && (letters[i].yDirection *= - 1); // Top / bottom border check with vertical direction change
       letters[i].yPosition += letters[i].yDirection;
     }
-  }
+  };
 
   // Display energy left at the left top of the screen
-  const displayEnergy = ({renderingContext}, {energy}) => {
+  const displayEnergy = ({ renderingContext }, { energy }) => {
     renderingContext.font = "22px Coda Caption";
     renderingContext.fillStyle = "orange";
     renderingContext.fillText(
@@ -553,10 +553,10 @@ const displayGameScreen = (constants, variables) => {
       energy,
       16
     );
-  }
+  };
 
   // Display current player score in the centre of the top screen
-  const displayScore = ({renderingContext}, {score}) => {
+  const displayScore = ({ renderingContext }, { score }) => {
     renderingContext.font = "22px Coda Caption";
     renderingContext.fillStyle = "orange";
     renderingContext.fillText(
@@ -564,10 +564,10 @@ const displayGameScreen = (constants, variables) => {
       320,
       30
     );
-  }
+  };
 
   // Display number of lives left at the right top of the screen
-  const displayLives = ({lifeImage, renderingContext}, {lives}) => {
+  const displayLives = ({ lifeImage, renderingContext }, { lives }) => {
     renderingContext.font = "22px Coda Caption";
     renderingContext.fillStyle = "orange";
     renderingContext.fillText(
@@ -587,10 +587,10 @@ const displayGameScreen = (constants, variables) => {
         livesStartXPosition += 30;
       }
     }
-  }
+  };
 
   // Display template word at the left bottom of the screen
-  const displayTemplateWord = ({renderingContext, elements, templateWords}) => {
+  const displayTemplateWord = ({ renderingContext, elements, templateWords }) => {
     renderingContext.font = "40px Coda Caption";
     renderingContext.fillStyle = "steelblue";
     renderingContext.fillText(
@@ -598,10 +598,10 @@ const displayGameScreen = (constants, variables) => {
       10,
       elements.canvas.height - 15
     );
-  }
+  };
 
   // Display assembled word at the right bottom of the screen
-  const displayAssembledWord = ({renderingContext, elements}) => {
+  const displayAssembledWord = ({ renderingContext, elements }) => {
     renderingContext.font = "40px Coda Caption";
     renderingContext.fillStyle = "orange";
     renderingContext.fillText(
@@ -609,28 +609,28 @@ const displayGameScreen = (constants, variables) => {
       620,
       elements.canvas.height - 15
     );
-  }
+  };
 
   // Get next random template word if all missing letters were hit
   const checkTemplateWord = (constants, variables) => {
-    const {templateWords} = constants;
-    const {letters} = variables;
+    const { templateWords } = constants;
+    const { letters } = variables;
     while (startIndex === oldStartIndex) startIndex = Math.floor(Math.random() * templateWords.length);
     [oldStartIndex, assembledWord, variables.isNextLevel] = [startIndex, definedAssembledWord, false];
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
     initializeFlyingLetters(constants, variables);
-  }
+  };
 
   // ---------- Display gameover screen ----------
   const displayGameoverScreen = (constants, variables) => {
-    const {gameOverContainer, restartButton} = constants.elements;
-    
+    const { gameOverContainer, restartButton } = constants.elements;
+
     // Create highscore table
     const createHighScoreTable = (constants, variables) => {
-      const {scoresTable, elements} = constants;
-      const {scoreList} = elements;
-      const {score} = variables;
+      const { scoresTable, elements } = constants;
+      const { scoreList } = elements;
+      const { score } = variables;
       // Insert score in highscore table and sort entries
       if ((scoresTable.length < 10) && (score !== 0)) {
         scoresTable.push(score);
@@ -645,25 +645,25 @@ const displayGameScreen = (constants, variables) => {
           scoreList.appendChild(scoreEntry);
         }
       );
-    }
-    
+    };
+
     const addRestartButtonHandler = (constants, variables) => {
       // Handler for click on restart button
       const handleRestartButton = (constants, variables) => {
         // Restart game
         const initializeGameRestart = (constants, variables) => {
-          const {gameOverContainer, scoreList, restartButton} = constants.elements;
+          const { gameOverContainer, scoreList, restartButton } = constants.elements;
           // Reset all game variables to default 
-          const resetAllVariables = ({maxEnergy, maxLives}, variables) => {
+          const resetAllVariables = ({ maxEnergy, maxLives }, variables) => {
             variables.energy = maxEnergy;
             variables.score = 0;
             variables.lives = maxLives;
-            variables.isNextLevel = false; 
+            variables.isNextLevel = false;
             variables.isGameOver = false;
             variables.isShotEnabled = false;
             variables.letterObjects = [];
             variables.letters = [];
-          }
+          };
 
           scoreList.innerHTML = ""; // clear the list
           // Remove handler for click on restart button
@@ -671,32 +671,32 @@ const displayGameScreen = (constants, variables) => {
             "click",
             handleRestartButton
           );
-          
+
           resetAllVariables(constants, variables);
           gameOverContainer.classList.add("displayOff");
           displayGameScreen(constants, variables);
-        }
+        };
         initializeGameRestart(constants, variables);
-      }
+      };
       // Add handler for click on restart button
       restartButton.addEventListener(
         "click",
         () => handleRestartButton(constants, variables)
       );
       return handleRestartButton
-    }
+    };
 
     createHighScoreTable(constants, variables);
     addRestartButtonHandler(constants, variables);
     gameOverContainer.classList.remove("displayOff");
-  }
+  };
 
   // Stop game if no lives left
   const stopGame = (constants, variables) => {
-    const {gameContainer} = constants.elements;
+    const { gameContainer } = constants.elements;
 
     // Stop interval
-    const stopInterval = ({intervalId, requestId}) => {
+    const stopInterval = ({ intervalId, requestId }) => {
       if (intervalId) {
         clearInterval(intervalId);
         variables.intervalId = null;
@@ -705,7 +705,7 @@ const displayGameScreen = (constants, variables) => {
         cancelAnimationFrame(requestId);
         variables.requestId = null;
       }
-    }
+    };
 
     // Remove event listeners
     const removeMouseEventListeners = () => {
@@ -717,26 +717,26 @@ const displayGameScreen = (constants, variables) => {
         "mousedown",
         handleLeftMouseButton
       );
-    }
-    
+    };
+
     // Stop game music and play game over sound
-    const stopGameMusic = ({gameMusic, gameOverSound}) => {
+    const stopGameMusic = ({ gameMusic, gameOverSound }) => {
       gameMusic.currentTime = 0;
       gameMusic.pause();
       gameMusic.currentTime = 0;
       gameOverSound.play();
-    }
-    
+    };
+
     stopInterval(variables);
     removeMouseEventListeners();
     stopGameMusic(constants);
     gameContainer.classList.add("displayOff");
     displayGameoverScreen(constants, variables);
-  }
+  };
 
   // Render all game elements 60 frames per second
   const renderAll = (constants, variables) => {
-    const {isNextLevel, isGameOver} = variables;
+    const { isNextLevel, isGameOver } = variables;
     displayBgPicture(constants); // Always display background picture
     isNextLevel && checkTemplateWord(constants, variables); // Check template word if level is finished
     if (isGameOver) {
@@ -753,7 +753,7 @@ const displayGameScreen = (constants, variables) => {
       displayTemplateWord(constants);
       displayAssembledWord(constants);
     }
-  }
+  };
 
   // Start game by interval
   const startInterval = variables => {
@@ -763,20 +763,20 @@ const displayGameScreen = (constants, variables) => {
       ),
       10 // 60 frames per second
     );
-  }
-  
+  };
+
   startInterval(variables);
 }
 
 // ---------- Display splash screen ----------
 const displaySplashScreen = (constants, variables) => {
-  const {splashContainer} = constants.elements;
-  
+  const { splashContainer } = constants.elements;
+
   // Handler for click on start button
   const handleStartButton = (constants, variables) => {
     // Initialize game start
     const initializeGameScreen = (constants, variables) => {
-      const {splashContainer, startButton} = constants.elements;
+      const { splashContainer, startButton } = constants.elements;
       // Remove handler for click on start button
       startButton.removeEventListener(
         "click",
@@ -784,16 +784,16 @@ const displaySplashScreen = (constants, variables) => {
       );
       splashContainer.classList.add("displayOff");
       displayGameScreen(constants, variables);
-    }
+    };
     initializeGameScreen(constants, variables);
-  }
+  };
   // Add handler for click on start button
   constants.elements.startButton.addEventListener(
     "click",
     () => handleStartButton(constants, variables)
   );
   splashContainer.classList.remove("displayOff");
-}
+};
 
 // Start game
 displaySplashScreen(constants, variables);
