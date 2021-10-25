@@ -569,7 +569,9 @@ const displayGameScreen = (constants, variables) => {
 
     // Check if all missed letters are hit
     for (let k = 0; k < currentTemplateWord.length; k++) {
-      if (currentTemplateWord[k] !== " ") return false;
+      if (currentTemplateWord[k] !== " ") {
+        return false;
+      }
     }
     return true;
   };
@@ -631,7 +633,9 @@ const displayGameScreen = (constants, variables) => {
         width,
         height
       );
-      if (isShotEnabled && checkLetterHit(constants, variables, i)) continue;
+      if (isShotEnabled && checkLetterHit(constants, variables, i)) {
+        continue;
+      }
       (letters[i].yPosition < 0 ||
         letters[i].yPosition > 600 - letterConstants.height) &&
         (letters[i].yDirection *= -1); // Top / bottom border check with vertical direction change
