@@ -162,8 +162,9 @@ const displayGameScreen = (constants, variables) => {
   // Load background image
   const loadBgImage = () => {
     // Handler for load background image
-    const handleBgImageLoad = () =>
+    const handleBgImageLoad = () => {
       bgImage.removeEventListener("load", handleBgImageLoad);
+    };
     // Add handler for load background image
     const bgImage = document.createElement("img");
     bgImage.src = "./images/Andromeda.png";
@@ -174,8 +175,9 @@ const displayGameScreen = (constants, variables) => {
   // Load spaceship image
   const loadSpaceshipImage = () => {
     // Handler for load spaceship image
-    const handleSpaceshipImageLoad = () =>
+    const handleSpaceshipImageLoad = () => {
       spaceshipImage.removeEventListener("load", handleSpaceshipImageLoad);
+    };
     // Add handler for load spaceship image
     const spaceshipImage = document.createElement("img");
     spaceshipImage.src = "./images/Ships.png";
@@ -186,8 +188,9 @@ const displayGameScreen = (constants, variables) => {
   // Load shot image
   const loadShotImage = () => {
     // Handler for load shot image
-    const handleShotImageLoad = () =>
+    const handleShotImageLoad = () => {
       shotImage.removeEventListener("load", handleShotImageLoad);
+    };
     // Add handler for load shot image
     const shotImage = document.createElement("img");
     shotImage.src = "./images/Shot.png";
@@ -198,8 +201,9 @@ const displayGameScreen = (constants, variables) => {
   // Load life image
   const loadLifeImage = () => {
     // Handler for load life image
-    const handleLifeImageLoad = () =>
+    const handleLifeImageLoad = () => {
       lifeImage.removeEventListener("load", handleLifeImageLoad);
+    };
     // Add handler for load life image
     const lifeImage = document.createElement("img");
     lifeImage.src = "./images/Ship-sm.png";
@@ -210,8 +214,9 @@ const displayGameScreen = (constants, variables) => {
   // Load letters image
   const loadLettersImage = () => {
     // Handler for load letters image
-    const handleLettersImageLoad = () =>
+    const handleLettersImageLoad = () => {
       lettersImage.removeEventListener("load", handleLettersImageLoad);
+    };
     // Add handler for load letters image
     const lettersImage = document.createElement("img");
     lettersImage.src = "./images/Characters-Set.png";
@@ -222,8 +227,9 @@ const displayGameScreen = (constants, variables) => {
   // Load game music
   const loadGameMusic = () => {
     // Handler for load game music
-    const handleGameMusicLoad = () =>
+    const handleGameMusicLoad = () => {
       gameMusic.removeEventListener("load", handleGameMusicLoad);
+    };
     // Add handler for load game music
     const gameMusic = new Audio("./sounds/RetroRulez.mp3");
     gameMusic.addEventListener("load", handleGameMusicLoad);
@@ -233,8 +239,9 @@ const displayGameScreen = (constants, variables) => {
   // Load positive hit sound
   const loadPositiveHitSound = () => {
     // Handler for load positive hit sound
-    const handlepositiveHitSoundLoad = () =>
+    const handlepositiveHitSoundLoad = () => {
       positiveHitSound.removeEventListener("load", handlepositiveHitSoundLoad);
+    };
     // Add handler for load positive hit sound
     const positiveHitSound = new Audio("./sounds/PosHit.mp3");
     positiveHitSound.addEventListener("load", handlepositiveHitSoundLoad);
@@ -244,8 +251,9 @@ const displayGameScreen = (constants, variables) => {
   // Load negative hit sound
   const loadNegativeHitSound = () => {
     // Handler for load negative hit sound
-    const handleNegativeHitSoundLoad = () =>
+    const handleNegativeHitSoundLoad = () => {
       negativeHitSound.removeEventListener("load", handleNegativeHitSoundLoad);
+    };
     // Add handler for load negative hit sound
     const negativeHitSound = new Audio("./sounds/NegHit.mp3");
     negativeHitSound.addEventListener("load", handleNegativeHitSoundLoad);
@@ -255,8 +263,9 @@ const displayGameScreen = (constants, variables) => {
   // Load game over sound
   const loadGameOverSound = () => {
     // Handler for load game over sound
-    const handleGameOverSoundLoad = () =>
+    const handleGameOverSoundLoad = () => {
       gameOverSound.removeEventListener("load", handleGameOverSoundLoad);
+    };
     // Add handler for load game over sound
     const gameOverSound = new Audio("./sounds/GameOver.mp3");
     gameOverSound.addEventListener("load", handleGameOverSoundLoad);
@@ -354,10 +363,10 @@ const displayGameScreen = (constants, variables) => {
       calculateSpaceshipPosition(event, constants);
     };
     // Add handler for mouse move up or down
-    variables.handleMouseUpDownCallback = (event) =>
+    variables.handleMouseUpDownCallback = (event) => {
       handleMouseUpDown(event, constants);
+    };
     document.addEventListener("mousemove", variables.handleMouseUpDownCallback);
-    return handleMouseUpDown;
   };
 
   // Add click on left mouse button handler
@@ -375,13 +384,13 @@ const displayGameScreen = (constants, variables) => {
       calcualteShotPosition(constants, variables);
     };
     // Add handler for click on left mouse button
-    variables.handleLeftMouseButtonCallback = () =>
+    variables.handleLeftMouseButtonCallback = () => {
       handleLeftMouseButton(constants, variables);
+    };
     document.addEventListener(
       "mousedown",
       variables.handleLeftMouseButtonCallback
     );
-    return handleLeftMouseButton;
   };
 
   constants.bgImage = loadBgImage();
@@ -398,13 +407,14 @@ const displayGameScreen = (constants, variables) => {
   constants.shot = initializeShotObject(constants);
   initializeFlyingLetters(constants, variables);
   initializeGameMusic(constants);
-  const handleMouseUpDown = addMouseUpDownHandler(constants);
-  const handleLeftMouseButton = addLeftMouseButtonHandler(constants, variables);
+  addMouseUpDownHandler(constants);
+  addLeftMouseButtonHandler(constants, variables);
   gameContainer.classList.remove("displayOff");
 
   // Display background picture
-  const displayBgPicture = ({ bgImage, renderingContext }) =>
+  const displayBgPicture = ({ bgImage, renderingContext }) => {
     renderingContext.drawImage(bgImage, 0, 0);
+  };
 
   // Display spaceship
   const displaySpaceship = ({ spaceship, renderingContext }) => {
@@ -668,7 +678,10 @@ const displayGameScreen = (constants, variables) => {
 
           scoreList.innerHTML = ""; // clear the list
           // Remove handler for click on restart button
-          restartButton.removeEventListener("click", variables.handleRestartButtonCallback);
+          restartButton.removeEventListener(
+            "click",
+            variables.handleRestartButtonCallback
+          );
 
           resetAllVariables(constants, variables);
           gameOverContainer.classList.add("displayOff");
@@ -677,8 +690,9 @@ const displayGameScreen = (constants, variables) => {
         initializeGameRestart(constants, variables);
       };
       // Add handler for click on restart button
-      variables.handleRestartButtonCallback = () =>
+      variables.handleRestartButtonCallback = () => {
         handleRestartButton(constants, variables);
+      };
       restartButton.addEventListener(
         "click",
         variables.handleRestartButtonCallback
@@ -709,8 +723,14 @@ const displayGameScreen = (constants, variables) => {
 
     // Remove event listeners
     const removeMouseEventListeners = () => {
-      document.removeEventListener("mousemove", variables.handleMouseUpDownCallback);
-      document.removeEventListener("mousedown", variables.handleLeftMouseButtonCallback);
+      document.removeEventListener(
+        "mousemove",
+        variables.handleMouseUpDownCallback
+      );
+      document.removeEventListener(
+        "mousedown",
+        variables.handleLeftMouseButtonCallback
+      );
     };
 
     // Stop game music and play game over sound
@@ -753,9 +773,9 @@ const displayGameScreen = (constants, variables) => {
   const startInterval = (variables) => {
     variables.intervalId = setInterval(
       () =>
-        (variables.requestId = requestAnimationFrame(() =>
-          renderAll(constants, variables)
-        )),
+        (variables.requestId = requestAnimationFrame(() => {
+          renderAll(constants, variables);
+        })),
       10 // 60 frames per second
     );
   };
@@ -773,15 +793,19 @@ const displaySplashScreen = (constants, variables) => {
     const initializeGameScreen = (constants, variables) => {
       const { splashContainer, startButton } = constants.elements;
       // Remove handler for click on start button
-      startButton.removeEventListener("click", variables.handleStartButtonCallback);
+      startButton.removeEventListener(
+        "click",
+        variables.handleStartButtonCallback
+      );
       splashContainer.classList.add("displayOff");
       displayGameScreen(constants, variables);
     };
     initializeGameScreen(constants, variables);
   };
   // Add handler for click on start button
-  variables.handleStartButtonCallback = () =>
+  variables.handleStartButtonCallback = () => {
     handleStartButton(constants, variables);
+  };
   constants.elements.startButton.addEventListener(
     "click",
     variables.handleStartButtonCallback
