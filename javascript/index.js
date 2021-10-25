@@ -108,82 +108,95 @@ const variables = {
   handleStartButtonCallback: null,
 };
 
-  // ---------- Display gameover screen ----------
-  const displayGameoverScreen = (constants, variables) => {
-    const { gameOverContainer, restartButton } = constants.elements;
+// ---------- Display gameover screen ----------
+const displayGameoverScreen = (constants, variables) => {
+  const { gameOverContainer, restartButton } = constants.elements;
 
-    // Play game over sound
-    const playGameoverSound = ({ gameOverSound }) => {
-      gameOverSound.play();
+  // Load game over sound
+  const loadGameOverSound = () => {
+    // Handler for load game over sound
+    const handleGameOverSoundLoad = () => {
+      gameOverSound.removeEventListener("load", handleGameOverSoundLoad);
     };
-
-    // Create highscore table
-    const createHighScoreTable = (constants, variables) => {
-      const { scoresTable, elements } = constants;
-      const { scoreList } = elements;
-      const { score } = variables;
-      // Insert score in highscore table and sort entries
-      if (scoresTable.length < 10 && score !== 0) {
-        scoresTable.push(score);
-        scoresTable.sort((a, b) => b - a);
-      }
-      // Create highscore table list elements
-      scoreList.innerHTML = ""; // clear the list
-      scoresTable.forEach((singleScore) => {
-        let scoreEntry = document.createElement("li");
-        scoreEntry.innerText = singleScore.toString().padStart(6, 0, 0);
-        scoreList.appendChild(scoreEntry);
-      });
-    };
-
-    const addRestartButtonHandler = (constants, variables) => {
-      // Handler for click on restart button
-      const handleRestartButton = (constants, variables) => {
-        // Restart game
-        const initializeGameRestart = (constants, variables) => {
-          const { gameOverContainer, scoreList, restartButton } =
-            constants.elements;
-          // Reset all game variables to default
-          const resetAllVariables = ({ maxEnergy, maxLives }, variables) => {
-            variables.energy = maxEnergy;
-            variables.score = 0;
-            variables.lives = maxLives;
-            variables.isNextLevel = false;
-            variables.isGameOver = false;
-            variables.isShotEnabled = false;
-            variables.letterObjects = [];
-            variables.letters = [];
-          };
-
-          scoreList.innerHTML = ""; // clear the list
-          // Remove handler for click on restart button
-          restartButton.removeEventListener(
-            "click",
-            variables.handleRestartButtonCallback
-          );
-
-          resetAllVariables(constants, variables);
-          gameOverContainer.classList.add("displayOff");
-          displayGameScreen(constants, variables);
-        };
-        initializeGameRestart(constants, variables);
-      };
-      // Add handler for click on restart button
-      variables.handleRestartButtonCallback = () => {
-        handleRestartButton(constants, variables);
-      };
-      restartButton.addEventListener(
-        "click",
-        variables.handleRestartButtonCallback
-      );
-      return handleRestartButton;
-    };
-
-    playGameoverSound(constants);
-    createHighScoreTable(constants, variables);
-    addRestartButtonHandler(constants, variables);
-    gameOverContainer.classList.remove("displayOff");
+    // Add handler for load game over sound
+    const gameOverSound = new Audio("./sounds/GameOver.mp3");
+    gameOverSound.addEventListener("load", handleGameOverSoundLoad);
+    return gameOverSound;
   };
+
+  // Play game over sound
+  const playGameoverSound = ({ gameOverSound }) => {
+    gameOverSound.play();
+  };
+
+  // Create highscore table
+  const createHighScoreTable = (constants, variables) => {
+    const { scoresTable, elements } = constants;
+    const { scoreList } = elements;
+    const { score } = variables;
+    // Insert score in highscore table and sort entries
+    if (scoresTable.length < 10 && score !== 0) {
+      scoresTable.push(score);
+      scoresTable.sort((a, b) => b - a);
+    }
+    // Create highscore table list elements
+    scoreList.innerHTML = ""; // clear the list
+    scoresTable.forEach((singleScore) => {
+      let scoreEntry = document.createElement("li");
+      scoreEntry.innerText = singleScore.toString().padStart(6, 0, 0);
+      scoreList.appendChild(scoreEntry);
+    });
+  };
+
+  const addRestartButtonHandler = (constants, variables) => {
+    // Handler for click on restart button
+    const handleRestartButton = (constants, variables) => {
+      // Restart game
+      const initializeGameRestart = (constants, variables) => {
+        const { gameOverContainer, scoreList, restartButton } =
+          constants.elements;
+        // Reset all game variables to default
+        const resetAllVariables = ({ maxEnergy, maxLives }, variables) => {
+          variables.energy = maxEnergy;
+          variables.score = 0;
+          variables.lives = maxLives;
+          variables.isNextLevel = false;
+          variables.isGameOver = false;
+          variables.isShotEnabled = false;
+          variables.letterObjects = [];
+          variables.letters = [];
+        };
+
+        scoreList.innerHTML = ""; // clear the list
+        // Remove handler for click on restart button
+        restartButton.removeEventListener(
+          "click",
+          variables.handleRestartButtonCallback
+        );
+
+        resetAllVariables(constants, variables);
+        gameOverContainer.classList.add("displayOff");
+        displayGameScreen(constants, variables);
+      };
+      initializeGameRestart(constants, variables);
+    };
+    // Add handler for click on restart button
+    variables.handleRestartButtonCallback = () => {
+      handleRestartButton(constants, variables);
+    };
+    restartButton.addEventListener(
+      "click",
+      variables.handleRestartButtonCallback
+    );
+    return handleRestartButton;
+  };
+
+  constants.gameOverSound = loadGameOverSound();
+  playGameoverSound(constants);
+  createHighScoreTable(constants, variables);
+  addRestartButtonHandler(constants, variables);
+  gameOverContainer.classList.remove("displayOff");
+};
 
 // ---------- Display game screen ----------
 const displayGameScreen = (constants, variables) => {
@@ -337,18 +350,6 @@ const displayGameScreen = (constants, variables) => {
     return negativeHitSound;
   };
 
-  // Load game over sound
-  const loadGameOverSound = () => {
-    // Handler for load game over sound
-    const handleGameOverSoundLoad = () => {
-      gameOverSound.removeEventListener("load", handleGameOverSoundLoad);
-    };
-    // Add handler for load game over sound
-    const gameOverSound = new Audio("./sounds/GameOver.mp3");
-    gameOverSound.addEventListener("load", handleGameOverSoundLoad);
-    return gameOverSound;
-  };
-
   // Initialize xy offset of each letter in letters image
   const initializeLetterObjects = (
     { alphabetCharacters, letterConstants },
@@ -478,7 +479,6 @@ const displayGameScreen = (constants, variables) => {
   constants.gameMusic = loadGameMusic();
   constants.positiveHitSound = loadPositiveHitSound();
   constants.negativeHitSound = loadNegativeHitSound();
-  constants.gameOverSound = loadGameOverSound();
   initializeLetterObjects(constants, variables);
   constants.spaceship = initializeSpaceshipObject(constants);
   constants.shot = initializeShotObject(constants);
