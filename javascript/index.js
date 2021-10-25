@@ -112,6 +112,11 @@ const variables = {
   const displayGameoverScreen = (constants, variables) => {
     const { gameOverContainer, restartButton } = constants.elements;
 
+    // Play game over sound
+    const playGameoverSound = ({ gameOverSound }) => {
+      gameOverSound.play();
+    };
+
     // Create highscore table
     const createHighScoreTable = (constants, variables) => {
       const { scoresTable, elements } = constants;
@@ -174,6 +179,7 @@ const variables = {
       return handleRestartButton;
     };
 
+    playGameoverSound(constants);
     createHighScoreTable(constants, variables);
     addRestartButtonHandler(constants, variables);
     gameOverContainer.classList.remove("displayOff");
@@ -411,7 +417,7 @@ const displayGameScreen = (constants, variables) => {
     }
   };
 
-  // Initialize game music
+  // Initialize and play game music
   const initializeGameMusic = ({ gameMusic }) => {
     gameMusic.loop = "loop";
     gameMusic.play();
@@ -545,6 +551,7 @@ const displayGameScreen = (constants, variables) => {
       }
       return false;
     };
+
     // Reduce energy if wrong letter was hit
     const reduceEnergy = (
       { maxEnergy, energyCountStep, negativeHitSound },
@@ -705,8 +712,6 @@ const displayGameScreen = (constants, variables) => {
     initializeFlyingLetters(constants, variables);
   };
 
-
-
   // Stop game if no lives left
   const stopGame = (constants, variables) => {
     const { gameContainer } = constants.elements;
@@ -735,12 +740,11 @@ const displayGameScreen = (constants, variables) => {
       );
     };
 
-    // Stop game music and play game over sound
-    const stopGameMusic = ({ gameMusic, gameOverSound }) => {
+    // Stop game music
+    const stopGameMusic = ({ gameMusic }) => {
       gameMusic.currentTime = 0;
       gameMusic.pause();
       gameMusic.currentTime = 0;
-      gameOverSound.play();
     };
 
     stopInterval(variables);
