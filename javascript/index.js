@@ -1,5 +1,3 @@
-// ---------- Global ----------
-
 const constants = {
   maxLives: 3,
   maxEnergy: 90,
@@ -108,28 +106,22 @@ const variables = {
   handleStartButtonCallback: null,
 };
 
-// ---------- Display gameover screen ----------
 const displayGameoverScreen = (constants, variables) => {
   const { gameOverContainer, restartButton } = constants.elements;
 
-  // Load game over sound
   const loadGameOverSound = () => {
-    // Handler for load game over sound
     const handleGameOverSoundLoad = () => {
       gameOverSound.removeEventListener("load", handleGameOverSoundLoad);
     };
-    // Add handler for load game over sound
     const gameOverSound = new Audio("./sounds/GameOver.mp3");
     gameOverSound.addEventListener("load", handleGameOverSoundLoad);
     return gameOverSound;
   };
 
-  // Play game over sound
   const playGameoverSound = ({ gameOverSound }) => {
     gameOverSound.play();
   };
 
-  // Create highscore table
   const createHighScoreTable = (constants, variables) => {
     const { scoresTable, elements } = constants;
     const { scoreList } = elements;
@@ -149,13 +141,11 @@ const displayGameoverScreen = (constants, variables) => {
   };
 
   const addRestartButtonHandler = (constants, variables) => {
-    // Handler for click on restart button
     const handleRestartButton = (constants, variables) => {
       // Restart game
       const initializeGameRestart = (constants, variables) => {
         const { gameOverContainer, scoreList, restartButton } =
           constants.elements;
-        // Reset all game variables to default
         const resetAllVariables = ({ maxEnergy, maxLives }, variables) => {
           variables.energy = maxEnergy;
           variables.score = 0;
@@ -168,7 +158,6 @@ const displayGameoverScreen = (constants, variables) => {
         };
 
         scoreList.innerHTML = ""; // clear the list
-        // Remove handler for click on restart button
         restartButton.removeEventListener(
           "click",
           variables.handleRestartButtonCallback
@@ -180,7 +169,6 @@ const displayGameoverScreen = (constants, variables) => {
       };
       initializeGameRestart(constants, variables);
     };
-    // Add handler for click on restart button
     variables.handleRestartButtonCallback = () => {
       handleRestartButton(constants, variables);
     };
@@ -198,7 +186,6 @@ const displayGameoverScreen = (constants, variables) => {
   gameOverContainer.classList.remove("displayOff");
 };
 
-// ---------- Display game screen ----------
 const displayGameScreen = (constants, variables) => {
   const { elements, templateWords } = constants;
   const { gameContainer, canvas } = elements;
@@ -249,108 +236,83 @@ const displayGameScreen = (constants, variables) => {
     }
   }
 
-  // Load background image
   const loadBgImage = () => {
-    // Handler for load background image
     const handleBgImageLoad = () => {
       bgImage.removeEventListener("load", handleBgImageLoad);
     };
-    // Add handler for load background image
     const bgImage = document.createElement("img");
     bgImage.src = "./images/Andromeda.png";
     bgImage.addEventListener("load", handleBgImageLoad);
     return bgImage;
   };
 
-  // Load spaceship image
   const loadSpaceshipImage = () => {
-    // Handler for load spaceship image
     const handleSpaceshipImageLoad = () => {
       spaceshipImage.removeEventListener("load", handleSpaceshipImageLoad);
     };
-    // Add handler for load spaceship image
     const spaceshipImage = document.createElement("img");
     spaceshipImage.src = "./images/Ships.png";
     spaceshipImage.addEventListener("load", handleSpaceshipImageLoad);
     return spaceshipImage;
   };
 
-  // Load shot image
   const loadShotImage = () => {
-    // Handler for load shot image
     const handleShotImageLoad = () => {
       shotImage.removeEventListener("load", handleShotImageLoad);
     };
-    // Add handler for load shot image
     const shotImage = document.createElement("img");
     shotImage.src = "./images/Shot.png";
     shotImage.addEventListener("load", handleShotImageLoad);
     return shotImage;
   };
 
-  // Load life image
   const loadLifeImage = () => {
-    // Handler for load life image
     const handleLifeImageLoad = () => {
       lifeImage.removeEventListener("load", handleLifeImageLoad);
     };
-    // Add handler for load life image
     const lifeImage = document.createElement("img");
     lifeImage.src = "./images/Ship-sm.png";
     lifeImage.addEventListener("load", handleLifeImageLoad);
     return lifeImage;
   };
 
-  // Load letters image
   const loadLettersImage = () => {
-    // Handler for load letters image
     const handleLettersImageLoad = () => {
       lettersImage.removeEventListener("load", handleLettersImageLoad);
     };
-    // Add handler for load letters image
     const lettersImage = document.createElement("img");
     lettersImage.src = "./images/Characters-Set.png";
     lettersImage.addEventListener("load", handleLettersImageLoad);
     return lettersImage;
   };
 
-  // Load game music
   const loadGameMusic = () => {
-    // Handler for load game music
     const handleGameMusicLoad = () => {
       gameMusic.removeEventListener("load", handleGameMusicLoad);
     };
-    // Add handler for load game music
     const gameMusic = new Audio("./sounds/RetroRulez.mp3");
     gameMusic.addEventListener("load", handleGameMusicLoad);
     return gameMusic;
   };
 
-  // Load positive hit sound
   const loadPositiveHitSound = () => {
-    // Handler for load positive hit sound
     const handlepositiveHitSoundLoad = () => {
       positiveHitSound.removeEventListener("load", handlepositiveHitSoundLoad);
     };
-    // Add handler for load positive hit sound
     const positiveHitSound = new Audio("./sounds/PosHit.mp3");
     positiveHitSound.addEventListener("load", handlepositiveHitSoundLoad);
     return positiveHitSound;
   };
 
-  // Load negative hit sound
   const loadNegativeHitSound = () => {
-    // Handler for load negative hit sound
     const handleNegativeHitSoundLoad = () => {
       negativeHitSound.removeEventListener("load", handleNegativeHitSoundLoad);
     };
-    // Add handler for load negative hit sound
     const negativeHitSound = new Audio("./sounds/NegHit.mp3");
     negativeHitSound.addEventListener("load", handleNegativeHitSoundLoad);
     return negativeHitSound;
   };
 
-  // Initialize xy offset of each letter in letters image
   const initializeLetterObjects = (
     { alphabetCharacters, letterConstants },
     { letterObjects }
@@ -371,8 +333,7 @@ const displayGameScreen = (constants, variables) => {
     });
   };
 
-  // Create spaceship object
-  const initializeSpaceshipObject = ({ spaceshipImage, elements }) => {
+  const createSpaceshipObject = ({ spaceshipImage, elements }) => {
     const spaceship = new SpaceshipObject(
       10,
       elements.canvas.height / 2,
@@ -383,8 +344,8 @@ const displayGameScreen = (constants, variables) => {
     return spaceship;
   };
 
-  // Create shot object
-  const initializeShotObject = ({ shotImage, elements }) => {
+
+  const createShotObject = ({ shotImage, elements }) => {
     const shot = new ShotObject(
       116,
       elements.canvas.height / 2,
@@ -395,7 +356,6 @@ const displayGameScreen = (constants, variables) => {
     return shot;
   };
 
-  // Initialize start xy position on display of each letter
   const initializeFlyingLetters = (
     { elements, flyingLetters, letterConstants },
     { letters }
@@ -418,17 +378,13 @@ const displayGameScreen = (constants, variables) => {
     }
   };
 
-  // Initialize and play game music
   const initializeGameMusic = ({ gameMusic }) => {
     gameMusic.loop = "loop";
     gameMusic.play();
   };
 
-  // Add mouse up or down handler
   const addMouseUpDownHandler = (constants) => {
-    // Handler for mouse move up or down
     const handleMouseUpDown = (event, constants) => {
-      // Get vertical spacehip position
       const calculateSpaceshipPosition = (
         { clientY },
         { spaceship, elements }
@@ -440,28 +396,23 @@ const displayGameScreen = (constants, variables) => {
       };
       calculateSpaceshipPosition(event, constants);
     };
-    // Add handler for mouse move up or down
     variables.handleMouseUpDownCallback = (event) => {
       handleMouseUpDown(event, constants);
     };
     document.addEventListener("mousemove", variables.handleMouseUpDownCallback);
   };
 
-  // Add click on left mouse button handler
   const addLeftMouseButtonHandler = (constants, variables) => {
-    // Handler for click on left mouse button
     const handleLeftMouseButton = (constants, variables) => {
-      // Get vertical shot position
-      const calcualteShotPosition = (
+      const calcualteVerticalShotPosition = (
         { shot, spaceship, letterConstants },
         variables
       ) => {
         variables.isShotEnabled = true;
         shot.yPosition = spaceship.yPosition + letterConstants.horizontalGap;
       };
-      calcualteShotPosition(constants, variables);
+      calcualteVerticalShotPosition(constants, variables);
     };
-    // Add handler for click on left mouse button
     variables.handleLeftMouseButtonCallback = () => {
       handleLeftMouseButton(constants, variables);
     };
@@ -480,20 +431,18 @@ const displayGameScreen = (constants, variables) => {
   constants.positiveHitSound = loadPositiveHitSound();
   constants.negativeHitSound = loadNegativeHitSound();
   initializeLetterObjects(constants, variables);
-  constants.spaceship = initializeSpaceshipObject(constants);
-  constants.shot = initializeShotObject(constants);
+  constants.spaceship = createSpaceshipObject(constants);
+  constants.shot = createShotObject(constants);
   initializeFlyingLetters(constants, variables);
   initializeGameMusic(constants);
   addMouseUpDownHandler(constants);
   addLeftMouseButtonHandler(constants, variables);
   gameContainer.classList.remove("displayOff");
 
-  // Display background picture
   const displayBgPicture = ({ bgImage, renderingContext }) => {
     renderingContext.drawImage(bgImage, 0, 0);
   };
 
-  // Display spaceship
   const displaySpaceship = ({ spaceship, renderingContext }) => {
     const { xPosition, yPosition, imageUrl } = spaceship;
     renderingContext.drawImage(
@@ -509,8 +458,7 @@ const displayGameScreen = (constants, variables) => {
     );
   };
 
-  // Display shot
-  const shootBullet = (
+  const displayShot = (
     { shotHorizontalSpeed, elements, renderingContext, shot },
     variables
   ) => {
@@ -525,8 +473,7 @@ const displayGameScreen = (constants, variables) => {
     }
   };
 
-  // Check if missing letter was hit
-  const checkMissingLetter = (constants, variables, i) => {
+  const checkMissingLetterHit = (constants, variables, i) => {
     // Insert hit letter in assembled word
     const insertHitLetter = (constants, variables, i) => {
       const { positiveHitSound } = constants;
@@ -552,7 +499,6 @@ const displayGameScreen = (constants, variables) => {
       return false;
     };
 
-    // Reduce energy if wrong letter was hit
     const reduceEnergy = (
       { maxEnergy, energyCountStep, negativeHitSound },
       variables
@@ -576,8 +522,7 @@ const displayGameScreen = (constants, variables) => {
     return true;
   };
 
-  // Check collision shot vs. letter(s)
-  const checkLetterHit = (constants, variables, i) => {
+  const checkCollisionShotVsLetters = (constants, variables, i) => {
     const { shot } = constants;
     const { letters } = variables;
     const { xPosition, yPosition, width, height } = shot;
@@ -594,7 +539,7 @@ const displayGameScreen = (constants, variables) => {
       yPosition + height <= letters[i].yPosition + letters[i].height &&
       yPosition >= letters[i].yPosition;
     if (xCollisionCheck1 && (yCollisionCheck1 || yCollisionCheck2)) {
-      variables.isNextLevel = checkMissingLetter(constants, variables, i);
+      variables.isNextLevel = checkMissingLetterHit(constants, variables, i);
       letters.splice(i, 1);
       variables.isShotEnabled = false;
       shot.xPosition = 116;
@@ -603,7 +548,6 @@ const displayGameScreen = (constants, variables) => {
     return false;
   };
 
-  // Display letters and do collision check if shot is enabled
   const moveLetters = (constants, variables) => {
     const {
       lettersImage,
@@ -633,7 +577,7 @@ const displayGameScreen = (constants, variables) => {
         width,
         height
       );
-      if (isShotEnabled && checkLetterHit(constants, variables, i)) {
+      if (isShotEnabled && checkCollisionShotVsLetters(constants, variables, i)) {
         continue;
       }
       (letters[i].yPosition < 0 ||
@@ -716,11 +660,9 @@ const displayGameScreen = (constants, variables) => {
     initializeFlyingLetters(constants, variables);
   };
 
-  // Stop game if no lives left
   const stopGame = (constants, variables) => {
     const { gameContainer } = constants.elements;
 
-    // Stop interval
     const stopInterval = ({ intervalId, requestId }) => {
       if (intervalId) {
         clearInterval(intervalId);
@@ -732,7 +674,6 @@ const displayGameScreen = (constants, variables) => {
       }
     };
 
-    // Remove event listeners
     const removeMouseEventListeners = () => {
       document.removeEventListener(
         "mousemove",
@@ -744,7 +685,6 @@ const displayGameScreen = (constants, variables) => {
       );
     };
 
-    // Stop game music
     const stopGameMusic = ({ gameMusic }) => {
       gameMusic.currentTime = 0;
       gameMusic.pause();
@@ -769,7 +709,7 @@ const displayGameScreen = (constants, variables) => {
     // Graphic elements only displayed if game not over
     else {
       displaySpaceship(constants);
-      shootBullet(constants, variables);
+      displayShot(constants, variables);
       moveLetters(constants, variables);
       displayEnergy(constants, variables);
       displayScore(constants, variables);
@@ -793,16 +733,12 @@ const displayGameScreen = (constants, variables) => {
   startInterval(variables);
 };
 
-// ---------- Display splash screen ----------
 const displaySplashScreen = (constants, variables) => {
   const { splashContainer } = constants.elements;
 
-  // Handler for click on start button
   const handleStartButton = (constants, variables) => {
-    // Initialize game start
     const initializeGameScreen = (constants, variables) => {
       const { splashContainer, startButton } = constants.elements;
-      // Remove handler for click on start button
       startButton.removeEventListener(
         "click",
         variables.handleStartButtonCallback
@@ -812,7 +748,6 @@ const displaySplashScreen = (constants, variables) => {
     };
     initializeGameScreen(constants, variables);
   };
-  // Add handler for click on start button
   variables.handleStartButtonCallback = () => {
     handleStartButton(constants, variables);
   };
