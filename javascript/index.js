@@ -4,7 +4,7 @@ const constants = {
   energyCountStep: 30,
   scoreCountStep: 100,
   shotHorizontalSpeed: 15,
-  bgImage: null,
+  backgroundImage: null,
   spaceshipImage: null,
   shotImage: null,
   lifeImage: null,
@@ -23,7 +23,7 @@ const constants = {
     gameContainer: document.querySelector("#gameContainer"),
     canvas: document.querySelector("canvas"),
     gameOverContainer: document.querySelector("#gameOverContainer"),
-    scoreList: document.querySelector("#scoreList"),
+    highscoreList: document.querySelector("#highscoreList"),
     restartButton: document.querySelector("#restartButton"),
   },
   templateWords: [
@@ -86,13 +86,15 @@ const constants = {
     verticalGap: 7,
     maxVerticalSpeed: 4,
   },
-  scoresTable: [10100, 9000, 1000],
+  highscoreBuffer: [10100, 9000, 1000],
 };
 
+const { maxEnergy, maxLives } = constants;
+
 const variables = {
-  energy: constants.maxEnergy,
+  energy: maxEnergy,
   score: 0,
-  lives: constants.maxLives,
+  lives: maxLives,
   isNextLevel: false,
   isGameOver: false,
   isShotEnabled: false,
@@ -106,15 +108,21 @@ const variables = {
   handleStartButtonCallback: null,
 };
 
-const displayGameoverScreen = (constants, variables) => {
-  const { gameOverContainer, restartButton } = constants.elements;
-
+const displayGameoverScreen = ({ constants, variables }) => {
   const loadGameOverSound = () => {
-    const handleGameOverSoundLoad = () => {
-      gameOverSound.removeEventListener("load", handleGameOverSoundLoad);
+    const handleLoadGameOverSound = () => {
+      gameOverSound.removeEventListener("load", handleLoadGameOverSound);
     };
+
+    const addLoadGameOverSoundHandler = (
+      gameOverSound,
+      handleLoadGameOverSound
+    ) => {
+      gameOverSound.addEventListener("load", handleLoadGameOverSound);
+    };
+
     const gameOverSound = new Audio("./sounds/GameOver.mp3");
-    gameOverSound.addEventListener("load", handleGameOverSoundLoad);
+    addLoadGameOverSoundHandler(gameOverSound, handleLoadGameOverSound);
     return gameOverSound;
   };
 
@@ -122,71 +130,98 @@ const displayGameoverScreen = (constants, variables) => {
     gameOverSound.play();
   };
 
-  const createHighScoreTable = (constants, variables) => {
-    const { scoresTable, elements } = constants;
-    const { scoreList } = elements;
+  const createHighscoreTable = ({ constants, variables }) => {
+    const updateHighscoreBuffer = (score, highscoreBuffer) => {
+      if (highscoreBuffer.length < 10 && score !== 0) {
+        highscoreBuffer.push(score);
+        highscoreBuffer.sort((a, b) => b - a);
+      }
+    };
+
+    const createHighscoreListElements = (highscoreBuffer, highscoreList) => {
+      const clearHighscroreList = (highscoreList) => {
+        highscoreList.innerHTML = "";
+      };
+
+      clearHighscroreList(highscoreList);
+      highscoreBuffer.forEach((singleScore) => {
+        let scoreEntry = document.createElement("li");
+        scoreEntry.innerText = singleScore.toString().padStart(6, 0, 0);
+        highscoreList.appendChild(scoreEntry);
+      });
+    };
+
+    const { highscoreBuffer, elements } = constants;
+    const { highscoreList } = elements;
     const { score } = variables;
-    // Insert score in highscore table and sort entries
-    if (scoresTable.length < 10 && score !== 0) {
-      scoresTable.push(score);
-      scoresTable.sort((a, b) => b - a);
-    }
-    // Create highscore table list elements
-    scoreList.innerHTML = ""; // clear the list
-    scoresTable.forEach((singleScore) => {
-      let scoreEntry = document.createElement("li");
-      scoreEntry.innerText = singleScore.toString().padStart(6, 0, 0);
-      scoreList.appendChild(scoreEntry);
-    });
+    updateHighscoreBuffer(score, highscoreBuffer);
+    createHighscoreListElements(highscoreBuffer, highscoreList);
   };
 
-  const addRestartButtonHandler = (constants, variables) => {
-    const handleRestartButton = (constants, variables) => {
-      // Restart game
-      const initializeGameRestart = (constants, variables) => {
-        const { gameOverContainer, scoreList, restartButton } =
-          constants.elements;
-        const resetAllVariables = ({ maxEnergy, maxLives }, variables) => {
-          variables.energy = maxEnergy;
-          variables.score = 0;
-          variables.lives = maxLives;
-          variables.isNextLevel = false;
-          variables.isGameOver = false;
-          variables.isShotEnabled = false;
-          variables.letterObjects = [];
-          variables.letters = [];
-        };
-
-        scoreList.innerHTML = ""; // clear the list
+  const handleRestartButton = ({ constants, variables }) => {
+    const initializeGameRestart = ({ constants, variables }) => {
+      const removeRestartButtonHandler = (restartButton, variables) => {
         restartButton.removeEventListener(
           "click",
           variables.handleRestartButtonCallback
         );
-
-        resetAllVariables(constants, variables);
-        gameOverContainer.classList.add("displayOff");
-        displayGameScreen(constants, variables);
       };
-      initializeGameRestart(constants, variables);
+
+      const clearHighscroreList = (highscoreList) => {
+        highscoreList.innerHTML = "";
+      };
+
+      const resetAllVariables = ({ constants, variables }) => {
+        const { maxEnergy, maxLives } = constants;
+        variables.energy = maxEnergy;
+        variables.score = 0;
+        variables.lives = maxLives;
+        variables.isNextLevel = false;
+        variables.isGameOver = false;
+        variables.isShotEnabled = false;
+        variables.letterObjects = [];
+        variables.letters = [];
+      };
+
+      const { gameOverContainer, highscoreList, restartButton } =
+        constants.elements;
+      removeRestartButtonHandler(restartButton, variables);
+      clearHighscroreList(highscoreList);
+      resetAllVariables({ constants, variables });
+      gameOverContainer.classList.add("displayOff");
+      displayGameScreen({ constants, variables });
     };
+
+    initializeGameRestart({ constants, variables });
+  };
+
+  const addRestartButtonHandler = (
+    restartButton,
+    handleRestartButton,
+    { constants, variables }
+  ) => {
     variables.handleRestartButtonCallback = () => {
-      handleRestartButton(constants, variables);
+      handleRestartButton({ constants, variables });
     };
+
     restartButton.addEventListener(
       "click",
       variables.handleRestartButtonCallback
     );
-    return handleRestartButton;
   };
 
   constants.gameOverSound = loadGameOverSound();
   playGameoverSound(constants);
-  createHighScoreTable(constants, variables);
-  addRestartButtonHandler(constants, variables);
+  createHighscoreTable({ constants, variables });
+  const { gameOverContainer, restartButton } = constants.elements;
+  addRestartButtonHandler(restartButton, handleRestartButton, {
+    constants,
+    variables,
+  });
   gameOverContainer.classList.remove("displayOff");
 };
 
-const displayGameScreen = (constants, variables) => {
+const displayGameScreen = ({ constants, variables }) => {
   const { elements, templateWords } = constants;
   const { gameContainer, canvas } = elements;
   const definedAssembledWord = " ".repeat(6);
@@ -236,87 +271,147 @@ const displayGameScreen = (constants, variables) => {
     }
   }
 
-  const loadBgImage = () => {
-    const handleBgImageLoad = () => {
-      bgImage.removeEventListener("load", handleBgImageLoad);
+  const loadBackgroundImage = () => {
+    const handleloadBackgroundImage = () => {
+      backgroundImage.removeEventListener("load", handleloadBackgroundImage);
     };
-    const bgImage = document.createElement("img");
-    bgImage.src = "./images/Andromeda.png";
-    bgImage.addEventListener("load", handleBgImageLoad);
-    return bgImage;
+
+    const addloadBackgroundImageHandler = (
+      backgroundImage,
+      handleloadBackgroundImage
+    ) => {
+      backgroundImage.addEventListener("load", handleloadBackgroundImage);
+    };
+
+    const backgroundImage = document.createElement("img");
+    backgroundImage.src = "./images/Andromeda.png";
+    addloadBackgroundImageHandler(backgroundImage, handleloadBackgroundImage);
+    return backgroundImage;
   };
 
   const loadSpaceshipImage = () => {
-    const handleSpaceshipImageLoad = () => {
-      spaceshipImage.removeEventListener("load", handleSpaceshipImageLoad);
+    const handleLoadSpaceshipImage = () => {
+      spaceshipImage.removeEventListener("load", handleLoadSpaceshipImage);
     };
+
+    const addLoadSpaceshipImageHandler = (
+      spaceshipImage,
+      handleLoadSpaceshipImage
+    ) => {
+      spaceshipImage.addEventListener("load", handleLoadSpaceshipImage);
+    };
+
     const spaceshipImage = document.createElement("img");
     spaceshipImage.src = "./images/Ships.png";
-    spaceshipImage.addEventListener("load", handleSpaceshipImageLoad);
+    addLoadSpaceshipImageHandler(spaceshipImage, handleLoadSpaceshipImage);
     return spaceshipImage;
   };
 
   const loadShotImage = () => {
-    const handleShotImageLoad = () => {
-      shotImage.removeEventListener("load", handleShotImageLoad);
+    const handleLoadShotImage = () => {
+      shotImage.removeEventListener("load", handleLoadShotImage);
     };
+
+    const addLoadShotImageHandler = (shotImage, handleLoadShotImage) => {
+      shotImage.addEventListener("load", handleLoadShotImage);
+    };
+
     const shotImage = document.createElement("img");
     shotImage.src = "./images/Shot.png";
-    shotImage.addEventListener("load", handleShotImageLoad);
+    addLoadShotImageHandler(shotImage, handleLoadShotImage);
     return shotImage;
   };
 
   const loadLifeImage = () => {
-    const handleLifeImageLoad = () => {
-      lifeImage.removeEventListener("load", handleLifeImageLoad);
+    const handleLoadLifeImage = () => {
+      lifeImage.removeEventListener("load", handleLoadLifeImage);
     };
+
+    const addLoadLifeImageHandler = (lifeImage, handleLoadLifeImage) => {
+      lifeImage.addEventListener("load", handleLoadLifeImage);
+    };
+
     const lifeImage = document.createElement("img");
     lifeImage.src = "./images/Ship-sm.png";
-    lifeImage.addEventListener("load", handleLifeImageLoad);
+    addLoadLifeImageHandler(lifeImage, handleLoadLifeImage);
     return lifeImage;
   };
 
   const loadLettersImage = () => {
-    const handleLettersImageLoad = () => {
-      lettersImage.removeEventListener("load", handleLettersImageLoad);
+    const handleLoadLettersImage = () => {
+      lettersImage.removeEventListener("load", handleLoadLettersImage);
     };
+
+    const addLoadLettersImageHandler = (
+      lettersImage,
+      handleLoadLettersImage
+    ) => {
+      lettersImage.addEventListener("load", handleLoadLettersImage);
+    };
+
     const lettersImage = document.createElement("img");
     lettersImage.src = "./images/Characters-Set.png";
-    lettersImage.addEventListener("load", handleLettersImageLoad);
+    addLoadLettersImageHandler(lettersImage, handleLoadLettersImage);
     return lettersImage;
   };
 
   const loadGameMusic = () => {
-    const handleGameMusicLoad = () => {
-      gameMusic.removeEventListener("load", handleGameMusicLoad);
+    const handleLoadGameMusic = () => {
+      gameMusic.removeEventListener("load", handleLoadGameMusic);
     };
+
+    const addLoadGameMusicHandler = (gameMusic, handleLoadGameMusic) => {
+      gameMusic.addEventListener("load", handleLoadGameMusic);
+    };
+
     const gameMusic = new Audio("./sounds/RetroRulez.mp3");
-    gameMusic.addEventListener("load", handleGameMusicLoad);
+    addLoadGameMusicHandler(gameMusic, handleLoadGameMusic);
     return gameMusic;
   };
 
   const loadPositiveHitSound = () => {
-    const handlepositiveHitSoundLoad = () => {
-      positiveHitSound.removeEventListener("load", handlepositiveHitSoundLoad);
+    const handleLoadpositiveHitSound = () => {
+      positiveHitSound.removeEventListener("load", handleLoadpositiveHitSound);
     };
+
+    const addLoadpositiveHitSoundHandler = (
+      positiveHitSound,
+      handleLoadpositiveHitSound
+    ) => {
+      positiveHitSound.addEventListener("load", handleLoadpositiveHitSound);
+    };
+
     const positiveHitSound = new Audio("./sounds/PosHit.mp3");
-    positiveHitSound.addEventListener("load", handlepositiveHitSoundLoad);
+    addLoadpositiveHitSoundHandler(
+      positiveHitSound,
+      handleLoadpositiveHitSound
+    );
     return positiveHitSound;
   };
 
   const loadNegativeHitSound = () => {
-    const handleNegativeHitSoundLoad = () => {
-      negativeHitSound.removeEventListener("load", handleNegativeHitSoundLoad);
+    const handleLoadNegativeHitSound = () => {
+      negativeHitSound.removeEventListener("load", handleLoadNegativeHitSound);
     };
+
+    const addLoadNegativeHitSoundHandler = (
+      negativeHitSound,
+      handleLoadNegativeHitSound
+    ) => {
+      negativeHitSound.addEventListener("load", handleLoadNegativeHitSound);
+    };
+
     const negativeHitSound = new Audio("./sounds/NegHit.mp3");
-    negativeHitSound.addEventListener("load", handleNegativeHitSoundLoad);
+    addLoadNegativeHitSoundHandler(
+      negativeHitSound,
+      handleLoadNegativeHitSound
+    );
     return negativeHitSound;
   };
 
-  const initializeLetterObjects = (
-    { alphabetCharacters, letterConstants },
-    { letterObjects }
-  ) => {
+  const initializeLetterObjects = ({ constants, variables }) => {
+    const { alphabetCharacters, letterConstants } = constants;
+    const { letterObjects } = variables;
     const { width, height, horizontalGap, verticalGap } = letterConstants;
     let [xOffset, yOffset] = [5, 8];
     alphabetCharacters.forEach((character) => {
@@ -344,7 +439,6 @@ const displayGameScreen = (constants, variables) => {
     return spaceship;
   };
 
-
   const createShotObject = ({ shotImage, elements }) => {
     const shot = new ShotObject(
       116,
@@ -356,10 +450,9 @@ const displayGameScreen = (constants, variables) => {
     return shot;
   };
 
-  const initializeFlyingLetters = (
-    { elements, flyingLetters, letterConstants },
-    { letters }
-  ) => {
+  const initializeFlyingLetters = ({ constants, variables }) => {
+    const { flyingLetters, letterConstants, elements } = constants;
+    const { letters } = variables;
     const { width, height, maxVerticalSpeed } = letterConstants;
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
       const xPosition =
@@ -390,39 +483,46 @@ const displayGameScreen = (constants, variables) => {
         { spaceship, elements }
       ) => {
         const { height } = spaceship;
-        clientY > 4 * height &&
-          clientY < elements.canvas.height - 8 * height &&
-          (spaceship.yPosition = clientY);
+        if (
+          clientY > 4 * height &&
+          clientY < elements.canvas.height - 8 * height
+        ) {
+          spaceship.yPosition = clientY;
+        }
       };
+
       calculateSpaceshipPosition(event, constants);
     };
+
     variables.handleMouseUpDownCallback = (event) => {
       handleMouseUpDown(event, constants);
     };
+
     document.addEventListener("mousemove", variables.handleMouseUpDownCallback);
   };
 
-  const addLeftMouseButtonHandler = (constants, variables) => {
-    const handleLeftMouseButton = (constants, variables) => {
-      const calcualteVerticalShotPosition = (
-        { shot, spaceship, letterConstants },
-        variables
-      ) => {
+  const addLeftMouseButtonHandler = ({ constants, variables }) => {
+    const handleLeftMouseButton = ({ constants, variables }) => {
+      const calcualteVerticalShotPosition = ({ constants, variables }) => {
+        const { shot, spaceship, letterConstants } = constants;
         variables.isShotEnabled = true;
         shot.yPosition = spaceship.yPosition + letterConstants.horizontalGap;
       };
-      calcualteVerticalShotPosition(constants, variables);
+
+      calcualteVerticalShotPosition({ constants, variables });
     };
+
     variables.handleLeftMouseButtonCallback = () => {
-      handleLeftMouseButton(constants, variables);
+      handleLeftMouseButton({ constants, variables });
     };
+
     document.addEventListener(
       "mousedown",
       variables.handleLeftMouseButtonCallback
     );
   };
 
-  constants.bgImage = loadBgImage();
+  constants.backgroundImage = loadBackgroundImage();
   constants.spaceshipImage = loadSpaceshipImage();
   constants.shotImage = loadShotImage();
   constants.lifeImage = loadLifeImage();
@@ -430,17 +530,17 @@ const displayGameScreen = (constants, variables) => {
   constants.gameMusic = loadGameMusic();
   constants.positiveHitSound = loadPositiveHitSound();
   constants.negativeHitSound = loadNegativeHitSound();
-  initializeLetterObjects(constants, variables);
+  initializeLetterObjects({ constants, variables });
   constants.spaceship = createSpaceshipObject(constants);
   constants.shot = createShotObject(constants);
-  initializeFlyingLetters(constants, variables);
+  initializeFlyingLetters({ constants, variables });
   initializeGameMusic(constants);
   addMouseUpDownHandler(constants);
-  addLeftMouseButtonHandler(constants, variables);
+  addLeftMouseButtonHandler({ constants, variables });
   gameContainer.classList.remove("displayOff");
 
-  const displayBgPicture = ({ bgImage, renderingContext }) => {
-    renderingContext.drawImage(bgImage, 0, 0);
+  const displayBgPicture = ({ backgroundImage, renderingContext }) => {
+    renderingContext.drawImage(backgroundImage, 0, 0);
   };
 
   const displaySpaceship = ({ spaceship, renderingContext }) => {
@@ -458,24 +558,26 @@ const displayGameScreen = (constants, variables) => {
     );
   };
 
-  const displayShot = (
-    { shotHorizontalSpeed, elements, renderingContext, shot },
-    variables
-  ) => {
-    // only if shot enabled
-    if (variables.isShotEnabled) {
-      const { xPosition, yPosition, imageUrl } = shot;
-      renderingContext.drawImage(imageUrl, xPosition, yPosition);
-      shot.xPosition += shotHorizontalSpeed;
-      // Check shot against right border
-      shot.xPosition > elements.canvas.width &&
-        ([variables.isShotEnabled, shot.xPosition] = [false, 116]);
-    }
+  const moveShot = ({ constants, variables }) => {
+    const checkShotCollisionWithRightBorder = (
+      shot,
+      { constants, variables }
+    ) => {
+      const { elements } = constants;
+      if (shot.xPosition > elements.canvas.width) {
+        [variables.isShotEnabled, shot.xPosition] = [false, 116];
+      }
+    };
+
+    const { shotHorizontalSpeed, renderingContext, shot } = constants;
+    const { xPosition, yPosition, imageUrl } = shot;
+    renderingContext.drawImage(imageUrl, xPosition, yPosition);
+    shot.xPosition += shotHorizontalSpeed;
+    checkShotCollisionWithRightBorder(shot, { constants, variables });
   };
 
-  const checkMissingLetterHit = (constants, variables, i) => {
-    // Insert hit letter in assembled word
-    const insertHitLetter = (constants, variables, i) => {
+  const checkMissingLetterHit = (i, { constants, variables }) => {
+    const insertHitLetterInAssembledWord = (i, { constants, variables }) => {
       const { positiveHitSound } = constants;
       const { letters } = variables;
       let buffer = "";
@@ -492,17 +594,15 @@ const displayGameScreen = (constants, variables) => {
           currentTemplateWord = currentTemplateWord.replace(
             letters[i].character,
             " "
-          ); // Clear hit letter in current template word
+          );
           return true;
         }
       }
       return false;
     };
 
-    const reduceEnergy = (
-      { maxEnergy, energyCountStep, negativeHitSound },
-      variables
-    ) => {
+    const reduceEnergy = ({ constants, variables }) => {
+      const { maxEnergy, energyCountStep, negativeHitSound } = constants;
       negativeHitSound.play();
       variables.energy > energyCountStep
         ? (variables.energy -= energyCountStep)
@@ -510,19 +610,26 @@ const displayGameScreen = (constants, variables) => {
         ? (variables.isGameOver = true)
         : (variables.energy = maxEnergy);
     };
-    !insertHitLetter(constants, variables, i) &&
-      reduceEnergy(constants, variables);
 
-    // Check if all missed letters are hit
-    for (let k = 0; k < currentTemplateWord.length; k++) {
-      if (currentTemplateWord[k] !== " ") {
-        return false;
+    const checkAllMissedLettersHit = () => {
+      for (let k = 0; k < currentTemplateWord.length; k++) {
+        if (currentTemplateWord[k] !== " ") {
+          return false;
+        }
       }
-    }
-    return true;
+      return true;
+    };
+
+    const isMissedLetterHit = insertHitLetterInAssembledWord(i, {
+      constants,
+      variables,
+    });
+    !isMissedLetterHit && reduceEnergy({ constants, variables });
+    const isAllMissedLettersHit = checkAllMissedLettersHit();
+    return isAllMissedLettersHit;
   };
 
-  const checkCollisionShotVsLetters = (constants, variables, i) => {
+  const checkShotCollisionWithLetters = (i, { constants, variables }) => {
     const { shot } = constants;
     const { letters } = variables;
     const { xPosition, yPosition, width, height } = shot;
@@ -539,7 +646,10 @@ const displayGameScreen = (constants, variables) => {
       yPosition + height <= letters[i].yPosition + letters[i].height &&
       yPosition >= letters[i].yPosition;
     if (xCollisionCheck1 && (yCollisionCheck1 || yCollisionCheck2)) {
-      variables.isNextLevel = checkMissingLetterHit(constants, variables, i);
+      variables.isNextLevel = checkMissingLetterHit(i, {
+        constants,
+        variables,
+      });
       letters.splice(i, 1);
       variables.isShotEnabled = false;
       shot.xPosition = 116;
@@ -548,7 +658,7 @@ const displayGameScreen = (constants, variables) => {
     return false;
   };
 
-  const moveLetters = (constants, variables) => {
+  const moveLetters = ({ constants, variables }) => {
     const {
       lettersImage,
       renderingContext,
@@ -577,52 +687,73 @@ const displayGameScreen = (constants, variables) => {
         width,
         height
       );
-      if (isShotEnabled && checkCollisionShotVsLetters(constants, variables, i)) {
+      const isShotCollisionWithLetters = checkShotCollisionWithLetters(i, {
+        constants,
+        variables,
+      });
+      if (isShotEnabled && isShotCollisionWithLetters) {
         continue;
       }
-      (letters[i].yPosition < 0 ||
-        letters[i].yPosition > 600 - letterConstants.height) &&
-        (letters[i].yDirection *= -1); // Top / bottom border check with vertical direction change
+      if (
+        letters[i].yPosition < 0 ||
+        letters[i].yPosition > 600 - letterConstants.height
+      ) {
+        letters[i].yDirection *= -1;
+      }
       letters[i].yPosition += letters[i].yDirection;
     }
   };
 
-  // Display energy left at the left top of the screen
-  const displayEnergy = ({ renderingContext }, { energy }) => {
+  const displayEnergy = ({ constants, variables }) => {
+    const { renderingContext } = constants;
+    const { energy } = variables;
     renderingContext.font = "22px Coda Caption";
     renderingContext.fillStyle = "orange";
     renderingContext.fillText("Energy", 10, 30);
     renderingContext.fillStyle = "steelblue";
-    renderingContext.fillRect(110, 15, energy, 16);
+    renderingContext.fillRect(
+      110, // left top of the screen
+      15,
+      energy,
+      16
+    );
   };
 
-  // Display current player score in the centre of the top screen
-  const displayScore = ({ renderingContext }, { score }) => {
+  const displayScore = ({ constants, variables }) => {
+    const { renderingContext } = constants;
+    const { score } = variables;
     renderingContext.font = "22px Coda Caption";
     renderingContext.fillStyle = "orange";
     renderingContext.fillText(
       `Score ${score.toString().padStart(6, 0, 0)}`,
-      320,
+      320, // centre of the top screen
       30
     );
   };
 
-  // Display number of lives left at the right top of the screen
-  const displayLives = ({ lifeImage, renderingContext }, { lives }) => {
+  const displayLives = ({ constants, variables }) => {
+    const { lifeImage, renderingContext } = constants;
+    const { lives } = variables;
     renderingContext.font = "22px Coda Caption";
     renderingContext.fillStyle = "orange";
-    renderingContext.fillText("Lives", 630, 30);
-    // Display life symbols only if lives are left
+    renderingContext.fillText(
+      "Lives",
+      630, // right top of the screen
+      30
+    );
     if (lives !== 0) {
       let livesStartXPosition = 705;
       for (let i = 0; i < lives; i++) {
-        renderingContext.drawImage(lifeImage, livesStartXPosition, 17);
+        renderingContext.drawImage(
+          lifeImage,
+          livesStartXPosition, // right top of the screen
+          17
+        );
         livesStartXPosition += 30;
       }
     }
   };
 
-  // Display template word at the left bottom of the screen
   const displayTemplateWord = ({
     renderingContext,
     elements,
@@ -632,24 +763,27 @@ const displayGameScreen = (constants, variables) => {
     renderingContext.fillStyle = "steelblue";
     renderingContext.fillText(
       templateWords[startIndex],
-      10,
+      10, // left bottom of the screen
       elements.canvas.height - 15
     );
   };
 
-  // Display assembled word at the right bottom of the screen
   const displayAssembledWord = ({ renderingContext, elements }) => {
     renderingContext.font = "40px Coda Caption";
     renderingContext.fillStyle = "orange";
-    renderingContext.fillText(assembledWord, 620, elements.canvas.height - 15);
+    renderingContext.fillText(
+      assembledWord,
+      620, // right bottom of the screen
+      elements.canvas.height - 15
+    );
   };
 
-  // Get next random template word if all missing letters were hit
-  const checkTemplateWord = (constants, variables) => {
+  const getNextTemplateWord = ({ constants, variables }) => {
     const { templateWords } = constants;
     const { letters } = variables;
-    while (startIndex === oldStartIndex)
+    while (startIndex === oldStartIndex) {
       startIndex = Math.floor(Math.random() * templateWords.length);
+    }
     [oldStartIndex, assembledWord, variables.isNextLevel] = [
       startIndex,
       definedAssembledWord,
@@ -657,12 +791,10 @@ const displayGameScreen = (constants, variables) => {
     ];
     currentTemplateWord = templateWords[startIndex];
     letters.splice(0, letters.length);
-    initializeFlyingLetters(constants, variables);
+    initializeFlyingLetters({ constants, variables });
   };
 
-  const stopGame = (constants, variables) => {
-    const { gameContainer } = constants.elements;
-
+  const stopGame = ({ constants, variables }) => {
     const stopInterval = ({ intervalId, requestId }) => {
       if (intervalId) {
         clearInterval(intervalId);
@@ -674,7 +806,7 @@ const displayGameScreen = (constants, variables) => {
       }
     };
 
-    const removeMouseEventListeners = () => {
+    const removeMouseHandlers = () => {
       document.removeEventListener(
         "mousemove",
         variables.handleMouseUpDownCallback
@@ -691,40 +823,39 @@ const displayGameScreen = (constants, variables) => {
       gameMusic.currentTime = 0;
     };
 
+    const { gameContainer } = constants.elements;
     stopInterval(variables);
-    removeMouseEventListeners();
+    removeMouseHandlers();
     stopGameMusic(constants);
     gameContainer.classList.add("displayOff");
-    displayGameoverScreen(constants, variables);
+    displayGameoverScreen({ constants, variables });
   };
 
-  // Render all game elements 60 frames per second
-  const renderAll = (constants, variables) => {
+  const renderGameElements = ({ constants, variables }) => {
     const { isNextLevel, isGameOver } = variables;
-    displayBgPicture(constants); // Always display background picture
-    isNextLevel && checkTemplateWord(constants, variables); // Check template word if level is finished
+    displayBgPicture(constants);
+    isNextLevel && getNextTemplateWord({ constants, variables });
     if (isGameOver) {
-      stopGame(constants, variables);
-    }
-    // Graphic elements only displayed if game not over
-    else {
+      stopGame({ constants, variables });
+    } else {
       displaySpaceship(constants);
-      displayShot(constants, variables);
-      moveLetters(constants, variables);
-      displayEnergy(constants, variables);
-      displayScore(constants, variables);
-      displayLives(constants, variables);
+      if (variables.isShotEnabled) {
+        moveShot({ constants, variables });
+      }
+      moveLetters({ constants, variables });
+      displayEnergy({ constants, variables });
+      displayScore({ constants, variables });
+      displayLives({ constants, variables });
       displayTemplateWord(constants);
       displayAssembledWord(constants);
     }
   };
 
-  // Start game by interval
   const startInterval = (variables) => {
     variables.intervalId = setInterval(
       () =>
         (variables.requestId = requestAnimationFrame(() => {
-          renderAll(constants, variables);
+          renderGameElements({ constants, variables });
         })),
       10 // 60 frames per second
     );
@@ -733,30 +864,37 @@ const displayGameScreen = (constants, variables) => {
   startInterval(variables);
 };
 
-const displaySplashScreen = (constants, variables) => {
-  const { splashContainer } = constants.elements;
-
-  const handleStartButton = (constants, variables) => {
-    const initializeGameScreen = (constants, variables) => {
+const displaySplashScreen = ({ constants, variables }) => {
+  const handleStartButton = ({ constants, variables }) => {
+    const initializeGameScreen = ({ constants, variables }) => {
       const { splashContainer, startButton } = constants.elements;
       startButton.removeEventListener(
         "click",
         variables.handleStartButtonCallback
       );
       splashContainer.classList.add("displayOff");
-      displayGameScreen(constants, variables);
+      displayGameScreen({ constants, variables });
     };
-    initializeGameScreen(constants, variables);
+    initializeGameScreen({ constants, variables });
   };
-  variables.handleStartButtonCallback = () => {
-    handleStartButton(constants, variables);
+
+  const addStartButtonHandler = (
+    handleStartButton,
+    { constants, variables }
+  ) => {
+    variables.handleStartButtonCallback = () => {
+      handleStartButton({ constants, variables });
+    };
+
+    constants.elements.startButton.addEventListener(
+      "click",
+      variables.handleStartButtonCallback
+    );
   };
-  constants.elements.startButton.addEventListener(
-    "click",
-    variables.handleStartButtonCallback
-  );
+
+  addStartButtonHandler(handleStartButton, { constants, variables });
+  const { splashContainer } = constants.elements;
   splashContainer.classList.remove("displayOff");
 };
 
-// Start game
-displaySplashScreen(constants, variables);
+displaySplashScreen({ constants, variables }); // Start game
