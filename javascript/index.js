@@ -539,7 +539,7 @@ const displayGameScreen = ({ constants, variables }) => {
   addLeftMouseButtonHandler({ constants, variables });
   gameContainer.classList.remove("displayOff");
 
-  const displayBgPicture = ({ backgroundImage, renderingContext }) => {
+  const displayBackgroundPicture = ({ backgroundImage, renderingContext }) => {
     renderingContext.drawImage(backgroundImage, 0, 0);
   };
 
@@ -833,7 +833,7 @@ const displayGameScreen = ({ constants, variables }) => {
 
   const renderGameElements = ({ constants, variables }) => {
     const { isNextLevel, isGameOver } = variables;
-    displayBgPicture(constants);
+    displayBackgroundPicture(constants);
     isNextLevel && getNextTemplateWord({ constants, variables });
     if (isGameOver) {
       stopGame({ constants, variables });
