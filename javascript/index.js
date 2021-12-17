@@ -108,21 +108,18 @@ const variables = {
   handleStartButtonCallback: null,
 };
 
+const addLoadEventHandler = (element, eventHandler) => {
+  element.addEventListener("load", eventHandler);
+};
+
 const displayGameoverScreen = ({ constants, variables }) => {
   const loadGameOverSound = () => {
     const handleLoadGameOverSound = () => {
       gameOverSound.removeEventListener("load", handleLoadGameOverSound);
     };
 
-    const addLoadGameOverSoundHandler = (
-      gameOverSound,
-      handleLoadGameOverSound
-    ) => {
-      gameOverSound.addEventListener("load", handleLoadGameOverSound);
-    };
-
     const gameOverSound = new Audio("./sounds/GameOver.mp3");
-    addLoadGameOverSoundHandler(gameOverSound, handleLoadGameOverSound);
+    addLoadEventHandler(gameOverSound, handleLoadGameOverSound);
     return gameOverSound;
   };
 
@@ -276,16 +273,9 @@ const displayGameScreen = ({ constants, variables }) => {
       backgroundImage.removeEventListener("load", handleloadBackgroundImage);
     };
 
-    const addloadBackgroundImageHandler = (
-      backgroundImage,
-      handleloadBackgroundImage
-    ) => {
-      backgroundImage.addEventListener("load", handleloadBackgroundImage);
-    };
-
     const backgroundImage = document.createElement("img");
     backgroundImage.src = "./images/Andromeda.png";
-    addloadBackgroundImageHandler(backgroundImage, handleloadBackgroundImage);
+    addLoadEventHandler(backgroundImage, handleloadBackgroundImage);
     return backgroundImage;
   };
 
@@ -294,16 +284,9 @@ const displayGameScreen = ({ constants, variables }) => {
       spaceshipImage.removeEventListener("load", handleLoadSpaceshipImage);
     };
 
-    const addLoadSpaceshipImageHandler = (
-      spaceshipImage,
-      handleLoadSpaceshipImage
-    ) => {
-      spaceshipImage.addEventListener("load", handleLoadSpaceshipImage);
-    };
-
     const spaceshipImage = document.createElement("img");
     spaceshipImage.src = "./images/Ships.png";
-    addLoadSpaceshipImageHandler(spaceshipImage, handleLoadSpaceshipImage);
+    addLoadEventHandler(spaceshipImage, handleLoadSpaceshipImage);
     return spaceshipImage;
   };
 
@@ -312,13 +295,9 @@ const displayGameScreen = ({ constants, variables }) => {
       shotImage.removeEventListener("load", handleLoadShotImage);
     };
 
-    const addLoadShotImageHandler = (shotImage, handleLoadShotImage) => {
-      shotImage.addEventListener("load", handleLoadShotImage);
-    };
-
     const shotImage = document.createElement("img");
     shotImage.src = "./images/Shot.png";
-    addLoadShotImageHandler(shotImage, handleLoadShotImage);
+    addLoadEventHandler(shotImage, handleLoadShotImage);
     return shotImage;
   };
 
@@ -327,13 +306,9 @@ const displayGameScreen = ({ constants, variables }) => {
       lifeImage.removeEventListener("load", handleLoadLifeImage);
     };
 
-    const addLoadLifeImageHandler = (lifeImage, handleLoadLifeImage) => {
-      lifeImage.addEventListener("load", handleLoadLifeImage);
-    };
-
     const lifeImage = document.createElement("img");
     lifeImage.src = "./images/Ship-sm.png";
-    addLoadLifeImageHandler(lifeImage, handleLoadLifeImage);
+    addLoadEventHandler(lifeImage, handleLoadLifeImage);
     return lifeImage;
   };
 
@@ -342,16 +317,9 @@ const displayGameScreen = ({ constants, variables }) => {
       lettersImage.removeEventListener("load", handleLoadLettersImage);
     };
 
-    const addLoadLettersImageHandler = (
-      lettersImage,
-      handleLoadLettersImage
-    ) => {
-      lettersImage.addEventListener("load", handleLoadLettersImage);
-    };
-
     const lettersImage = document.createElement("img");
     lettersImage.src = "./images/Characters-Set.png";
-    addLoadLettersImageHandler(lettersImage, handleLoadLettersImage);
+    addLoadEventHandler(lettersImage, handleLoadLettersImage);
     return lettersImage;
   };
 
@@ -360,12 +328,8 @@ const displayGameScreen = ({ constants, variables }) => {
       gameMusic.removeEventListener("load", handleLoadGameMusic);
     };
 
-    const addLoadGameMusicHandler = (gameMusic, handleLoadGameMusic) => {
-      gameMusic.addEventListener("load", handleLoadGameMusic);
-    };
-
     const gameMusic = new Audio("./sounds/RetroRulez.mp3");
-    addLoadGameMusicHandler(gameMusic, handleLoadGameMusic);
+    addLoadEventHandler(gameMusic, handleLoadGameMusic);
     return gameMusic;
   };
 
@@ -374,18 +338,8 @@ const displayGameScreen = ({ constants, variables }) => {
       positiveHitSound.removeEventListener("load", handleLoadpositiveHitSound);
     };
 
-    const addLoadpositiveHitSoundHandler = (
-      positiveHitSound,
-      handleLoadpositiveHitSound
-    ) => {
-      positiveHitSound.addEventListener("load", handleLoadpositiveHitSound);
-    };
-
     const positiveHitSound = new Audio("./sounds/PosHit.mp3");
-    addLoadpositiveHitSoundHandler(
-      positiveHitSound,
-      handleLoadpositiveHitSound
-    );
+    addLoadEventHandler(positiveHitSound, handleLoadpositiveHitSound);
     return positiveHitSound;
   };
 
@@ -394,18 +348,8 @@ const displayGameScreen = ({ constants, variables }) => {
       negativeHitSound.removeEventListener("load", handleLoadNegativeHitSound);
     };
 
-    const addLoadNegativeHitSoundHandler = (
-      negativeHitSound,
-      handleLoadNegativeHitSound
-    ) => {
-      negativeHitSound.addEventListener("load", handleLoadNegativeHitSound);
-    };
-
     const negativeHitSound = new Audio("./sounds/NegHit.mp3");
-    addLoadNegativeHitSoundHandler(
-      negativeHitSound,
-      handleLoadNegativeHitSound
-    );
+    addLoadEventHandler(negativeHitSound, handleLoadNegativeHitSound);
     return negativeHitSound;
   };
 
