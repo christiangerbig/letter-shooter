@@ -722,7 +722,7 @@ const displayGameScreen = ({ constants, variables }) => {
     );
   };
 
-  const getNextTemplateWord = ({ constants, variables }) => {
+  const fetchNextTemplateWord = ({ constants, variables }) => {
     const { templateWords } = constants;
     const { letters } = variables;
     while (startIndex === oldStartIndex) {
@@ -778,7 +778,7 @@ const displayGameScreen = ({ constants, variables }) => {
   const renderGameElements = ({ constants, variables }) => {
     const { isNextLevel, isGameOver } = variables;
     displayBackgroundPicture(constants);
-    isNextLevel && getNextTemplateWord({ constants, variables });
+    isNextLevel && fetchNextTemplateWord({ constants, variables });
     if (isGameOver) {
       stopGame({ constants, variables });
     } else {
