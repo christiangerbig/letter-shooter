@@ -23,7 +23,7 @@ const constants = {
     gameContainer: document.querySelector("#gameContainer"),
     canvas: document.querySelector("canvas"),
     gameOverContainer: document.querySelector("#gameOverContainer"),
-    highscoreList: document.querySelector("#highscoreList"),
+    highscoresList: document.querySelector("#highscoresList"),
     restartButton: document.querySelector("#restartButton"),
   },
   templateWords: [
@@ -86,7 +86,7 @@ const constants = {
     verticalGap: 7,
     maxVerticalSpeed: 4,
   },
-  highscoreBuffer: [10100, 9000, 1000],
+  highscores: [10100, 9000, 1000],
 };
 
 const { maxEnergy, maxLives } = constants;
@@ -108,18 +108,9 @@ const variables = {
   handleStartButtonCallback: null,
 };
 
-const addLoadEventHandler = (element, eventHandler) => {
-  element.addEventListener("load", eventHandler);
-};
-
 const displayGameoverScreen = ({ constants, variables }) => {
   const loadGameOverSound = () => {
-    const handleLoadGameOverSound = () => {
-      gameOverSound.removeEventListener("load", handleLoadGameOverSound);
-    };
-
     const gameOverSound = new Audio("./sounds/GameOver.mp3");
-    addLoadEventHandler(gameOverSound, handleLoadGameOverSound);
     return gameOverSound;
   };
 
@@ -127,69 +118,52 @@ const displayGameoverScreen = ({ constants, variables }) => {
     gameOverSound.play();
   };
 
+  const updateHighscores = (score, highscores) => {
+    if (highscores.length < 10 && score !== 0) {
+      highscores.push(score);
+      highscores.sort((a, b) => b - a);
+    }
+  };
+
+  const clearHighscoresList = (highscoresList) => {
+    highscoresList.innerHTML = "";
+  };
+
+  const createHighscoresList = (highscores, highscoresList) => {
+    highscores.forEach((singleScore) => {
+      let scoreEntry = document.createElement("li");
+      scoreEntry.innerText = singleScore.toString().padStart(6, 0, 0);
+      highscoresList.appendChild(scoreEntry);
+    });
+  };
+
   const createHighscoreTable = ({ constants, variables }) => {
-    const updateHighscoreBuffer = (score, highscoreBuffer) => {
-      if (highscoreBuffer.length < 10 && score !== 0) {
-        highscoreBuffer.push(score);
-        highscoreBuffer.sort((a, b) => b - a);
-      }
-    };
-
-    const createHighscoreListElements = (highscoreBuffer, highscoreList) => {
-      const clearHighscroreList = (highscoreList) => {
-        highscoreList.innerHTML = "";
-      };
-
-      clearHighscroreList(highscoreList);
-      highscoreBuffer.forEach((singleScore) => {
-        let scoreEntry = document.createElement("li");
-        scoreEntry.innerText = singleScore.toString().padStart(6, 0, 0);
-        highscoreList.appendChild(scoreEntry);
-      });
-    };
-
-    const { highscoreBuffer, elements } = constants;
-    const { highscoreList } = elements;
+    const { highscores, elements } = constants;
+    const { highscoresList } = elements;
     const { score } = variables;
-    updateHighscoreBuffer(score, highscoreBuffer);
-    createHighscoreListElements(highscoreBuffer, highscoreList);
+    updateHighscores(score, highscores);
+    clearHighscoresList(highscoresList);
+    createHighscoresList(highscores, highscoresList);
+  };
+
+  const resetAllVariables = ({ constants, variables }) => {
+    const { maxEnergy, maxLives } = constants;
+    variables.energy = maxEnergy;
+    variables.score = 0;
+    variables.lives = maxLives;
+    variables.isNextLevel = false;
+    variables.isGameOver = false;
+    variables.isShotEnabled = false;
+    variables.letterObjects = [];
+    variables.letters = [];
   };
 
   const handleRestartButton = ({ constants, variables }) => {
-    const initializeGameRestart = ({ constants, variables }) => {
-      const removeRestartButtonHandler = (restartButton, variables) => {
-        restartButton.removeEventListener(
-          "click",
-          variables.handleRestartButtonCallback
-        );
-      };
-
-      const clearHighscroreList = (highscoreList) => {
-        highscoreList.innerHTML = "";
-      };
-
-      const resetAllVariables = ({ constants, variables }) => {
-        const { maxEnergy, maxLives } = constants;
-        variables.energy = maxEnergy;
-        variables.score = 0;
-        variables.lives = maxLives;
-        variables.isNextLevel = false;
-        variables.isGameOver = false;
-        variables.isShotEnabled = false;
-        variables.letterObjects = [];
-        variables.letters = [];
-      };
-
-      const { gameOverContainer, highscoreList, restartButton } =
-        constants.elements;
-      removeRestartButtonHandler(restartButton, variables);
-      clearHighscroreList(highscoreList);
-      resetAllVariables({ constants, variables });
-      gameOverContainer.classList.add("displayOff");
-      displayGameScreen({ constants, variables });
-    };
-
-    initializeGameRestart({ constants, variables });
+    const { gameOverContainer, highscoresList } = constants.elements;
+    clearHighscoresList(highscoresList);
+    resetAllVariables({ constants, variables });
+    gameOverContainer.classList.add("displayOff");
+    displayGameScreen({ constants, variables });
   };
 
   const addRestartButtonHandler = (
@@ -203,7 +177,8 @@ const displayGameoverScreen = ({ constants, variables }) => {
 
     restartButton.addEventListener(
       "click",
-      variables.handleRestartButtonCallback
+      variables.handleRestartButtonCallback,
+      { once: true }
     );
   };
 
@@ -220,7 +195,7 @@ const displayGameoverScreen = ({ constants, variables }) => {
 
 const displayGameScreen = ({ constants, variables }) => {
   const { elements, templateWords } = constants;
-  const { gameContainer, canvas } = elements;
+  const { canvas } = elements;
   const definedAssembledWord = " ".repeat(6);
 
   let startIndex = Math.floor(Math.random() * templateWords.length);
@@ -269,87 +244,47 @@ const displayGameScreen = ({ constants, variables }) => {
   }
 
   const loadBackgroundImage = () => {
-    const handleloadBackgroundImage = () => {
-      backgroundImage.removeEventListener("load", handleloadBackgroundImage);
-    };
-
     const backgroundImage = document.createElement("img");
     backgroundImage.src = "./images/Andromeda.png";
-    addLoadEventHandler(backgroundImage, handleloadBackgroundImage);
     return backgroundImage;
   };
 
   const loadSpaceshipImage = () => {
-    const handleLoadSpaceshipImage = () => {
-      spaceshipImage.removeEventListener("load", handleLoadSpaceshipImage);
-    };
-
     const spaceshipImage = document.createElement("img");
     spaceshipImage.src = "./images/Ships.png";
-    addLoadEventHandler(spaceshipImage, handleLoadSpaceshipImage);
     return spaceshipImage;
   };
 
   const loadShotImage = () => {
-    const handleLoadShotImage = () => {
-      shotImage.removeEventListener("load", handleLoadShotImage);
-    };
-
     const shotImage = document.createElement("img");
     shotImage.src = "./images/Shot.png";
-    addLoadEventHandler(shotImage, handleLoadShotImage);
     return shotImage;
   };
 
   const loadLifeImage = () => {
-    const handleLoadLifeImage = () => {
-      lifeImage.removeEventListener("load", handleLoadLifeImage);
-    };
-
     const lifeImage = document.createElement("img");
     lifeImage.src = "./images/Ship-sm.png";
-    addLoadEventHandler(lifeImage, handleLoadLifeImage);
     return lifeImage;
   };
 
   const loadLettersImage = () => {
-    const handleLoadLettersImage = () => {
-      lettersImage.removeEventListener("load", handleLoadLettersImage);
-    };
-
     const lettersImage = document.createElement("img");
     lettersImage.src = "./images/Characters-Set.png";
-    addLoadEventHandler(lettersImage, handleLoadLettersImage);
     return lettersImage;
   };
 
   const loadGameMusic = () => {
-    const handleLoadGameMusic = () => {
-      gameMusic.removeEventListener("load", handleLoadGameMusic);
-    };
-
     const gameMusic = new Audio("./sounds/RetroRulez.mp3");
-    addLoadEventHandler(gameMusic, handleLoadGameMusic);
     return gameMusic;
   };
 
   const loadPositiveHitSound = () => {
-    const handleLoadpositiveHitSound = () => {
-      positiveHitSound.removeEventListener("load", handleLoadpositiveHitSound);
-    };
-
     const positiveHitSound = new Audio("./sounds/PosHit.mp3");
-    addLoadEventHandler(positiveHitSound, handleLoadpositiveHitSound);
     return positiveHitSound;
   };
 
   const loadNegativeHitSound = () => {
-    const handleLoadNegativeHitSound = () => {
-      negativeHitSound.removeEventListener("load", handleLoadNegativeHitSound);
-    };
-
     const negativeHitSound = new Audio("./sounds/NegHit.mp3");
-    addLoadEventHandler(negativeHitSound, handleLoadNegativeHitSound);
     return negativeHitSound;
   };
 
@@ -415,73 +350,20 @@ const displayGameScreen = ({ constants, variables }) => {
     }
   };
 
-  const initializeGameMusic = ({ gameMusic }) => {
-    gameMusic.loop = "loop";
-    gameMusic.play();
+  const initializeGameObjects = ({ constants, variables }) => {
+    constants.backgroundImage = loadBackgroundImage();
+    constants.spaceshipImage = loadSpaceshipImage();
+    constants.shotImage = loadShotImage();
+    constants.lifeImage = loadLifeImage();
+    constants.lettersImage = loadLettersImage();
+    constants.gameMusic = loadGameMusic();
+    constants.positiveHitSound = loadPositiveHitSound();
+    constants.negativeHitSound = loadNegativeHitSound();
+    initializeLetterObjects({ constants, variables });
+    constants.spaceship = createSpaceshipObject(constants);
+    constants.shot = createShotObject(constants);
+    initializeFlyingLetters({ constants, variables });
   };
-
-  const addMouseUpDownHandler = (constants) => {
-    const handleMouseUpDown = (event, constants) => {
-      const calculateSpaceshipPosition = (
-        { clientY },
-        { spaceship, elements }
-      ) => {
-        const { height } = spaceship;
-        if (
-          clientY > 4 * height &&
-          clientY < elements.canvas.height - 8 * height
-        ) {
-          spaceship.yPosition = clientY;
-        }
-      };
-
-      calculateSpaceshipPosition(event, constants);
-    };
-
-    variables.handleMouseUpDownCallback = (event) => {
-      handleMouseUpDown(event, constants);
-    };
-
-    document.addEventListener("mousemove", variables.handleMouseUpDownCallback);
-  };
-
-  const addLeftMouseButtonHandler = ({ constants, variables }) => {
-    const handleLeftMouseButton = ({ constants, variables }) => {
-      const calcualteVerticalShotPosition = ({ constants, variables }) => {
-        const { shot, spaceship, letterConstants } = constants;
-        variables.isShotEnabled = true;
-        shot.yPosition = spaceship.yPosition + letterConstants.horizontalGap;
-      };
-
-      calcualteVerticalShotPosition({ constants, variables });
-    };
-
-    variables.handleLeftMouseButtonCallback = () => {
-      handleLeftMouseButton({ constants, variables });
-    };
-
-    document.addEventListener(
-      "mousedown",
-      variables.handleLeftMouseButtonCallback
-    );
-  };
-
-  constants.backgroundImage = loadBackgroundImage();
-  constants.spaceshipImage = loadSpaceshipImage();
-  constants.shotImage = loadShotImage();
-  constants.lifeImage = loadLifeImage();
-  constants.lettersImage = loadLettersImage();
-  constants.gameMusic = loadGameMusic();
-  constants.positiveHitSound = loadPositiveHitSound();
-  constants.negativeHitSound = loadNegativeHitSound();
-  initializeLetterObjects({ constants, variables });
-  constants.spaceship = createSpaceshipObject(constants);
-  constants.shot = createShotObject(constants);
-  initializeFlyingLetters({ constants, variables });
-  initializeGameMusic(constants);
-  addMouseUpDownHandler(constants);
-  addLeftMouseButtonHandler({ constants, variables });
-  gameContainer.classList.remove("displayOff");
 
   const displayBackgroundPicture = ({ backgroundImage, renderingContext }) => {
     renderingContext.drawImage(backgroundImage, 0, 0);
@@ -738,35 +620,35 @@ const displayGameScreen = ({ constants, variables }) => {
     initializeFlyingLetters({ constants, variables });
   };
 
+  const stopInterval = ({ intervalId, requestId }) => {
+    if (intervalId) {
+      clearInterval(intervalId);
+      variables.intervalId = null;
+    }
+    if (requestId) {
+      cancelAnimationFrame(requestId);
+      variables.requestId = null;
+    }
+  };
+
+  const removeMouseHandlers = () => {
+    document.removeEventListener(
+      "mousemove",
+      variables.handleMouseUpDownCallback
+    );
+    document.removeEventListener(
+      "mousedown",
+      variables.handleLeftMouseButtonCallback
+    );
+  };
+
+  const stopGameMusic = ({ gameMusic }) => {
+    gameMusic.currentTime = 0;
+    gameMusic.pause();
+    gameMusic.currentTime = 0;
+  };
+
   const stopGame = ({ constants, variables }) => {
-    const stopInterval = ({ intervalId, requestId }) => {
-      if (intervalId) {
-        clearInterval(intervalId);
-        variables.intervalId = null;
-      }
-      if (requestId) {
-        cancelAnimationFrame(requestId);
-        variables.requestId = null;
-      }
-    };
-
-    const removeMouseHandlers = () => {
-      document.removeEventListener(
-        "mousemove",
-        variables.handleMouseUpDownCallback
-      );
-      document.removeEventListener(
-        "mousedown",
-        variables.handleLeftMouseButtonCallback
-      );
-    };
-
-    const stopGameMusic = ({ gameMusic }) => {
-      gameMusic.currentTime = 0;
-      gameMusic.pause();
-      gameMusic.currentTime = 0;
-    };
-
     const { gameContainer } = constants.elements;
     stopInterval(variables);
     removeMouseHandlers();
@@ -795,30 +677,96 @@ const displayGameScreen = ({ constants, variables }) => {
     }
   };
 
+  const addMouseUpDownHandler = (constants) => {
+    const handleMouseUpDown = (event, constants) => {
+      const calculateSpaceshipPosition = (
+        { clientY },
+        { spaceship, elements }
+      ) => {
+        const { height } = spaceship;
+        if (
+          clientY > 4 * height &&
+          clientY < elements.canvas.height - 8 * height
+        ) {
+          spaceship.yPosition = clientY;
+        }
+      };
+
+      calculateSpaceshipPosition(event, constants);
+    };
+
+    variables.handleMouseUpDownCallback = (event) => {
+      handleMouseUpDown(event, constants);
+    };
+
+    document.addEventListener("mousemove", variables.handleMouseUpDownCallback);
+  };
+
+  const addLeftMouseButtonHandler = ({ constants, variables }) => {
+    const handleLeftMouseButton = ({ constants, variables }) => {
+      const calcualteVerticalShotPosition = ({ constants, variables }) => {
+        const { shot, spaceship, letterConstants } = constants;
+        variables.isShotEnabled = true;
+        shot.yPosition = spaceship.yPosition + letterConstants.horizontalGap;
+      };
+
+      calcualteVerticalShotPosition({ constants, variables });
+    };
+
+    variables.handleLeftMouseButtonCallback = () => {
+      handleLeftMouseButton({ constants, variables });
+    };
+
+    document.addEventListener(
+      "mousedown",
+      variables.handleLeftMouseButtonCallback
+    );
+  };
+
   const startInterval = (variables) => {
     variables.intervalId = setInterval(
-      () =>
-        (variables.requestId = requestAnimationFrame(() => {
+      () => {
+        variables.requestId = requestAnimationFrame(() => {
           renderGameElements({ constants, variables });
-        })),
+        });
+      },
       10 // 60 frames per second
     );
   };
 
-  startInterval(variables);
+  const startGameMusic = ({ gameMusic }) => {
+    gameMusic.loop = "loop";
+    gameMusic.play();
+  };
+
+  const startGame = ({ constants, variables }) => {
+    addMouseUpDownHandler(constants);
+    addLeftMouseButtonHandler({ constants, variables });
+    constants.elements.gameContainer.classList.remove("displayOff");
+    startInterval(variables);
+    startGameMusic(constants);
+  };
+
+  const handleLoadBackgroundImage = () => {
+    startGame({ constants, variables });
+  };
+
+  initializeGameObjects({ constants, variables });
+  constants.backgroundImage.addEventListener(
+    "load",
+    handleLoadBackgroundImage,
+    { once: true }
+  );
 };
 
 const displaySplashScreen = ({ constants, variables }) => {
   const handleStartButton = ({ constants, variables }) => {
     const initializeGameScreen = ({ constants, variables }) => {
-      const { splashContainer, startButton } = constants.elements;
-      startButton.removeEventListener(
-        "click",
-        variables.handleStartButtonCallback
-      );
+      const { splashContainer } = constants.elements;
       splashContainer.classList.add("displayOff");
       displayGameScreen({ constants, variables });
     };
+
     initializeGameScreen({ constants, variables });
   };
 
@@ -832,7 +780,8 @@ const displaySplashScreen = ({ constants, variables }) => {
 
     constants.elements.startButton.addEventListener(
       "click",
-      variables.handleStartButtonCallback
+      variables.handleStartButtonCallback,
+      { once: true }
     );
   };
 
@@ -841,4 +790,4 @@ const displaySplashScreen = ({ constants, variables }) => {
   splashContainer.classList.remove("displayOff");
 };
 
-displaySplashScreen({ constants, variables }); // Start game
+displaySplashScreen({ constants, variables });
