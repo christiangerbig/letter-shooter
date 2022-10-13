@@ -32,10 +32,10 @@ Letter Shooter is a game where the player moves a spaceship vertically on the sc
 
 ## Data structure
 
-splash.js
+splash
 - displaySplashScreen() {}
 
-game.js
+game
 - displayGameScreen() {}
 - displayBGPicture() {}
 - moveSpaceship() {}
@@ -48,7 +48,7 @@ game.js
 - displayLives() {}
 - displayScore() {}
 
-gameOver.js
+gameOver
 - displayGameOverScreen() {}
 
 ## Classes
