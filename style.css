@@ -8,7 +8,7 @@ body {
   from {opacity: 0;}
   to {opacity: 1;}
 }
-#splashContainer {
+#splash-container {
   width: 100%;
   background-color: #5b82cc;
   background-image: linear-gradient(#5b82cc, rgb(0, 0, 0));
@@ -16,17 +16,17 @@ body {
   text-shadow: 0px 0px 1px black;
   animation: fadeSplashContainerIn 2s forwards;
 }
-#titleContainer {
+#title-container {
   margin-top: 2em;
 }
-#titleContainer h1 {
+#title-container h1 {
   font-size: 2.7rem;
   padding: 0 0.4rem 0.4rem 0.4rem;
 }
 .subtitle {
   margin-bottom: 2rem;
 }
-#startButton {
+#start-button {
   font-family: "Coda Caption";
   font-size: 0.9rem;
   margin-top: 2rem;
@@ -37,7 +37,7 @@ body {
   from {opacity: 0;}
   to {opacity: 1;}
 }
-#gameContainer {
+#game-container {
   animation: fadeGameContainerIn 2s forwards;
 }
 
@@ -46,7 +46,7 @@ body {
   from {opacity: 0;}
   to {opacity: 1;}
 }
-#gameOverContainer {
+#game-over-container {
   width: 100%;
   background-color: #5b82cc;
   background-image: linear-gradient(#5b82cc, rgb(0, 0, 0));
@@ -54,48 +54,48 @@ body {
   text-shadow: 0px 0px 1px black;
   animation: scrollGameOverContainerIn 2s forwards;
 }
-#gameOverContainer h1 {
+#game-over-container h1 {
   font-size: 2.7rem;
   padding: 0 0.4rem 0.4rem 0.4rem;
 }
-#highscoreContainer ul {
+#highscore-container ul {
   font-family: monospace;
   font-size: 2rem;
   padding-left: 0;
   list-style-type: none;
 }
-#highscoreContainer h1 {
+#highscore-container h1 {
   margin-bottom: 0;
 }
-#restartButton {
+#restart-button {
   font-family: "Coda Caption";
   font-size: 0.9rem;
 }
 
 /* Main classes */
-.flexContainer {
+.flex-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
 }
-.flexContainer2 {
+.flex-container2 {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   text-align: center;
 }
-.fixedContainerHeight {
+.is-fixed-container-height {
   height: 580px;
 }
-.cursorOn {
+.is-cursor-on {
   cursor: auto;
 }
-.cursorOff {
+.is-cursor-off {
   cursor: none;
 }
-.displayOff {
+.is-display-off {
   display: none;
 }

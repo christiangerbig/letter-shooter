@@ -30,11 +30,11 @@
     <!-- Splash screen -->
     <section>
       <div
-        id="splashContainer"
-        class="displayOff cursorOn fixedContainerHeight"
+        id="splash-container"
+        class="is-display-off is-cursor-on is-fixed-container-height"
       >
-        <div class="flexContainer">
-          <div id="titleContainer">
+        <div class="flex-container">
+          <div id="title-container">
             <article>
               <header>
                 <div>
@@ -53,7 +53,7 @@
               </div>
             </article>
             <div>
-              <button type="button" id="startButton">Start game</button>
+              <button type="button" id="start-button">Start game</button>
             </div>
           </div>
         </div>
@@ -62,8 +62,8 @@
 
     <!-- Game screen -->
     <section>
-      <div id="gameContainer" class="displayOff cursorOff">
-        <div class="flexContainer">
+      <div id="game-container" class="is-display-off is-cursor-off">
+        <div class="flex-container">
           <canvas width="800" height="600"></canvas>
         </div>
       </div>
@@ -72,18 +72,18 @@
     <!-- Game over screen -->
     <section>
       <div
-        id="gameOverContainer"
-        class="displayOff cursorOn fixedContainerHeight"
+        id="game-over-container"
+        class="is-display-off is-cursor-on is-fixed-container-height"
       >
-        <div class="flexContainer fixedContainerHeight">
-          <div id="highscoreContainer" class="flexboxContainer2">
+        <div class="flex-container is-fixed-container-height">
+          <div id="highscore-container" class="flexbox-container2">
             <div>
               <h1>GAME OVER</h1>
               <h2>Highscore</h2>
-              <ul id="highscoresList"></ul>
+              <ul id="highscores-list"></ul>
             </div>
             <div>
-              <button type="button" id="restartButton">Restart game</button>
+              <button type="button" id="restart-button">Restart game</button>
             </div>
           </div>
         </div>

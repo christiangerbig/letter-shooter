@@ -18,13 +18,13 @@ const constants = {
   spaceship: null,
   // HTML elements
   elements: {
-    splashContainer: document.querySelector("#splashContainer"),
-    startButton: document.querySelector("#startButton"),
-    gameContainer: document.querySelector("#gameContainer"),
+    splashContainer: document.querySelector("#splash-container"),
+    startButton: document.querySelector("#start-button"),
+    gameContainer: document.querySelector("#game-container"),
     canvas: document.querySelector("canvas"),
-    gameOverContainer: document.querySelector("#gameOverContainer"),
-    highscoresList: document.querySelector("#highscoresList"),
-    restartButton: document.querySelector("#restartButton"),
+    gameOverContainer: document.querySelector("#game-over-container"),
+    highscoresList: document.querySelector("#highscores-list"),
+    restartButton: document.querySelector("#restart-button"),
   },
   templateWords: [
     "HOUSE",
@@ -162,7 +162,7 @@ const displayGameoverScreen = ({ constants, variables }) => {
     const { gameOverContainer, highscoresList } = constants.elements;
     clearHighscoresList(highscoresList);
     resetAllVariables({ constants, variables });
-    gameOverContainer.classList.add("displayOff");
+    gameOverContainer.classList.add("is-display-off");
     displayGameScreen({ constants, variables });
   };
 
@@ -190,7 +190,7 @@ const displayGameoverScreen = ({ constants, variables }) => {
     constants,
     variables,
   });
-  gameOverContainer.classList.remove("displayOff");
+  gameOverContainer.classList.remove("is-display-off");
 };
 
 const displayGameScreen = ({ constants, variables }) => {
@@ -653,7 +653,7 @@ const displayGameScreen = ({ constants, variables }) => {
     stopInterval(variables);
     removeMouseHandlers();
     stopGameMusic(constants);
-    gameContainer.classList.add("displayOff");
+    gameContainer.classList.add("is-display-off");
     displayGameoverScreen({ constants, variables });
   };
 
@@ -742,7 +742,7 @@ const displayGameScreen = ({ constants, variables }) => {
   const startGame = ({ constants, variables }) => {
     addMouseUpDownHandler(constants);
     addLeftMouseButtonHandler({ constants, variables });
-    constants.elements.gameContainer.classList.remove("displayOff");
+    constants.elements.gameContainer.classList.remove("is-display-off");
     startInterval(variables);
     startGameMusic(constants);
   };
@@ -763,7 +763,7 @@ const displaySplashScreen = ({ constants, variables }) => {
   const handleStartButton = ({ constants, variables }) => {
     const initializeGameScreen = ({ constants, variables }) => {
       const { splashContainer } = constants.elements;
-      splashContainer.classList.add("displayOff");
+      splashContainer.classList.add("is-display-off");
       displayGameScreen({ constants, variables });
     };
 
@@ -787,7 +787,7 @@ const displaySplashScreen = ({ constants, variables }) => {
 
   addStartButtonHandler(handleStartButton, { constants, variables });
   const { splashContainer } = constants.elements;
-  splashContainer.classList.remove("displayOff");
+  splashContainer.classList.remove("is-display-off");
 };
 
 displaySplashScreen({ constants, variables });
