@@ -37,16 +37,18 @@ splash
 
 game
 - displayGameScreen() {}
-- displayBGPicture() {}
-- moveSpaceship() {}
-- shootBullet() {}
+- displayBackgroundPicture() {}
+- displaySpaceship() {}
+- moveShot() {}
 - moveLetters() {}
-- checkLetterHit() {}
+- checkMissingLetterHit() {}
+- checkShotCollisionWithLetters() {}
 - displayTemplateWord() {}
 - displayAssembledWord() {}
 - displayEnergy() {}
 - displayLives() {}
 - displayScore() {}
+- fetchNextTemplateWord() {}
 
 gameOver
 - displayGameOverScreen() {}

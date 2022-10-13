@@ -108,7 +108,7 @@ const variables = {
   handleStartButtonCallback: null,
 };
 
-const displayGameoverScreen = ({ constants, variables }) => {
+const displayGameOverScreen = ({ constants, variables }) => {
   const loadGameOverSound = () => {
     const gameOverSound = new Audio("./sounds/GameOver.mp3");
     return gameOverSound;
@@ -654,7 +654,7 @@ const displayGameScreen = ({ constants, variables }) => {
     removeMouseHandlers();
     stopGameMusic(constants);
     gameContainer.classList.add("is-display-off");
-    displayGameoverScreen({ constants, variables });
+    displayGameOverScreen({ constants, variables });
   };
 
   const renderGameElements = ({ constants, variables }) => {
