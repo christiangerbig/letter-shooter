@@ -138,16 +138,20 @@ const displayGameOverScreen = ({ constants, variables }) => {
   };
 
   const createHighscoreTable = ({ constants, variables }) => {
-    const { highscores, elements } = constants;
-    const { highscoresList } = elements;
+    const {
+      highscores,
+      elements: { highscoresList },
+    } = constants;
     const { score } = variables;
     updateHighscores(score, highscores);
     clearHighscoresList(highscoresList);
     createHighscoresList(highscores, highscoresList);
   };
 
-  const resetAllVariables = ({ constants, variables }) => {
-    const { maxEnergy, maxLives } = constants;
+  const resetAllVariables = ({
+    constants: { maxEnergy, maxLives },
+    variables,
+  }) => {
     variables.energy = maxEnergy;
     variables.score = 0;
     variables.lives = maxLives;
@@ -159,7 +163,9 @@ const displayGameOverScreen = ({ constants, variables }) => {
   };
 
   const handleRestartButton = ({ constants, variables }) => {
-    const { gameOverContainer, highscoresList } = constants.elements;
+    const {
+      elements: { gameOverContainer, highscoresList },
+    } = constants;
     clearHighscoresList(highscoresList);
     resetAllVariables({ constants, variables });
     gameOverContainer.classList.add("is-display-off");
@@ -185,7 +191,9 @@ const displayGameOverScreen = ({ constants, variables }) => {
   constants.gameOverSound = loadGameOverSound();
   playGameoverSound(constants);
   createHighscoreTable({ constants, variables });
-  const { gameOverContainer, restartButton } = constants.elements;
+  const {
+    elements: { gameOverContainer, restartButton },
+  } = constants;
   addRestartButtonHandler(restartButton, handleRestartButton, {
     constants,
     variables,
@@ -194,8 +202,10 @@ const displayGameOverScreen = ({ constants, variables }) => {
 };
 
 const displayGameScreen = ({ constants, variables }) => {
-  const { elements, templateWords } = constants;
-  const { canvas } = elements;
+  const {
+    elements: { canvas },
+    templateWords,
+  } = constants;
   const definedAssembledWord = " ".repeat(6);
 
   let startIndex = Math.floor(Math.random() * templateWords.length);
@@ -289,9 +299,11 @@ const displayGameScreen = ({ constants, variables }) => {
   };
 
   const initializeLetterObjects = ({ constants, variables }) => {
-    const { alphabetCharacters, letterConstants } = constants;
+    const {
+      alphabetCharacters,
+      letterConstants: { width, height, horizontalGap, verticalGap },
+    } = constants;
     const { letterObjects } = variables;
-    const { width, height, horizontalGap, verticalGap } = letterConstants;
     let [xOffset, yOffset] = [5, 8];
     alphabetCharacters.forEach((character) => {
       const letterSubRectangle = new LetterSubRectangleObject(
@@ -330,9 +342,12 @@ const displayGameScreen = ({ constants, variables }) => {
   };
 
   const initializeFlyingLetters = ({ constants, variables }) => {
-    const { flyingLetters, letterConstants, elements } = constants;
+    const {
+      flyingLetters,
+      letterConstants: { width, height, maxVerticalSpeed },
+      elements,
+    } = constants;
     const { letters } = variables;
-    const { width, height, maxVerticalSpeed } = letterConstants;
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
       const xPosition =
         elements.canvas.width - Math.floor(Math.random() * 500) - width;
@@ -369,8 +384,10 @@ const displayGameScreen = ({ constants, variables }) => {
     renderingContext.drawImage(backgroundImage, 0, 0);
   };
 
-  const displaySpaceship = ({ spaceship, renderingContext }) => {
-    const { xPosition, yPosition, imageUrl } = spaceship;
+  const displaySpaceship = ({
+    spaceship: { xPosition, yPosition, imageUrl },
+    renderingContext,
+  }) => {
     renderingContext.drawImage(
       imageUrl,
       0,
@@ -389,8 +406,10 @@ const displayGameScreen = ({ constants, variables }) => {
       shot,
       { constants, variables }
     ) => {
-      const { elements } = constants;
-      if (shot.xPosition > elements.canvas.width) {
+      const {
+        elements: { canvas },
+      } = constants;
+      if (shot.xPosition > canvas.width) {
         [variables.isShotEnabled, shot.xPosition] = [false, 116];
       }
     };
@@ -427,8 +446,10 @@ const displayGameScreen = ({ constants, variables }) => {
       return false;
     };
 
-    const reduceEnergy = ({ constants, variables }) => {
-      const { maxEnergy, energyCountStep, negativeHitSound } = constants;
+    const reduceEnergy = ({
+      constants: { maxEnergy, energyCountStep, negativeHitSound },
+      variables,
+    }) => {
       negativeHitSound.play();
       variables.energy > energyCountStep
         ? (variables.energy -= energyCountStep)
@@ -489,7 +510,7 @@ const displayGameScreen = ({ constants, variables }) => {
       lettersImage,
       renderingContext,
       alphabetCharacters,
-      letterConstants,
+      letterConstants: { width, height },
     } = constants;
     const { isShotEnabled, letterObjects, letters } = variables;
     for (let i = 0; i < letters.length; i++) {
@@ -501,7 +522,6 @@ const displayGameScreen = ({ constants, variables }) => {
           break;
         }
       }
-      const { width, height } = letterConstants;
       renderingContext.drawImage(
         lettersImage,
         currentLetter.xOffset,
@@ -520,19 +540,17 @@ const displayGameScreen = ({ constants, variables }) => {
       if (isShotEnabled && isShotCollisionWithLetters) {
         continue;
       }
-      if (
-        letters[i].yPosition < 0 ||
-        letters[i].yPosition > 600 - letterConstants.height
-      ) {
+      if (letters[i].yPosition < 0 || letters[i].yPosition > 600 - height) {
         letters[i].yDirection *= -1;
       }
       letters[i].yPosition += letters[i].yDirection;
     }
   };
 
-  const displayEnergy = ({ constants, variables }) => {
-    const { renderingContext } = constants;
-    const { energy } = variables;
+  const displayEnergy = ({
+    constants: { renderingContext },
+    variables: { energy },
+  }) => {
     renderingContext.font = "22px Coda Caption";
     renderingContext.fillStyle = "orange";
     renderingContext.fillText("Energy", 10, 30);
@@ -545,9 +563,10 @@ const displayGameScreen = ({ constants, variables }) => {
     );
   };
 
-  const displayScore = ({ constants, variables }) => {
-    const { renderingContext } = constants;
-    const { score } = variables;
+  const displayScore = ({
+    constants: { renderingContext },
+    variables: { score },
+  }) => {
     renderingContext.font = "22px Coda Caption";
     renderingContext.fillStyle = "orange";
     renderingContext.fillText(
@@ -557,9 +576,10 @@ const displayGameScreen = ({ constants, variables }) => {
     );
   };
 
-  const displayLives = ({ constants, variables }) => {
-    const { lifeImage, renderingContext } = constants;
-    const { lives } = variables;
+  const displayLives = ({
+    constants: { lifeImage, renderingContext },
+    variables: { lives },
+  }) => {
     renderingContext.font = "22px Coda Caption";
     renderingContext.fillStyle = "orange";
     renderingContext.fillText(
@@ -649,7 +669,9 @@ const displayGameScreen = ({ constants, variables }) => {
   };
 
   const stopGame = ({ constants, variables }) => {
-    const { gameContainer } = constants.elements;
+    const {
+      elements: { gameContainer },
+    } = constants;
     stopInterval(variables);
     removeMouseHandlers();
     stopGameMusic(constants);
@@ -705,9 +727,13 @@ const displayGameScreen = ({ constants, variables }) => {
   const addLeftMouseButtonHandler = ({ constants, variables }) => {
     const handleLeftMouseButton = ({ constants, variables }) => {
       const calcualteVerticalShotPosition = ({ constants, variables }) => {
-        const { shot, spaceship, letterConstants } = constants;
+        const {
+          shot,
+          spaceship: { yPosition },
+          letterConstants: { horizontalGap },
+        } = constants;
         variables.isShotEnabled = true;
-        shot.yPosition = spaceship.yPosition + letterConstants.horizontalGap;
+        shot.yPosition = yPosition + horizontalGap;
       };
 
       calcualteVerticalShotPosition({ constants, variables });
@@ -762,7 +788,9 @@ const displayGameScreen = ({ constants, variables }) => {
 const displaySplashScreen = ({ constants, variables }) => {
   const handleStartButton = ({ constants, variables }) => {
     const initializeGameScreen = ({ constants, variables }) => {
-      const { splashContainer } = constants.elements;
+      const {
+        elements: { splashContainer },
+      } = constants;
       splashContainer.classList.add("is-display-off");
       displayGameScreen({ constants, variables });
     };
@@ -786,7 +814,9 @@ const displaySplashScreen = ({ constants, variables }) => {
   };
 
   addStartButtonHandler(handleStartButton, { constants, variables });
-  const { splashContainer } = constants.elements;
+  const {
+    elements: { splashContainer },
+  } = constants;
   splashContainer.classList.remove("is-display-off");
 };
 
