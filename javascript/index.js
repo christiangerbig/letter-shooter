@@ -118,33 +118,30 @@ const displayGameOverScreen = ({ constants, variables }) => {
     gameOverSound.play();
   };
 
-  const updateHighscores = (score, highscores) => {
-    if (highscores.length < 10 && score !== 0) {
-      highscores.push(score);
-      highscores.sort((a, b) => b - a);
-    }
-  };
-
-  const clearHighscoresList = (highscoresList) => {
-    highscoresList.innerHTML = "";
-  };
-
-  const createHighscoresList = (highscores, highscoresList) => {
-    highscores.forEach((singleScore) => {
-      let scoreEntry = document.createElement("li");
-      scoreEntry.innerText = singleScore.toString().padStart(6, 0, 0);
-      highscoresList.appendChild(scoreEntry);
-    });
-  };
-
-  const createHighscoreTable = ({ constants, variables }) => {
-    const {
+  const createHighscoreTable = ({
+    constants: {
       highscores,
       elements: { highscoresList },
-    } = constants;
-    const { score } = variables;
+    },
+    variables: { score },
+  }) => {
+    const updateHighscores = (score, highscores) => {
+      if (highscores.length < 10 && score !== 0) {
+        highscores.push(score);
+        highscores.sort((a, b) => b - a);
+      }
+    };
+
+    const createHighscoresList = (highscores, highscoresList) => {
+      highscoresList.innerHTML = "";
+      highscores.forEach((singleScore) => {
+        let scoreEntry = document.createElement("li");
+        scoreEntry.innerText = singleScore.toString().padStart(6, 0, 0);
+        highscoresList.appendChild(scoreEntry);
+      });
+    };
+
     updateHighscores(score, highscores);
-    clearHighscoresList(highscoresList);
     createHighscoresList(highscores, highscoresList);
   };
 
@@ -166,7 +163,7 @@ const displayGameOverScreen = ({ constants, variables }) => {
     const {
       elements: { gameOverContainer, highscoresList },
     } = constants;
-    clearHighscoresList(highscoresList);
+    highscoresList.innerHTML = "";
     resetAllVariables({ constants, variables });
     gameOverContainer.classList.add("is-display-off");
     displayGameScreen({ constants, variables });
@@ -341,13 +338,14 @@ const displayGameScreen = ({ constants, variables }) => {
     return shot;
   };
 
-  const initializeFlyingLetters = ({ constants, variables }) => {
-    const {
+  const initializeFlyingLetters = ({
+    constants: {
       flyingLetters,
       letterConstants: { width, height, maxVerticalSpeed },
       elements,
-    } = constants;
-    const { letters } = variables;
+    },
+    variables: { letters },
+  }) => {
     for (let i = 0; i < flyingLetters[startIndex].length; i++) {
       const xPosition =
         elements.canvas.width - Math.floor(Math.random() * 500) - width;
@@ -404,11 +402,13 @@ const displayGameScreen = ({ constants, variables }) => {
   const moveShot = ({ constants, variables }) => {
     const checkShotCollisionWithRightBorder = (
       shot,
-      { constants, variables }
+      {
+        constants: {
+          elements: { canvas },
+        },
+        variables,
+      }
     ) => {
-      const {
-        elements: { canvas },
-      } = constants;
       if (shot.xPosition > canvas.width) {
         [variables.isShotEnabled, shot.xPosition] = [false, 116];
       }
@@ -640,7 +640,8 @@ const displayGameScreen = ({ constants, variables }) => {
     initializeFlyingLetters({ constants, variables });
   };
 
-  const stopInterval = ({ intervalId, requestId }) => {
+  const stopInterval = (variables) => {
+    const { intervalId, requestId } = variables;
     if (intervalId) {
       clearInterval(intervalId);
       variables.intervalId = null;
@@ -651,15 +652,12 @@ const displayGameScreen = ({ constants, variables }) => {
     }
   };
 
-  const removeMouseHandlers = () => {
-    document.removeEventListener(
-      "mousemove",
-      variables.handleMouseUpDownCallback
-    );
-    document.removeEventListener(
-      "mousedown",
-      variables.handleLeftMouseButtonCallback
-    );
+  const removeMouseHandlers = ({
+    handleMouseUpDownCallback,
+    handleLeftMouseButtonCallback,
+  }) => {
+    document.removeEventListener("mousemove", handleMouseUpDownCallback);
+    document.removeEventListener("mousedown", handleLeftMouseButtonCallback);
   };
 
   const stopGameMusic = ({ gameMusic }) => {
@@ -673,21 +671,21 @@ const displayGameScreen = ({ constants, variables }) => {
       elements: { gameContainer },
     } = constants;
     stopInterval(variables);
-    removeMouseHandlers();
+    removeMouseHandlers(variables);
     stopGameMusic(constants);
     gameContainer.classList.add("is-display-off");
     displayGameOverScreen({ constants, variables });
   };
 
   const renderGameElements = ({ constants, variables }) => {
-    const { isNextLevel, isGameOver } = variables;
+    const { isNextLevel, isGameOver, isShotEnabled } = variables;
     displayBackgroundPicture(constants);
     isNextLevel && fetchNextTemplateWord({ constants, variables });
     if (isGameOver) {
       stopGame({ constants, variables });
     } else {
       displaySpaceship(constants);
-      if (variables.isShotEnabled) {
+      if (isShotEnabled) {
         moveShot({ constants, variables });
       }
       moveLetters({ constants, variables });
@@ -703,13 +701,10 @@ const displayGameScreen = ({ constants, variables }) => {
     const handleMouseUpDown = (event, constants) => {
       const calculateSpaceshipPosition = (
         { clientY },
-        { spaceship, elements }
+        { spaceship, elements: { canvas } }
       ) => {
         const { height } = spaceship;
-        if (
-          clientY > 4 * height &&
-          clientY < elements.canvas.height - 8 * height
-        ) {
+        if (clientY > 4 * height && clientY < canvas.height - 8 * height) {
           spaceship.yPosition = clientY;
         }
       };
@@ -766,9 +761,12 @@ const displayGameScreen = ({ constants, variables }) => {
   };
 
   const startGame = ({ constants, variables }) => {
+    const {
+      elements: { gameContainer },
+    } = constants;
     addMouseUpDownHandler(constants);
     addLeftMouseButtonHandler({ constants, variables });
-    constants.elements.gameContainer.classList.remove("is-display-off");
+    gameContainer.classList.remove("is-display-off");
     startInterval(variables);
     startGameMusic(constants);
   };
@@ -781,7 +779,9 @@ const displayGameScreen = ({ constants, variables }) => {
   constants.backgroundImage.addEventListener(
     "load",
     handleLoadBackgroundImage,
-    { once: true }
+    {
+      once: true,
+    }
   );
 };
 
@@ -806,11 +806,12 @@ const displaySplashScreen = ({ constants, variables }) => {
       handleStartButton({ constants, variables });
     };
 
-    constants.elements.startButton.addEventListener(
-      "click",
-      variables.handleStartButtonCallback,
-      { once: true }
-    );
+    const {
+      elements: { startButton },
+    } = constants;
+    startButton.addEventListener("click", variables.handleStartButtonCallback, {
+      once: true,
+    });
   };
 
   addStartButtonHandler(handleStartButton, { constants, variables });
